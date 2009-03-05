@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+	   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	   <link rel="stylesheet" type="text/css" href="styles.css" />
+	   <script type="text/javascript" src="mootools-1.2-core-yc.js"></script>
+       <script type="text/javascript" src="spell_checker.js"></script>
+       <script type="text/javascript">
+           function checkForm() {
+               sc_spellCheckers.resumeAll();
+               return true;
+           }
+       </script>
+		<title></title>
+	</head>
+	<body>
+        <form action="submitTest.php" method="post" onsubmit="return checkForm();">
+            <p>
+                <textarea class="spell_check" rows="10" cols="50" name="box1">This is a test textarea. Somethiss Nomrally textarea is not in the dictionary, but it hass beeen added to the personall dicationary.</textarea>
+            </p>
+            <p>
+            <textarea class="spell_check" rows="10" cols="50" name="box2"><p>A seccond onee with some mispellings and some HTML.</p></textarea>
+            </p>
+            <p>
+                <input type="submit" value="Send" />
+            </p>
+        </form>
+    </body>
+</html>
