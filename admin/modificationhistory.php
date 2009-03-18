@@ -100,7 +100,9 @@ if ($data_id != 0)
 	if ($row_id != -1)
 		$sql .= " WHERE c.row_id = '$row_id'";
 
-	xhtml_table($db->GetAll($sql),array('name','row_id','pdes','odes','assigned','completed','data'),array(T_("Column"),T_("Row"),T_("Process"),T_("Operator"),T_("Assigned"),T_("Completed"),T_("Data")));
+	$rs2 = $db->GetAll($sql);
+	translate_array($rs2,array("pdes"));
+	xhtml_table($rs2,array('name','row_id','pdes','odes','assigned','completed','data'),array(T_("Column"),T_("Row"),T_("Process"),T_("Operator"),T_("Assigned"),T_("Completed"),T_("Data")));
 
 }
 

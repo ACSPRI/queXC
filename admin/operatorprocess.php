@@ -98,7 +98,7 @@ if ($operator_id != 0)
 		LEFT JOIN operator_process AS op ON (op.operator_id = $operator_id AND op.process_id = p.process_id)";
 
 	$rs = $db->GetAll($sql);
-
+	translate_array($rs,array("description"));
 	xhtml_table($rs,array('description','cbox','abox'),array(T_("Process"),T_("Select"),T_("Allow queXC to auto guess code")));
 
 	print "<div><input type='submit' name='submit' value='" . T_("Assign processes") . "'/></div></form>";

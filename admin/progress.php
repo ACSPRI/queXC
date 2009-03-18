@@ -103,8 +103,10 @@ print "<div>" . T_("Work remaining") .  "</div>";
 if (empty($rs))
 	print "<p>" . T_("No work remaining") . " <a href='markcolumns.php?data_id=$data_id'>" . T_("Create work") . "</a></p>";
 else
+{
+	translate_array($rs,array("processd"));
 	xhtml_table($rs,array('count','name','datad','processd','odes','dele'),array(T_("Rows to do"),T_("Column"),T_("Data file"),T_("Process to apply"),T_("For specific operator?"),T_("Delete work")));
-
+}
 
 xhtml_foot();
 ?>

@@ -71,7 +71,10 @@ if ($operator_id != false)
 	if (empty($work))
 		print "<p>" . T_("No work history") ."</p>";
 	else
+	{
+		translate_array($work,array("description"));
 		xhtml_table($work,array('completed','name','data','description','redo'),array(T_("Date"),T_("Column"),T_("Data"),T_("Process"),T_("Redo?")));
+	}
 }
 else
 	print "<p>" . T_("No operator") . "</p>";

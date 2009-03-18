@@ -93,7 +93,9 @@ $sql = "SELECT code_group_id as value,description, CASE WHEN code_group_id = '$c
 	FROM code_group";
 
 print "<div>" . T_("Select code group: ");
-display_chooser($db->GetAll($sql),'code_group_id','code_group_id');
+$rs2 = $db->GetAll($sql);
+translate_array($rs2,array("description"));
+display_chooser($rs2,'code_group_id','code_group_id');
 print "</div>";
 
 if ($code_group_id != 0)
@@ -105,7 +107,9 @@ if ($code_group_id != 0)
 		FROM process";
 	
 	print "<div>" . T_("Select parent process (if any): ");
-	display_chooser($db->GetAll($sql),'process_id','process_id',true,false,false);
+	$rs2 = $db->GetAll($sql);
+	translate_array($rs2,array("description"));
+	display_chooser($rs2,'process_id','process_id',true,false,false);
 	print "</div>";
 
 	print "<div><input type='checkbox' name='autolabel' id='autolabel'/><label for='autolabel'>" . T_("Automatically assign a code if the code label exactly matches the data?") . "</label></div>";
@@ -126,8 +130,9 @@ $sql = "SELECT p.process_id,p.description as pdes,c.description as cdes
 	LEFT JOIN code_group AS c ON (c.code_group_id = p.code_group_id)";
 
 p(T_("Existing processes"),'h2');
-
-xhtml_table($db->GetAll($sql),array('process_id','pdes','cdes'),array(T_("Process ID"),T_("Process"),T_("Code Group")));
+$rs2 = $db->GetAll($sql);
+translate_array($rs2,array("pdes","cdes"));
+xhtml_table($rs2,array('process_id','pdes','cdes'),array(T_("Process ID"),T_("Process"),T_("Code Group")));
 
 xhtml_foot();
 ?>

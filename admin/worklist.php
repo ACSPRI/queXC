@@ -74,7 +74,10 @@ $work = $db->GetAll($sql);
 if (empty($work))
 	print "<p>" . T_("No work history") ."</p>";
 else
+{
+	translate_array($work,array("description"));
 	xhtml_table($work,array('work_unit_id','completed','name','data','description','op','del'),array(T_("Work Unit ID"),T_("Date Completed"),T_("Column"),T_("Data"),T_("Process"),T_("Operator"),T_("Delete?")));
+}
 
 xhtml_foot();
 

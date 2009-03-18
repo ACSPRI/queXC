@@ -71,7 +71,9 @@ $sql = "SELECT code_group_id as value,description, CASE WHEN code_group_id = '$c
 	FROM code_group";
 
 print "<div>" . T_("Select code group: ");
-display_chooser($db->GetAll($sql),'code_group_id','code_group_id');
+$rs2 = $db->GetAll($sql);
+translate_array($rs2,array("description"));
+display_chooser($rs2,'code_group_id','code_group_id');
 print "</div>";
 
 if ($code_group_id != 0)
@@ -87,7 +89,7 @@ if ($code_group_id != 0)
 	print "<form action='' method='post'><div><input type='hidden' name='code_group_id' value='$code_group_id'/></div>";
 	print "<div>" . T_("Select code: ");
 	$c = $db->GetAll($sql);
-
+	translate_array($c,array("description"));
 	display_chooser($c,'code_id','code_id',true,false,false);
 	print "</div>";
 	print "<p><input type='submit' name='submit' value='" . T_("Assign as blank code") . "'/></p></form>";

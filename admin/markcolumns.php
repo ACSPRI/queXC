@@ -119,7 +119,9 @@ if ($data_id != 0)
 			FROM process";
 
 		print "<div>" . T_("Select process to apply to this variable:") . "</div>";
-		display_chooser($db->GetAll($sql),'process_id','process_id',true,"data_id=$data_id&amp;column_id=$column_id");
+		$rs2 = $db->GetAll($sql);
+		translate_array($rs2,array("description"));
+		display_chooser($rs2,'process_id','process_id',true,"data_id=$data_id&amp;column_id=$column_id");
 
 		if ($process_id != 0)
 		{
@@ -158,7 +160,7 @@ if ($data_id != 0)
 		ORDER BY w.work_id ASC";
 
 	$rs = $db->GetAll($sql);
-
+	translate_array($rs,array("description"));
 	p(T_("Current work for this data file"),"h2");
 	xhtml_table($rs,array('work_id','name','description','parent_work_id','oname'),array(T_("Work ID"),T_("Variable name"),T_("Process description"),T_("Parent job"),T_("Assigned operator")));
 

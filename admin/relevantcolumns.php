@@ -121,6 +121,7 @@ if ($data_id != 0)
 	
 		print "<div>" . T_("Select process: ");
 		$c = $db->GetAll($sql);
+		translate_array($c,array("description"));
 		display_chooser($c,'process_id','process_id',true,"data_id=$data_id&amp;column_id=$column_id");
 		print "</div>";
 	

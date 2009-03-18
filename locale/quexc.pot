@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: queXC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-12 10:58+1000\n"
+"POT-Creation-Date: 2009-03-18 12:41+1000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Adam Zammit <adam.zammit@deakin.edu.au>\n"
 "Language-Team: \n"
@@ -14,30 +14,30 @@ msgstr ""
 "X-Poedit-Basepath: /misc/htdocsdev/quexc/\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: endwork.php:49
-#: index.php:84
+#: endwork.php:48
+#: index.php:83
 msgid "queXC"
 msgstr ""
 
-#: endwork.php:55
+#: endwork.php:54
 msgid "Work is complete"
 msgstr ""
 
-#: endwork.php:58
+#: endwork.php:57
 #: index.php:155
-#: workhistory.php:78
+#: workhistory.php:80
 msgid "No operator"
 msgstr ""
 
-#: index.php:97
+#: index.php:96
 msgid "No more work currently available"
 msgstr ""
 
-#: index.php:98
+#: index.php:97
 msgid "Try again for more work"
 msgstr ""
 
-#: index.php:99
+#: index.php:98
 msgid "End work"
 msgstr ""
 
@@ -61,42 +61,42 @@ msgstr ""
 msgid "Error, try with Firefox"
 msgstr ""
 
-#: workhistory.php:55
+#: workhistory.php:54
 msgid "Work History"
 msgstr ""
 
-#: workhistory.php:59
+#: workhistory.php:58
 msgid "Today"
 msgstr ""
 
-#: workhistory.php:59
+#: workhistory.php:58
 msgid "Redo"
 msgstr ""
 
-#: workhistory.php:73
+#: workhistory.php:72
 msgid "No work history"
 msgstr ""
 
-#: workhistory.php:75
+#: workhistory.php:76
 msgid "Date"
 msgstr ""
 
-#: workhistory.php:75
-#: admin/progress.php:106
+#: workhistory.php:76
+#: admin/progress.php:108
 msgid "Column"
 msgstr ""
 
-#: workhistory.php:75
+#: workhistory.php:76
 msgid "Data"
 msgstr ""
 
-#: workhistory.php:75
+#: workhistory.php:76
 #: admin/operatorperformance.php:87
-#: admin/createprocess.php:127
+#: admin/createprocess.php:135
 msgid "Process"
 msgstr ""
 
-#: workhistory.php:75
+#: workhistory.php:76
 msgid "Redo?"
 msgstr ""
 
@@ -107,7 +107,6 @@ msgstr ""
 #: admin/markcolumns.php:83
 #: admin/adddata.php:86
 #: admin/progress.php:75
-#: admin/export.php:85
 msgid "Select data file: "
 msgstr ""
 
@@ -123,49 +122,49 @@ msgstr ""
 msgid "Select process to apply to this variable:"
 msgstr ""
 
-#: admin/markcolumns.php:126
+#: admin/markcolumns.php:128
 msgid "Select operator(s) to apply this process"
 msgstr ""
 
-#: admin/markcolumns.php:142
+#: admin/markcolumns.php:144
 msgid "Any operator: enter how many"
 msgstr ""
 
-#: admin/markcolumns.php:144
+#: admin/markcolumns.php:146
 #: admin/operatorperformance.php:87
 msgid "Operator"
 msgstr ""
 
-#: admin/markcolumns.php:144
+#: admin/markcolumns.php:146
 msgid "Select"
 msgstr ""
 
-#: admin/markcolumns.php:146
+#: admin/markcolumns.php:148
 #: admin/progress.php:104
 msgid "Create work"
 msgstr ""
 
-#: admin/markcolumns.php:162
+#: admin/markcolumns.php:164
 msgid "Current work for this data file"
 msgstr ""
 
-#: admin/markcolumns.php:163
+#: admin/markcolumns.php:165
 msgid "Work ID"
 msgstr ""
 
-#: admin/markcolumns.php:163
+#: admin/markcolumns.php:165
 msgid "Variable name"
 msgstr ""
 
-#: admin/markcolumns.php:163
+#: admin/markcolumns.php:165
 msgid "Process description"
 msgstr ""
 
-#: admin/markcolumns.php:163
+#: admin/markcolumns.php:165
 msgid "Parent job"
 msgstr ""
 
-#: admin/markcolumns.php:163
+#: admin/markcolumns.php:165
 msgid "Assigned operator"
 msgstr ""
 
@@ -203,6 +202,30 @@ msgstr ""
 #: admin/importcsv.php:77
 #: admin/import.php:80
 msgid "Create new data file"
+msgstr ""
+
+#: admin/databasestrings.php:33
+msgid "Blank"
+msgstr ""
+
+#: admin/databasestrings.php:34
+msgid "Not codeable"
+msgstr ""
+
+#: admin/databasestrings.php:35
+msgid "Spacing"
+msgstr ""
+
+#: admin/databasestrings.php:36
+msgid "Spell check"
+msgstr ""
+
+#: admin/databasestrings.php:37
+msgid "Email validate"
+msgstr ""
+
+#: admin/databasestrings.php:38
+msgid "Create new code group"
 msgstr ""
 
 #: admin/adddata.php:62
@@ -251,23 +274,23 @@ msgstr ""
 msgid "No work remaining"
 msgstr ""
 
-#: admin/progress.php:106
+#: admin/progress.php:108
 msgid "Rows to do"
 msgstr ""
 
-#: admin/progress.php:106
+#: admin/progress.php:108
 msgid "Data file"
 msgstr ""
 
-#: admin/progress.php:106
+#: admin/progress.php:108
 msgid "Process to apply"
 msgstr ""
 
-#: admin/progress.php:106
+#: admin/progress.php:108
 msgid "For specific operator?"
 msgstr ""
 
-#: admin/progress.php:106
+#: admin/progress.php:108
 msgid "Delete work"
 msgstr ""
 
@@ -295,48 +318,52 @@ msgstr ""
 msgid "Create process"
 msgstr ""
 
-#: admin/createprocess.php:79
+#: admin/createprocess.php:81
 msgid "Successfully created process"
 msgstr ""
 
-#: admin/createprocess.php:81
+#: admin/createprocess.php:83
 msgid "Failed to create process"
 msgstr ""
 
-#: admin/createprocess.php:93
+#: admin/createprocess.php:95
 #: admin/selectblankcode.php:73
 msgid "Select code group: "
 msgstr ""
 
-#: admin/createprocess.php:105
+#: admin/createprocess.php:109
 msgid "Select parent process (if any): "
 msgstr ""
 
-#: admin/createprocess.php:109
+#: admin/createprocess.php:115
 msgid "Automatically assign a code if the code label exactly matches the data?"
 msgstr ""
 
-#: admin/createprocess.php:110
+#: admin/createprocess.php:116
 msgid "Automatically assign a code if the code value exactly matches the data?"
 msgstr ""
 
-#: admin/createprocess.php:112
+#: admin/createprocess.php:117
+msgid "Use the code group as a template? (Create a new, editable code group for each work unit that this is assigned to)"
+msgstr ""
+
+#: admin/createprocess.php:119
 msgid "Name for process using this code: "
 msgstr ""
 
-#: admin/createprocess.php:115
+#: admin/createprocess.php:122
 msgid "Create new process"
 msgstr ""
 
-#: admin/createprocess.php:125
+#: admin/createprocess.php:132
 msgid "Existing processes"
 msgstr ""
 
-#: admin/createprocess.php:127
+#: admin/createprocess.php:135
 msgid "Process ID"
 msgstr ""
 
-#: admin/createprocess.php:127
+#: admin/createprocess.php:135
 msgid "Code Group"
 msgstr ""
 
@@ -372,40 +399,40 @@ msgstr ""
 msgid "Export CSV file"
 msgstr ""
 
-#: admin/operatoradd.php:65
+#: admin/operatoradd.php:64
 msgid "Added: "
 msgstr ""
 
-#: admin/operatoradd.php:69
+#: admin/operatoradd.php:68
 msgid "Could not add"
 msgstr ""
 
-#: admin/operatoradd.php:69
+#: admin/operatoradd.php:68
 msgid "There may already be an operator of this name"
 msgstr ""
 
-#: admin/operatoradd.php:77
-#: admin/operatoradd.php:86
+#: admin/operatoradd.php:76
+#: admin/operatoradd.php:85
 msgid "Add an operator"
 msgstr ""
 
-#: admin/operatoradd.php:87
+#: admin/operatoradd.php:86
 msgid "Add an operator to allow them to use queXC"
 msgstr ""
 
-#: admin/operatoradd.php:88
+#: admin/operatoradd.php:87
 msgid "Use this form to enter the username of a user based on your directory security system. For example, if you have secured the base directory of queXC using Apache file based security, enter the usernames of the users here."
 msgstr ""
 
-#: admin/operatoradd.php:90
+#: admin/operatoradd.php:89
 msgid "Enter the username of an operator to add:"
 msgstr ""
 
-#: admin/operatoradd.php:91
+#: admin/operatoradd.php:90
 msgid "Enter a description of the operator to add:"
 msgstr ""
 
-#: admin/operatoradd.php:92
+#: admin/operatoradd.php:91
 msgid "Add user"
 msgstr ""
 
@@ -422,15 +449,15 @@ msgstr ""
 msgid "Select row: "
 msgstr ""
 
-#: admin/modificationhistory.php:103
+#: admin/modificationhistory.php:105
 msgid "Row"
 msgstr ""
 
-#: admin/modificationhistory.php:103
+#: admin/modificationhistory.php:105
 msgid "Assigned"
 msgstr ""
 
-#: admin/modificationhistory.php:103
+#: admin/modificationhistory.php:105
 msgid "Completed"
 msgstr ""
 
@@ -439,23 +466,23 @@ msgstr ""
 msgid "Export code groups"
 msgstr ""
 
-#: admin/exportcode.php:72
+#: admin/exportcode.php:74
 msgid "Export code group"
 msgstr ""
 
-#: admin/worklist.php:61
+#: admin/worklist.php:60
 msgid "Work List"
 msgstr ""
 
-#: admin/worklist.php:78
+#: admin/worklist.php:79
 msgid "Work Unit ID"
 msgstr ""
 
-#: admin/worklist.php:78
+#: admin/worklist.php:79
 msgid "Date Completed"
 msgstr ""
 
-#: admin/worklist.php:78
+#: admin/worklist.php:79
 msgid "Delete?"
 msgstr ""
 
@@ -585,20 +612,20 @@ msgstr ""
 msgid "Select relevant columns"
 msgstr ""
 
-#: admin/relevantcolumns.php:130
-#: admin/relevantcolumns.php:139
+#: admin/relevantcolumns.php:131
+#: admin/relevantcolumns.php:140
 msgid "Remove"
 msgstr ""
 
-#: admin/relevantcolumns.php:139
+#: admin/relevantcolumns.php:140
 msgid "Related column"
 msgstr ""
 
-#: admin/relevantcolumns.php:141
+#: admin/relevantcolumns.php:142
 msgid "Select column to add"
 msgstr ""
 
-#: admin/relevantcolumns.php:153
+#: admin/relevantcolumns.php:154
 msgid "Add column"
 msgstr ""
 
@@ -651,12 +678,8 @@ msgstr ""
 msgid "Allow additions to this code group?"
 msgstr ""
 
-#: admin/importcode.php:86
-msgid "Create new code group"
-msgstr ""
-
-#: functions/functions.code.php:190
-#: functions/functions.code.php:196
+#: functions/functions.code.php:193
+#: functions/functions.code.php:199
 msgid "Add"
 msgstr ""
 
@@ -668,25 +691,29 @@ msgstr ""
 msgid "Code imported from (data_id:variable name)"
 msgstr ""
 
-#: functions/functions.work.php:237
-#: functions/functions.work.php:458
+#: functions/functions.work.php:239
+#: functions/functions.work.php:573
 msgid "Code for group:"
 msgstr ""
 
-#: functions/functions.work.php:237
-#: functions/functions.work.php:458
+#: functions/functions.work.php:239
+#: functions/functions.work.php:573
 msgid "Level:"
 msgstr ""
 
-#: functions/functions.work.php:445
+#: functions/functions.work.php:422
+msgid "Copy of:"
+msgstr ""
+
+#: functions/functions.work.php:560
 msgid "code for variable:"
 msgstr ""
 
-#: functions/functions.work.php:445
+#: functions/functions.work.php:560
 msgid "by operator:"
 msgstr ""
 
-#: functions/functions.work.php:596
+#: functions/functions.work.php:713
 msgid "ERROR: There is more than one work_unit assigned to you that is not complete. This may be due to logging on with the same username on multiple machines at the same time. Please avoid doing this - and ask your technician to delete from the work_unit table the rows that are assigned to your operator id"
 msgstr ""
 

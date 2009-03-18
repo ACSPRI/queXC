@@ -1,6 +1,6 @@
 <?
 /**
- * Export Code group 
+ * Translation template for strings in the database
  *
  *
  *      This file is part of queXC
@@ -29,50 +29,12 @@
  * 
  */
 
-/**
- * Configuration file
- */
-include ("../config.inc.php");
 
-/**
- * XHTML functions
- */
-include ("../functions/functions.xhtml.php");
+T_("Blank");
+T_("Not codeable");
+T_("Spacing");
+T_("Spell check");
+T_("Email validate");
+T_("Create new code group");
 
-/**
- * DB functions
- */
-include("../db.inc.php");
-
-/**
- * Export functions
- */
-include("../functions/functions.export.php");
-
-if (isset($_GET['codegroup']))
-{
-	export_code(intval($_GET['codegroup']));
-	exit();
-}
-
-xhtml_head(T_("Export code groups"),true,array("../css/table.css"),array("../js/display.js"));
-
-$code_group_id = 0;
-if (isset($_GET['code_group_id'])) $code_group_id = intval($_GET['code_group_id']);
-
-//Select a code group to export data from
-$sql = "SELECT code_group_id as value,description, CASE WHEN code_group_id = '$code_group_id' THEN 'selected=\'selected\'' ELSE '' END AS selected
-	FROM code_group";
-
-print "<div>" . T_("Select code group: ");
-$rs2 = $db->GetAll($sql);
-translate_array($rs2,array("description"));
-display_chooser($rs2,'code_group_id','code_group_id');
-print "</div>";
-
-if ($code_group_id != 0)
-	print "<p><a href='?codegroup=$code_group_id>" . T_("Export code group") . "</a></p>";
-
-
-xhtml_foot();
 ?>
