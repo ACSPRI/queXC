@@ -67,6 +67,12 @@ if(isset($_GET['csv']))
 	exit();
 }
 
+if(isset($_GET['csvl']))
+{
+	export_csv(intval($_GET['csvl']),true,true);
+	exit();
+}
+
 if(isset($_GET['pspp']))
 {
 	export_pspp(intval($_GET['pspp']));
@@ -94,6 +100,7 @@ if ($data_id != 0)
 	print "<p><a href='?data_id=$data_id&amp;ddi=$data_id'>" . T_("Export DDI file") . "</a></p>";
 	print "<p><a href='?data_id=$data_id&amp;pspp=$data_id'>" . T_("Export PSPP file") . "</a></p>";
 	print "<p><a href='?data_id=$data_id&amp;csv=$data_id'>" . T_("Export CSV file") . "</a></p>";
+	print "<p><a href='?data_id=$data_id&amp;csvl=$data_id'>" . T_("Export CSV file with labels for codes") . "</a></p>";
 }
 
 

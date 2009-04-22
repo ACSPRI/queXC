@@ -47,9 +47,10 @@ include_once(dirname(__FILE__).'/../db.inc.php');
  *
  * @param int $data_id The data id to export
  * @param bool $header Whether to echo the header or not
+ * @param bool $replacecode Whether to replace the code value with the code text
  *
  */
-function export_csv($data_id, $header = true)
+function export_csv($data_id, $header = true, $replacecode = false)
 {
 	global $db;
 
@@ -57,7 +58,7 @@ function export_csv($data_id, $header = true)
 	$sql = "SELECT *
 		FROM `column`
 		WHERE data_id = '$data_id'
-		ORDER BY sortorder ASC";
+		ORDER BY in_input DESC , startpos ASC , sortorder ASC, column_id ASC";
 
 	$columns = $db->GetAll($sql);
 
@@ -81,7 +82,7 @@ function export_csv($data_id, $header = true)
 	$t = 1;
 	foreach($columns as $c)
 	{
-		echo $c['description'];
+		echo "\"" . str_replace("\"", "'", $c['description']) . "\"";
 		if ($t < $ccount) 
 			echo ",";
 		$t++;
@@ -96,7 +97,7 @@ function export_csv($data_id, $header = true)
 		$rowtext = "";
 
 		//Get the latest revision of the data for this row...
-		$sql = "SELECT co.startpos, co.width, (
+		$sql = "SELECT co.startpos, co.width, co.code_level_id, (
 				SELECT DATA FROM cell_revision
 				WHERE cell_id = c.cell_id
 				ORDER BY cell_revision_id DESC
@@ -112,7 +113,21 @@ function export_csv($data_id, $header = true)
 		$t = 1;
 		foreach($cells as $cell)
 		{
-			$rowtext .= $cell['data'];
+			$v = $cell['data']; //default is the listed data
+
+			if ($replacecode && !empty($cell['code_level_id']))
+			{
+				$sql = "SELECT label
+					FROM `code`
+					WHERE code_level_id = {$cell['code_level_id']}
+					AND value LIKE '{$cell['data']}'";
+
+				$label = $db->CacheGetRow($sql);
+				$v = $label['label'];
+			}
+			
+			$rowtext .= "\"" . str_replace("\"","'",$v) . "\"";
+			
 			if ($t < $ccount)
 				$rowtext .= ",";
 			$t++;
