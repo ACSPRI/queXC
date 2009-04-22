@@ -222,10 +222,35 @@ function add_code($post)
 	{
 		$value = $db->qstr($post['newcodevaluea']);
 		$text = $db->qstr($post['newcodetexta']);
+		$width = strlen($post['newcodevaluea']); //length of the actual entered text
 
 		$level = intval($post['newcodelevel']);
 		$sibling = intval($post['newcodesibling']);
 		
+		$sql = "SELECT width
+			FROM code_level
+			WHERE code_level_id = $level";
+
+		$clwidth = $db->GetRow($sql);
+
+		//todo: check for type of variable
+
+		if ($width > $clwidth['width']) //if the entered value is wider than the current column
+		{
+			$sql = "UPDATE code_level
+				SET width = '$width'
+				WHERE code_level_id = $level";
+
+			$db->Execute($sql);
+
+			//update any columns relying on this code
+			$sql = "UPDATE `column`
+				SET width = '$width'
+				WHERE code_level_id = $level";
+
+			$db->Execute($sql);
+		}
+
 		$sql = "INSERT INTO code (code_id,value,label,keywords,code_level_id)
 			VALUES (NULL,$value,$text,NULL,$level)";
 		$db->Execute($sql);
@@ -278,7 +303,7 @@ function add_code($post)
 			{
 				$level = $codelevel['level'];
 				$level = $level + 1;
-				$width = strlen($value);
+				$width = strlen($post['newcodevalueb']); //length of the actual entered text
 				$sql = "INSERT INTO code_level (code_level_id,code_group_id,level,width)
 					VALUES (NULL,{$codelevel['code_group_id']},$level,$width)";
 				$db->Execute($sql);
