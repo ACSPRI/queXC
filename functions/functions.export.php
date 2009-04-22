@@ -104,7 +104,7 @@ function export_csv($data_id, $header = true)
 			FROM `column` AS co
 			LEFT JOIN cell AS c ON ( c.column_id = co.column_id AND c.row_id = '{$row['row_id']}' )
 			WHERE co.data_id = '$data_id'
-			ORDER BY co.in_input DESC , co.startpos ASC , co.sortorder ASC";
+			ORDER BY co.in_input DESC , co.startpos ASC , co.sortorder ASC, co.column_id ASC";
 
 		$cells = $db->GetAll($sql);
 		
@@ -138,14 +138,6 @@ function export_fixed_width($data_id, $header = true)
 {
 	global $db;
 
-	//Get all columns for this data file
-	$sql = "SELECT *
-		FROM `column`
-		WHERE data_id = '$data_id'
-		ORDER BY sortorder ASC";
-
-	$columns = $db->GetAll($sql);
-
 	//For each (row) export the latest revision from each column
 	$sql = "SELECT row_id
 		FROM `cell` as c, `column` as co
@@ -162,6 +154,7 @@ function export_fixed_width($data_id, $header = true)
 		header ("Content-Disposition: attachment; filename=data_$data_id.txt");
 	}
 
+	
 	foreach($rows as $row)
 	{
 		set_time_limit(240); //need to do this per line as it will take a while...
@@ -169,7 +162,7 @@ function export_fixed_width($data_id, $header = true)
 		$rowtext = "";
 
 		//Get the latest revision of the data for this row...
-		$sql = "SELECT co.startpos, co.width, (
+		$sql = "SELECT co.startpos, co.width, co.in_input, (
 				SELECT DATA FROM cell_revision
 				WHERE cell_id = c.cell_id
 				ORDER BY cell_revision_id DESC
@@ -177,13 +170,25 @@ function export_fixed_width($data_id, $header = true)
 			FROM `column` AS co
 			LEFT JOIN cell AS c ON ( c.column_id = co.column_id AND c.row_id = '{$row['row_id']}' )
 			WHERE co.data_id = '$data_id'
-			ORDER BY co.in_input DESC , co.startpos ASC , co.sortorder ASC";
+			ORDER BY co.in_input DESC , co.startpos ASC , co.sortorder ASC, co.column_id ASC";
 
 		//Trim and pad the data to the correct width
 		$cells = $db->GetAll($sql);
 		
+		$startpos = 1;
 		foreach($cells as $cell)
+		{
+			if ($cell['in_input'] == 1)
+			{
+				if ($cell['startpos'] > $startpos) //if there is a gap, fill it with blank space
+				{
+					$rowtext .= str_pad(" ",($cell['startpos'] - $startpos)," ",STR_PAD_RIGHT);
+					$startpos = $cell['startpos'];
+				}
+			}							
 			$rowtext .= str_pad(substr($cell['data'],0,$cell['width']), $cell['width'], " ", STR_PAD_RIGHT);
+			$startpos += $cell['width'];
+		}
 		
 		$rowtext .= "\r\n";
 
@@ -219,7 +224,7 @@ function export_ddi($data_id)
 	$sql = "SELECT c.column_group_id, cg.description, GROUP_CONCAT( c.name SEPARATOR ' ' ) AS name
 		FROM `column` AS c
 		LEFT JOIN column_group AS cg ON ( cg.column_group_id = c.column_group_id )
-		WHERE c.data_id =1
+		WHERE c.data_id = '$data_id'
 		GROUP BY c.column_group_id";
 
 	$vargroups = $db->GetAll($sql);
@@ -242,7 +247,7 @@ function export_ddi($data_id)
 	$sql = "SELECT c.*
 		FROM `column` as c
 		WHERE data_id = '$data_id'
-		ORDER BY c.in_input DESC , c.startpos ASC , c.sortorder ASC";
+		ORDER BY c.in_input DESC , c.startpos ASC , c.sortorder ASC, c.column_id ASC";
 
 	$cols = $db->GetAll($sql);
 
@@ -410,7 +415,7 @@ function export_pspp($data_id)
 		WHERE data_id = '$data_id'
 		AND c.name IS NOT NULL
 		AND c.name != ''
-		ORDER BY c.in_input DESC , c.startpos ASC , c.sortorder ASC";
+		ORDER BY c.in_input DESC , c.startpos ASC , c.sortorder ASC, c.column_id ASC";
 
 	$cols = $db->GetAll($sql);
 
