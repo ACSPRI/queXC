@@ -264,12 +264,9 @@ foreach($operators as $v)
 }
 
 
-print "</table><p><input type=\"submit\" name=\"submit\ value=\"" . T_("Assign operators to datas") . "\"/></p></form>";
+print "</table><p><input type=\"submit\" name=\"submit\" value=\"" . T_("Assign operators to data") . "\"/></p></form>";
 
 
 xhtml_foot();
 
 ?>
-
-
-
