@@ -79,6 +79,12 @@ if(isset($_GET['pspp']))
 	exit();
 }
 
+if(isset($_GET['psppn']))
+{
+	export_pspp(intval($_GET['psppn']),false);
+	exit();
+}
+
 xhtml_head(T_("Export Data"),true,array("../css/table.css"),array("../js/display.js"));
 
 $data_id = 0;
@@ -98,7 +104,8 @@ if ($data_id != 0)
 
 	print "<p><a href='?data_id=$data_id&amp;data=$data_id'>" . T_("Export fixed width data file") . "</a></p>";
 	print "<p><a href='?data_id=$data_id&amp;ddi=$data_id'>" . T_("Export DDI file") . "</a></p>";
-	print "<p><a href='?data_id=$data_id&amp;pspp=$data_id'>" . T_("Export PSPP file") . "</a></p>";
+	print "<p><a href='?data_id=$data_id&amp;pspp=$data_id'>" . T_("Export PSPP file with data inline") . "</a></p>";
+	print "<p><a href='?data_id=$data_id&amp;psppn=$data_id'>" . T_("Export PSPP file") . "</a></p>";
 	print "<p><a href='?data_id=$data_id&amp;csv=$data_id'>" . T_("Export CSV file") . "</a></p>";
 	print "<p><a href='?data_id=$data_id&amp;csvl=$data_id'>" . T_("Export CSV file with labels for codes") . "</a></p>";
 }

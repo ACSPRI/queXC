@@ -364,7 +364,7 @@ function export_ddi($data_id)
  *
  * NOTE: Assumes there is only one or 0 parents for each code
  *
- * @param int code_group_id The code group to export
+ * @param int $code_group_id The code group to export
  *
  */
 function export_code($code_group_id)
@@ -410,9 +410,10 @@ function pspp_escape($string,$length = 250)
  * Export the data in PSPP form (may also work with SPSS)
  *
  * @param int data_id The data id to export
+ * @param bool include_data Whether or not to include the data
  *
  */
-function export_pspp($data_id)
+function export_pspp($data_id, $include_data = true)
 {
 	global $db;
 
@@ -420,8 +421,10 @@ function export_pspp($data_id)
 	header ("Content-Type: text");
 	header ("Content-Disposition: attachment; filename=data_$data_id.sps");
 
-
-	echo "DATA LIST FIXED /";
+	if ($include_data)
+		echo "DATA LIST FIXED /";
+	else 
+		echo "DATA LIST FILE=\"data_$data_id.txt\" /";
 
 	//export variables in the format: varname start-end (type)
 	//Make sure not to include variables with no name as there is no way to identify them
@@ -458,7 +461,7 @@ function export_pspp($data_id)
 		echo "$varname $startpos-$endpos $vartype";
 	}
 
-	echo "\nVARIABLE LABELS ";
+	echo " .\nVARIABLE LABELS ";
 
 	$first = true;
 	foreach ($cols as $col)
@@ -474,7 +477,7 @@ function export_pspp($data_id)
 		echo "$varname '$vardescription' ";
 	}
 
-	echo "\nVALUE LABELS";
+	echo " .\nVALUE LABELS";
 
 	//If there are categories, insert them here
 	foreach ($cols as $col)
@@ -510,11 +513,14 @@ function export_pspp($data_id)
 		}
 	}
 
-	echo "\nBEGIN DATA.\n";
+	echo " .\n";
 
-	export_fixed_width($data_id,false);
-
-	echo "END DATA.\n";
+	if ($include_data)
+	{
+		echo "BEGIN DATA.\n";
+		export_fixed_width($data_id,false);
+		echo "END DATA.\n";
+	}
 }
 
 ?>
