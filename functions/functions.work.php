@@ -334,7 +334,7 @@ function get_work_other_variables($work_unit_id)
 
 	//DPCc describes that given a DPC, the given c's are relevant
 
-	$sql = "SELECT c.name,ce2.cell_id
+	$sql = "SELECT CONCAT(c.name, ': ', c.description) as name ,ce2.cell_id,c.code_level_id
 		FROM work_unit as wu, column_process_column as cpc, `column` as c, cell as ce1, cell as ce2, work as w
 		WHERE wu.work_id = w.work_id
 		AND w.column_id = cpc.column_id
@@ -352,6 +352,18 @@ function get_work_other_variables($work_unit_id)
 	foreach($rows as $row)
 	{
 		list ($t1,$t2) = get_cell_data($row['cell_id']);
+		if (!empty($row['code_level_id']))
+		{
+			$cli = $row['code_level_id'];
+			//Replace with code label if a code supplied
+			$sql = "SELECT `label`
+				FROM `code`
+				WHERE `code_level_id` = '$cli'
+				AND `value` LIKE '$t1'";
+			$rs = $db->GetRow($sql);
+			if (!empty($rs))
+				$t1 = $rs['label'];
+		}
 		$data[] = array('name' => $row['name'], 'data' => $t1);
 	}
 
