@@ -74,7 +74,8 @@ $sql = "SELECT o.description AS odes, p.description AS pdes, count( * ) as count
 	JOIN operator AS o ON ( o.operator_id = wu.operator_id )
 	JOIN process AS p ON ( p.process_id = wu.process_id )
 	WHERE wu.completed IS NOT NULL
-	AND wu.assigned IS NOT NULL ";
+	AND wu.assigned IS NOT NULL
+	AND TIMESTAMPDIFF(SECOND, wu.assigned, wu.completed) < '" . PERFORMANCE_IGNORE_LONGER_THAN . "' ";
 
 if ($operator_id != 0) $sql .= " AND wu.operator_id = '$operator_id' ";
 if ($process_id != 0) $sql .= " AND wu.process_id = '$process_id' ";

@@ -12,7 +12,14 @@
   top : 85%;
   left : 0;
   bottom : auto;
-  width : 100%;
+  width : 70%;
+  height : 15%;
+}#performance {
+  position : fixed;
+  top : 85%;
+  left : 70%;
+  bottom : auto;
+  width : 30%;
   height : 15%;
 }
 .embeddedobject {

@@ -58,7 +58,12 @@ if (!defined('SPELL_DICTIONARY_FILE')) define('SPELL_DICTIONARY_FILE',dirname(__
 if (!defined('ASSIGN_MAX_LIMIT')) define('ASSIGN_MAX_LIMIT',100);
 
 if (!defined('WORK_HISTORY_LIMIT')) define('WORK_HISTORY_LIMIT',50);
-if (!defined('WORK_HISTORY_STRING_LENGTH')) define('WORK_HISTORY_STRING_LENGTH',20);
+if (!defined('WORK_HISTORY_STRING_LENGTH')) define('WORK_HISTORY_STRING_LENGTH',80);
+
+/**
+ * For calculating performance, ignore times longer than this (seconds)
+ */
+if (!defined('PERFORMANCE_IGNORE_LONGER_THAN')) define('PERFORMANCE_IGNORE_LONGER_THAN', 360);
 
 /**
  * Path to ADODB

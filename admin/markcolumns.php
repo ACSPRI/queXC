@@ -52,6 +52,9 @@ if (isset($_POST['submit']))
 	$process_id = intval($_POST['process_id']);
 	$column_id = intval($_POST['column_id']);
 	$anyoperators = intval($_POST['any']);
+	$mcgi = false;
+	if (isset($_POST['multi_code_group_id']) && !empty($_POST['multi_code_group_id']))
+		$mcgi = intval($_POST['multi_code_group_id']);
 	$operators = array();
 	
 	for ($i = 0; $i < $anyoperators; $i++)
@@ -66,7 +69,7 @@ if (isset($_POST['submit']))
 	if (count($operators) > 0)
 	{
 		include ("../functions/functions.work.php");
-		create_work($data_id,$process_id,$column_id,$operators);
+		create_work($data_id,$process_id,$column_id,$operators,$mcgi);
 	}
 }
 
@@ -144,6 +147,13 @@ if ($data_id != 0)
 			$rs[] = array('description' => T_("Any operator: enter how many"), 'cbox' => "<input type='text' name='any' value='0'/>");
 
 			xhtml_table($rs,array('description','cbox'),array(T_("Operator"),T_("Select")));
+
+			//Add a code group to select to generate multiple columns
+			print "<div>" . T_("To create a multiple choice coding scheme, select a code group to generate multiple groups from") . "</div>"; 
+
+			$sql = "SELECT code_group_id as value, description, '' AS selected
+				FROM code_group";
+			display_chooser($db->GetAll($sql),'multi_code_group_id','multi_code_group_id',true,false,false);
 
 			print "<div><input type='submit' name='submit' value='" . T_("Create work") . "'/></div></form>";
 		}

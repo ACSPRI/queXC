@@ -203,81 +203,137 @@ function save_work_process($post)
 			new_cell_revision($cell_id,$post['ci' . $cell_id],$work_unit_id);
 	}
 
-	//If the process has a code_group - update all code levels (cli) with the posted codes 
 
-	$sql = "SELECT c.code_level_id,c.column_id,ce.row_id,c.column_group_id
-		FROM work_unit as wu, `column` as c, work as w, cell as ce, process as p
+	//If we are dealing with a multi-column, get each column group
+	$sql = "SELECT c.column_group_id
+		FROM work_unit as wu, `column` as c, work as w, process as p
 		WHERE wu.work_unit_id = '$work_unit_id'
 		AND wu.process_id = p.process_id
 		AND p.code_group_id IS NOT NULL
 		AND wu.work_id = w.work_id
-		AND c.column_group_id = w.column_group_id
-		AND ce.cell_id = wu.cell_id";
+		AND w.column_multi_group_id IS NOT NULL
+		AND c.column_multi_group_id = w.column_multi_group_id
+		GROUP BY c.column_group_id";
 
-	$rs = $db->Execute($sql); //A listing of all columns to write data to.
+	$mg = $db->GetAll($sql);
 
-	if ($db->HasFailedTrans()) print $sql;
-	
-	if (!empty($rs))
+	$groups = array();
+
+	if (empty($mg))
 	{
-		$rows = $rs->GetAssoc(); //By code_level_id
-	
-		$t= current($rows);
-		$row_id = $t['row_id'];
-
-		//If a code level doesn't exist in a column, create the column
-		foreach($post as $key => $val)
+		$groups[] = " AND c.column_group_id = w.column_group_id ";
+	}
+	else
+	{
+		foreach($mg as $m)
 		{
-			if (substr($key,0,3) == 'cli')
+			$groups[] = " AND c.column_group_id = {$m['column_group_id']} ";
+
+			//If text is submitted for this group, update via the reference_column_group
+			if (isset($post['tt' . $m['column_group_id']]))
 			{
-				$code_level_id = intval(substr($key,3));
-				if (!isset($rows[$code_level_id]))
-				{
-					//create a column
-
-					$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,code_level_id)
-						SELECT NULL,c.data_id,c.column_group_id,CONCAT('L$code_level_id','G',c.column_group_id),CONCAT('" . T_("Code for group:") . " ', cg.description, ' "  . T_("Level:") . " ',cl.level),0,cl.width,(SELECT c.value NOT REGEXP '[0-9]+' as ttype
-							FROM code as c
-							WHERE c.code_level_id = $code_level_id
-							GROUP BY c.value NOT REGEXP '[0-9]+'
-							ORDER BY ttype ASC
-							LIMIT 1),'0','0',$code_level_id
-						FROM work_unit AS wu, `column` AS c, work AS w, cell AS ce, code_group as cg, code_level as cl, process as p
-						WHERE wu.work_unit_id = $work_unit_id
-						AND p.process_id = wu.process_id
-						AND p.code_group_id IS NOT NULL
-						AND wu.work_id = w.work_id
-						AND c.column_group_id = w.column_group_id
-						AND ce.cell_id = wu.cell_id
-						AND cl.code_level_id = $code_level_id
-						AND cg.code_group_id = cl.code_group_id
-						LIMIT 1";
-
-					$db->Execute($sql);
-
-					$column_id = $db->Insert_ID();
-
-					$rows[$code_level_id] = array('row_id' => $row_id, 'column_id' => $column_id);
-				}
+				//get column and row id
+				$sql = "SELECT c.column_id, ce.row_id
+					FROM `column` as c, cell as ce, work_unit as wu
+					WHERE reference_column_group_id = '{$g['column_group_id']}'
+					AND ce.cell_id = wu.cell_id
+					AND wu.work_unit_id = '$work_unit_id'";
+				
+				$tt = $db->GetRow($sql);
+	
+	
+				$cell_id = get_cell_id($tt['row_id'],$tt['column_id']);
+				if ($cell_id == false)
+					$cell_id = new_cell($tt['row_id'],$tt['column_id']);
+				new_cell_revision($cell_id,$post['tt' . $m['column_group_id']],$work_unit_id);
 			}
-		}
-	
-		foreach($rows as $key => $row)
-		{
-			$code_level_id = $key;
-			
-			$code = ""; //insert blank if nothing submitted - otherwise old codes will shine through
-	
-			if (isset($post['cli' . $code_level_id])) //if something was submitted for this code level
-				$code = $post['cli' . $code_level_id];
-	
-			$cell_id = get_cell_id($row['row_id'],$row['column_id']);
-			if ($cell_id == false)
-				$cell_id = new_cell($row['row_id'],$row['column_id']);
-			new_cell_revision($cell_id,$code,$work_unit_id);
 		}
 	}
 
+	
+	foreach($groups as $g) //loop over either all columns groups for this question or the one
+	{
+		
+
+		//If the process has a code_group - update all code levels (cli) with the posted codes 
+
+		$sql = "SELECT c.code_level_id,c.column_id,ce.row_id,c.column_group_id
+			FROM work_unit as wu, `column` as c, work as w, cell as ce, process as p
+			WHERE wu.work_unit_id = '$work_unit_id'
+			AND wu.process_id = p.process_id
+			AND p.code_group_id IS NOT NULL
+			AND wu.work_id = w.work_id
+			AND ce.cell_id = wu.cell_id ";
+	
+		$sql .= $g;
+
+		$rs = $db->Execute($sql); //A listing of all columns to write data to.
+	
+		if ($db->HasFailedTrans()) print $sql;
+		
+		if (!empty($rs))
+		{
+			$rows = $rs->GetAssoc(); //By code_level_id
+		
+			$t = current($rows);
+			$row_id = $t['row_id'];
+	
+			//If a code level doesn't exist in a column, create the column
+			foreach($post as $key => $val)
+			{
+				if (substr($key,0,2) == 'cc')
+				{
+					$cc = explode(substr($key,2),"X");
+					$code_level_id = intval($ccc[0]);
+					$column_group_id = intval($ccc[1]);
+
+					if ($column_group_id == $t['column_group_id'] && !isset($rows[$code_level_id]))
+					{
+						//create a column
+	
+						$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,code_level_id,column_multi_group_id)
+							SELECT NULL,c.data_id,c.column_group_id,CONCAT('L$code_level_id','G',c.column_group_id),CONCAT('" . T_("Code for group:") . " ', cg.description, ' "  . T_("Level:") . " ',cl.level),0,cl.width,(SELECT c.value NOT REGEXP '[0-9]+' as ttype
+								FROM code as c
+								WHERE c.code_level_id = $code_level_id
+								GROUP BY c.value NOT REGEXP '[0-9]+'
+								ORDER BY ttype ASC
+								LIMIT 1),'0','0',$code_level_id,c.column_multi_group_id
+							FROM work_unit AS wu, `column` AS c, work AS w, cell AS ce, code_group as cg, code_level as cl, process as p
+							WHERE wu.work_unit_id = $work_unit_id
+							AND p.process_id = wu.process_id
+							AND p.code_group_id IS NOT NULL
+							AND wu.work_id = w.work_id
+							AND c.column_group_id = w.column_group_id
+							AND ce.cell_id = wu.cell_id
+							AND cl.code_level_id = $code_level_id
+							AND cg.code_group_id = cl.code_group_id
+							LIMIT 1";
+	
+						$db->Execute($sql);
+	
+						$column_id = $db->Insert_ID();
+	
+						$rows[$code_level_id] = array('row_id' => $row_id, 'column_id' => $column_id);
+					}
+				}
+			}
+		
+			foreach($rows as $key => $row)
+			{
+				$code_level_id = $key;
+				
+				$code = ""; //insert blank if nothing submitted - otherwise old codes will shine through
+		
+				if (isset($post['cc' . $code_level_id . "X" .  $t['column_group_id']])) //if something was submitted for this code level
+					$code = $post['cc' . $code_level_id . "X" . $t['column_group_id']];
+		
+				$cell_id = get_cell_id($row['row_id'],$row['column_id']);
+				if ($cell_id == false)
+					$cell_id = new_cell($row['row_id'],$row['column_id']);
+				new_cell_revision($cell_id,$code,$work_unit_id);
+			}
+		}
+	}
 	//Complete this row
 	complete_work($work_unit_id);
 
@@ -534,9 +590,10 @@ function copy_code_group($code_group_id)
  * @param int process_id The process id to apply
  * @param int column_id The column id where the data originates
  * @param array operators An array of operators to assign the work to (if any)
+ * @param int|bool $mcgi Multi code_group_id - to create multiple columns if exists
  * @return bool True on success, false on fail
  */
-function create_work($data_id,$process_id,$column_id,$operators = array('NULL'))
+function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),$mcgi = false)
 {
 	global $db;
 
@@ -550,53 +607,95 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'))
 	$c = $db->GetRow($sql);
 
 	$column_group_id = "NULL";
+	$cmgi = "NULL";
 	$work_id = array();
 
 	if (!empty($c['code_group_id']))
 	{
-		$template = $c['template'];
+		$mc = array(array('cmgi' => "NULL", 'label' => ""));
 
-		if ($template == 1) //create a new code group based on this one
-			$code_group_id = copy_code_group($c['code_group_id']);
-		else
-			$code_group_id = $c['code_group_id'];
+
+		if ($mcgi)
+		{
+			$sql = "INSERT INTO column_multi_group(description,code_group_id)
+				VALUES ('','$mcgi')";
+
+			$db->Execute($sql);
+			
+			$cmgi = $db->Insert_ID();
+
+			$sql = "SELECT $cmgi as cmgi,c.label as label
+				FROM code as c,code_level as cl
+				WHERE cl.code_group_id = '$mcgi'
+				AND c.code_level_id = cl.code_level_id
+				AND cl.level = 0"; //select the top level only
+
+			$mc = $db->GetAll($sql);
+		}
+
 
 		//Columns need to be created as we are creating a new code
-
+	
 		//need to create a new column for each assigned operator (if there is one)
 		foreach($operators as $operator_id)
 		{
-
-			//First create a new column_group
-			$sql = "INSERT INTO column_group (column_group_id,description,code_group_id)
-				SELECT NULL, CONCAT(p.description, ' " . T_("code for variable:") . " ', c.name, CASE WHEN o.operator_id IS NULL THEN '' ELSE CONCAT(' " . T_("by operator:") . " ', o.description) END ), '$code_group_id'
-				FROM process as p
-				JOIN `column` as c on (c.column_id = '$column_id')
-				LEFT JOIN operator as o on (o.operator_id = $operator_id)
-				WHERE p.process_id = '$process_id'";
-		
-			$db->Execute($sql);
-			
-			$column_group_id = $db->Insert_ID();
-
-			//Now create all necessary columns
-
-			$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,code_level_id)
-				SELECT NULL,'$data_id','$column_group_id',CONCAT('L',ocl.code_level_id,'G$column_group_id'),CONCAT('". T_("Code for group:") ." ',ocg.description, ' " . T_("Level:") . " ',ocl.level),0,width,(SELECT c.value NOT REGEXP '[0-9]+' as ttype
-			FROM code as c
-			WHERE c.code_level_id = ocl.code_level_id
-			GROUP BY c.value NOT REGEXP '[0-9]+'
-			ORDER BY ttype ASC
-			LIMIT 1),'0','0',ocl.code_level_id
-				FROM code_level as ocl, code_group as ocg
-				WHERE ocl.code_group_id = '$code_group_id'
-				AND ocg.code_group_id = '$code_group_id'";
+			foreach($mc as $m) //loop over all multi columns 
+			{
+				$template = $c['template'];
+				$cmgi = $m['cmgi'];
 	
-			$db->Execute($sql);
+				if ($template == 1) //create a new code group based on this one
+					$code_group_id = copy_code_group($c['code_group_id']);
+				else
+					$code_group_id = $c['code_group_id'];
+	
+				//First create a new column_group
+				$sql = "INSERT INTO column_group (column_group_id,description,code_group_id)
+					SELECT NULL, CONCAT(p.description, ' " . T_("code for variable:") . " ', c.name, CASE WHEN o.operator_id IS NULL THEN '' ELSE CONCAT(' " . T_("by operator:") . " ', o.description) END ), '$code_group_id'
+					FROM process as p
+					JOIN `column` as c on (c.column_id = '$column_id')
+					LEFT JOIN operator as o on (o.operator_id = $operator_id)
+					WHERE p.process_id = '$process_id'";
+			
+				$db->Execute($sql);
+				
+				$column_group_id = $db->Insert_ID();
+	
+				//Now create all necessary columns
+	
+				$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,code_level_id,column_multi_group_id)
+					SELECT NULL,'$data_id','$column_group_id',CONCAT('L',ocl.code_level_id,'G$column_group_id'),";
+
+				if ($cmgi == "NULL")
+					$sql .= "CONCAT('". T_("Code for group:") ." ',ocg.description, ' " . T_("Level:") . " ',ocl.level)";
+				else
+					$sql .= "'{$m['label']}'";
+
+				$sql .= ",0,width,(SELECT c.value NOT REGEXP '[0-9]+' as ttype
+						FROM code as c
+						WHERE c.code_level_id = ocl.code_level_id
+						GROUP BY c.value NOT REGEXP '[0-9]+'
+						ORDER BY ttype ASC
+						LIMIT 1),'0','0',ocl.code_level_id,$cmgi
+					FROM code_level as ocl, code_group as ocg
+					WHERE ocl.code_group_id = '$code_group_id'
+					AND ocg.code_group_id = '$code_group_id'";
+	
+				$db->Execute($sql);
+
+				if ($mcgi) //if multi columns, insert a text column for each code column
+				{
+					$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,reference_column_group_id) VALUES (NULL,'$data_id','$column_group_id','TG$column_group_id','Text for $column_group_id','0','0','1','0','0','$column_group_id')";
+					$db->Execute($sql);
+				}
+			}
+
+			if ($cmgi != "NULL")
+				$column_group_id = "NULL";
 
 			//Create the initial work item
-			$sql = "INSERT INTO work (work_id,column_id,column_group_id,process_id,operator_id)
-				VALUES (NULL,'$column_id',$column_group_id,'$process_id',$operator_id)";
+			$sql = "INSERT INTO work (work_id,column_id,column_group_id,process_id,operator_id,column_multi_group_id)
+				VALUES (NULL,'$column_id',$column_group_id,'$process_id',$operator_id,$cmgi)";
 		
 			$db->Execute($sql);
 	

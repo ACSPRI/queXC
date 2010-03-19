@@ -1,0 +1,31 @@
+{
+	"Menu":{
+		"TestMenu": {
+			"title": "test menu"
+		},
+		"AddItem":{
+			"title": "add item demo"
+		},
+		"MoveItem":{
+			"title": "move item demo"
+		},
+		"CopyItem":{
+			"title": "copy item demo"
+		},
+		"RemoveItem":{
+			"title": "remove item demo"
+		},
+		"Connect":{
+			"title": "connect submenu demo"
+		},
+		"Set": {
+			"title": "set method"
+		},
+		"LoadRequest": {
+			"title": "load data"
+		},
+		"Checkbox": {
+			"title": "checkbox demo"
+		}
+	}
+}

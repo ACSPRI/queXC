@@ -67,7 +67,7 @@ $code_id = false;
 if (isset($_POST['work_unit_id']))
 {
 	//If we are adding a new code...
-	if (isset($_POST['submit_add_parent']) || isset($_POST['submit_add_sibling']))
+	if (isset($_POST['submit_add_parent']) || isset($_POST['submit_add_sibling']) || isset($_POST['submit_add_multi']))
 		$code_id = add_code($_POST);
 	else
 		save_work_process($_POST); //Posted - save the data 
@@ -80,7 +80,7 @@ if (isset($_POST['work_unit_id']))
 	}
 }
 
-xhtml_head(T_("queXC"), true, array("css/table.css","css/index.css","include/ajax-spell/styles.css"),array('include/ajax-spell/mootools-1.2-core-yc.js','js/index.js'));
+xhtml_head(T_("queXC"), true, array("css/table.css","css/index.css","include/ajax-spell/styles.css","include/mif.menu-v1.2/Source/assets/styles/menu.css"),array('include/mif.menu-v1.2/assets/scripts/mootools.js','include/mootools/mootools-extension.js','js/index.js','include/mif.menu-v1.2/mif.menu-v1.2.js'));
 
 //See if there is work for us, if not, display "No more work" and allow for the page to be refreshed, or work to end
 
@@ -101,6 +101,7 @@ if ($operator_id != false)
 	{
 		print "<div id='heading'>";
 		//print "<h2>" . get_work_data_description($work_unit_id) . "</h2>";
+		print "<input type='text' value='' size='100' id='selectedText' readonly='readonly'/>";
 		print "</div>";
 		
 		print "<div id='othervariables'>";
@@ -111,10 +112,11 @@ if ($operator_id != false)
 	
 		print "<div id='thiscolumn'>";
 		$thiscolumn = get_work_column($work_unit_id);
-		print "<p>{$thiscolumn['name']}: {$thiscolumn['description']}</p><h3>{$thiscolumn['data'][0]}</h3>";
+		print "<p>{$thiscolumn['name']}: {$thiscolumn['description']}</p><h3 id='menu-target' onmouseup='getSelectedText();'>{$thiscolumn['data'][0]}</h3>";
 		print "</div>";
 	
 		print "<form action='' method='post' id='cleancodeform'>";
+		print "<p><input type='submit' name='submit' value='" . T_("Submit and continue") . "'/>  <input type='submit' name='submit_end' value='" . T_("Submit and end work") . "'/></p>";
 		print "<div id='cleancode'>";
 		$r = get_work_process($work_unit_id);
 		$cell_id = $r['cell_id'];
@@ -129,7 +131,7 @@ if ($operator_id != false)
 			//coding
 			print "<div class='header' id='header'>";
 			if ($code_id == false)
-				display_codes($work_id,$operator_id,$cdata[0]);
+				display_codes($work_unit_id,$operator_id,$cdata[0]);
 			else
 				display_all_codes($code_id);
 			print "</div>";
@@ -143,13 +145,13 @@ if ($operator_id != false)
 		}
 		
 		print "<input type='hidden' name='work_unit_id' value='$work_unit_id'/></div>";
-		print "<p><input type='submit' name='submit' value='" . T_("Submit and continue") . "'/>  <input type='submit' name='submit_end' value='" . T_("Submit and end work") . "'/></p>";
 		print "</form>";
 	}
 	
 	print "</div>";
 
 	print "<div id='workhistory'><object class='embeddedobject' id='work-history' data='workhistory.php' standby='" . T_("Loading panel...") . "' type='application/xhtml+xml'><p>" . T_("Error, try with Firefox") . "</p></object></div>";
+	print "<div id='performance'><object class='embeddedobject' id='performancetab' data='performance.php' standby='" . T_("Loading panel...") . "' type='application/xhtml+xml'><p>" . T_("Error, try with Firefox") . "</p></object></div>";
 }
 else
 	p(T_("No operator"),"p");

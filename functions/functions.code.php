@@ -40,27 +40,234 @@ include_once(dirname(__FILE__).'/../config.inc.php');
 include_once(dirname(__FILE__).'/../db.inc.php');
 
 /**
+ * Display a group of codes given the column_group_id
+ *
+ * @param int $column_group_id The column_group_id
+ */
+function display_code_group($column_group_id)
+{
+	global $db;
+
+	$codes = array();
+	$last = 0; //Make sure we don't automatically select this code
+	$allow = false; //Not allowed to automatically add codes
+
+	//First see if we are allowed to add codes to this code
+	$sql = "SELECT cg.allow_additions, cg.code_group_id
+		FROM code_group as cg, `column_group` as cog
+		WHERE cg.code_group_id = cog.code_group_id
+		AND cog.column_group_id = $column_group_id";
+	
+	$allowa = $db->GetRow($sql);
+	
+	if (!empty($allowa) && $allowa['allow_additions'] == 1)
+		$allow = true;
+
+	$code_group_id = $allowa['code_group_id'];
+
+	$sql = "SELECT c.code_level_id, c.column_id
+		FROM `column` as c, code_level as cl
+		WHERE c.column_group_id = '$column_group_id'
+		AND cl.code_level_id = c.code_level_id	
+		ORDER BY cl.level ASC";
+
+	$levels = $db->GetAll($sql);
+
+	//display levels only up to where selected
+
+	foreach($levels as $level)
+	{
+		$code_level_id = $level['code_level_id'];
+		$column_id = $level['column_id'];
+
+		$sql = "SELECT c.code_id, c.label, c.value
+			FROM `code` as c
+			WHERE c.code_level_id = '$code_level_id'";
+
+		$codes = $db->GetAll($sql);
+
+		print "<div class='level'>";
+		foreach($codes as $code)
+		{
+			print "<div class='row'><input class='rab' type='radio' name='cc" . $code_level_id . "X" . $column_group_id . "' value='{$code['value']}' id='ccc{$code['code_id']}X" . $code_level_id . "X" . $column_group_id . "'";
+	//if ($base && $r['code_id'] == $c && !($last == 1 && ($count == $total)))
+	//{
+	//	print " checked='checked'";
+	//			$lastcode = 1;
+	//			$parentcode = $r['code_id'];
+	//		}
+			print "/><label for='ccc{$code['code_id']}X" . $code_level_id . "X" . $column_group_id . "'>{$code['value']}:{$code['label']}</label></div>";
+		}
+		print "</div>";
+	}
+}
+
+
+/**
  * Display codes given the work_id
  * 
- * @param int $work_id The given work_id
+ * @param int $work_unit_id The given work_unit_id
  * @param bool|int $operator_id The operator_id
  * @param string $cdata The code data to search on
  * @see display_all_codes
  */
-function display_codes($work_id,$operator_id = false,$cdata = "")
+function display_codes($work_unit_id, $operator_id = false,$cdata = "")
 {
 	global $db;
 
 	//If the operator_id is set, find out if auto_code is set for this operator and process
-	$sql = "SELECT op.auto_code
-		FROM operator_process as op, work as w
+	$sql = "SELECT op.auto_code, w.column_multi_group_id as cmgi, w.column_group_id as cgi, ce.row_id as row_id
+		FROM operator_process as op, work as w, work_unit as wu, `cell` as ce
 		WHERE op.operator_id = $operator_id
 		AND op.process_id = w.process_id
-		AND w.work_id = '$work_id'";
+		AND w.work_id = wu.work_id
+		AND wu.work_unit_id = '$work_unit_id'
+		AND ce.cell_id = wu.cell_id";
 	
 	$ac = $db->GetRow($sql);
 
-	if (empty($ac) || $ac['auto_code'] == 0)
+	//If this is a multi-group - loop over each unique column group and display entire code set
+	if (!empty($ac['cmgi'])) //multi group
+	{
+		$sql = "SELECT c.column_group_id as cgi, c.column_id, c.description
+			FROM `column` as c
+			WHERE c.column_multi_group_id = '{$ac['cmgi']}'
+			GROUP BY c.column_group_id";
+
+		$rs = $db->GetAll($sql);
+		
+		print "<script type='text/javascript'>";
+		print "document.addEvent('domready', function(){ function jsfcheck(item, state){ alert('test');  } var testMenu = new Mif.Menu().attach('menu-target').load(";
+	
+		$json = array();
+		
+
+		foreach($rs as $r)
+		{
+			//display root element (checkbox)
+
+			$column_group_id = $r['cgi'];
+			$column_description = $r['description'];
+		
+			$tmp = (object) array('name' => $r['description'], 'id' => 'ci' . $r['column_id'], 'submenu' => 0);
+			$tmp->submenu = array();
+
+
+			//can use action to call a function
+
+			$codes = array();
+		
+			$sql = "SELECT c.code_level_id, c.column_id
+				FROM `column` as c, code_level as cl
+				WHERE c.column_group_id = '{$r['cgi']}'
+				AND cl.code_level_id = c.code_level_id	
+				ORDER BY cl.level ASC";
+
+			$levels = $db->GetAll($sql);
+
+
+			foreach($levels as $level)
+			{
+				$code_level_id = $level['code_level_id'];
+				$column_id = $level['column_id'];
+
+				$sql = "SELECT c.code_id, c.label, c.value
+					FROM `code` as c
+					WHERE c.code_level_id = '$code_level_id'";
+
+				$codes = $db->GetAll($sql);
+
+/*				$tmp->submenu[] = (object) array('options' => "{
+						onCheck: function(item, state){
+							alert('test');
+						}
+					}");*/
+
+				foreach($codes as $code)
+				{
+					//print "<div class='row'><input class='rab' type='radio' name='cc" . $code_level_id . "X" . $column_group_id . "' value='{$code['value']}' id='ccc{$code['code_id']}X" . $code_level_id . "X" . $column_group_id . "'";
+
+
+					//This javascript needs to:
+					//	1. search for an existing element of the same name, and if so, append text to it/update value
+					//	2. add a new radio input element with the selected value and the text selected - clicking itself should destroy itself
+					$jse = "cc" . $code_level_id . "X" . $column_group_id;
+					$jset = "tt" . $column_group_id;
+					$jsed = "dd" . $code_level_id . "X" . $column_group_id;
+					$value = $code['value'];
+					$label = $code['label'];
+
+					$js = "	function(item, state) {
+							var el = $('$jse');
+
+							if (el != null)
+							{
+								$('$jsed').destroy();
+							}
+
+							txt = $('selectedText').get('value');
+							tel = new Element('input');
+							tel.set('name', '$jset');
+							tel.set('value', txt);
+							tel.set('size', txt.length);
+							tel.set('id', '$jset');
+							tel.set('type', 'text');
+							tel.set('readonly','readonly');
+							nel = new Element('input');
+							nel.set('name', '$jse');
+							nel.set('value', '$value');
+							nel.set('id', '$jse');
+							nel.set('type', 'radio');
+							nel.set('checked','true');
+							lel = new Element('label');
+							lel.set('for', '$jse');
+							lel.set('html', '$column_description - $value:$label');
+							lel.set('onclick','$(\'$jsed\').destroy();');							
+
+							del = new Element('div');
+							del.set('id','$jsed');
+							del.adopt(tel);
+							del.adopt(lel);
+							del.adopt(nel);
+							document.id('cleancode').adopt(del);
+						}";
+					
+
+					$tmp->submenu[] = (object) array('name' => $code['label'], 'checked' => 'false', 'group' => 'ci' . $r['column_id'], 'check' => 'jsfcheck', 'action' => $js);
+				}
+				break; //temporary: only use first level
+			}
+			
+			$json[] = $tmp;
+		}
+
+		print json_encode($json);
+		print ")})</script>";
+
+
+/*
+			print "<div class='row' style='clear:left;'><input class='cb' type='checkbox' name='ci{$r['column_id']}' id='ci{$r['column_id']}' value='1' ";
+			print "onclick='showhide(\"cg{$r['cgi']}\")'/><label for='ci{$r['column_id']}'>{$r['description']}</label>"; 
+			print "</div>";
+			
+
+			//display code group (radio)
+			print "<div id='cg{$r['cgi']}' style='display:none;'>";
+			display_code_group($r['cgi'],$ac['row_id']);
+			print "</div>";
+
+*/
+	}
+	else 	//If this is just a column group - display leveled code set
+	{
+		display_code_group($ac['cgi'],$ac['row_id']);
+	}
+/*
+	if (!empty($ac['cmgi'])) //multi group
+	{
+		display_multi_root($ac['cmgi']);
+	}
+	else if (empty($ac) || $ac['auto_code'] == 0)
 	{
 		//get a code from this code group
 
@@ -97,7 +304,64 @@ function display_codes($work_id,$operator_id = false,$cdata = "")
 
 
 	}
+*/
+}
 
+/**
+ * Display multiple choice codes (root is multiple choice, each code (if any) is a child
+ * Each column is a root multiple choice code
+ *
+ * @param int $cmgi Column multi group id
+ *
+ */
+function display_multi_root($cmgi)
+{
+	global $db;
+
+	//Get all columns with this $cmgi
+	$sql = "SELECT column_id,description,code_level_id
+		FROM `column`
+		WHERE column_multi_group_id = '$cmgi'";
+
+	$rs = $db->GetAll($sql);
+	
+	//Display columns as rows with check boxes.
+	print "<div class='level'>";	
+	foreach($rs as $r)
+	{
+		print "<div class='row'><input class='cb' type='checkbox' name='ci{$r['column_id']}' id='ci{$r['column_id']}' value='1' ";
+		if (false)
+		{
+			print " checked='checked'";
+		}
+		print "/><label for='ci{$r['column_id']}'>{$r['description']}</label>"; 
+	
+		print "</div>";
+		//display codes under this column
+		$sql = "SELECT c.code_id
+			FROM code as c
+			WHERE c.code_level_id = '{$r['code_level_id']}'
+			LIMIT 1";
+
+		$a = $db->GetRow($sql);
+	
+		if (!empty($a))
+		{
+			print "<div class='subcode' id='sc{$r['column_id']}' style='display:inline;'>";
+			display_all_codes($a['code_id'],false);
+			print "</div>";
+		}
+
+	}
+
+	//When check boxes selected, should display all relevant codes (if any)
+
+
+	//Allow for adding a new column
+	print "<div class='row'><div><input type='hidden' name='newcodemulti' value='$cmgi'/><input type='text' name='newcodetextm'/><input type='submit' name='submit_add_multi' value='" . T_("Add") . "'/></div></div>";
+
+	
+	print "</div>";
 }
 
 /** 
@@ -324,6 +588,21 @@ function add_code($post)
 			$db->Execute($sql);
 		}
 
+	}
+	else if (isset($post['submit_add_multi'])) //Add multi level code
+	{
+		//Must create a new column and a new code level based on the current process
+
+		$cmgi = $db->qstr($post['newcodemulti']);
+		$desc = $db->qstr($post['newcodetextm']);
+
+		$sql = "INSERT INTO `column` (data_id,column_group_id,column_multi_group_id,name,description,width)
+				SELECT data_id,column_group_id,$cmgi,name,$desc,'1'
+				FROM `column` 
+				WHERE column_multi_group_id = $cmgi
+				LIMIT 1";
+
+		$db->Execute($sql);
 	}
 
 	if ($db->CompleteTrans())
