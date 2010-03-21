@@ -58,7 +58,7 @@ function updateevents() {
 			method: 'get',
 			evalScripts: true,
 			url: 'index.php',
-			data: { 'display_codes' : this.id.substr(1) },
+			data: { 'display_codes' : this.id },
 			update: $('header'),
 			}
 		).send();

@@ -130,6 +130,43 @@ function remove_work_units($operator_id)
 
 
 /**
+ * Refer to supervisor
+ *
+ * @param int $work_unit_id The work unit to refer
+ * @return bool True if could assign, false if cannot (i.e. no supervisor selected)
+ */
+function refer_to_supervisor($work_unit_id)
+{
+	global $db;
+
+	$sql = "SELECT o.operator_id
+		FROM operator_process as o
+		JOIN work_unit AS wu ON (wu.work_unit_id = $work_unit_id AND wu.process_id = o.process_id)
+		JOIN work AS w ON (w.work_id = wu.work_id)
+		JOIN `column` AS c ON (c.column_id = w.column_id)
+		JOIN operator_data AS od ON (od.data_id = c.data_id AND od.operator_id = o.operator_id)
+		WHERE o.is_supervisor = 1";
+
+	$rs = $db->GetRow($sql); //will currently just get the first supervisor
+
+	if (!empty($rs))
+	{
+		$so = $rs['operator_id'];
+
+		$sql = "UPDATE work_unit
+			SET operator_id = '$so', assigned = NULL
+			WHERE work_unit_id = $work_unit_id 
+			AND completed IS NULL";
+
+		$db->Execute($sql);
+
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Redo a work unit 
  *
  * @param int $work_unit_id The work unit to redo
@@ -283,9 +320,9 @@ function save_work_process($post)
 			{
 				if (substr($key,0,2) == 'cc')
 				{
-					$cc = explode(substr($key,2),"X");
-					$code_level_id = intval($ccc[0]);
-					$column_group_id = intval($ccc[1]);
+					$cc = explode("X",substr($key,2));
+					$code_level_id = intval($cc[0]);
+					$column_group_id = intval($cc[1]);
 
 					if ($column_group_id == $t['column_group_id'] && !isset($rows[$code_level_id]))
 					{

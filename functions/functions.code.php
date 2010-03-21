@@ -243,37 +243,15 @@ function display_codes($work_unit_id, $operator_id = false,$cdata = "")
 
 		print json_encode($json);
 		print ")})</script>";
-
-
-/*
-			print "<div class='row' style='clear:left;'><input class='cb' type='checkbox' name='ci{$r['column_id']}' id='ci{$r['column_id']}' value='1' ";
-			print "onclick='showhide(\"cg{$r['cgi']}\")'/><label for='ci{$r['column_id']}'>{$r['description']}</label>"; 
-			print "</div>";
-			
-
-			//display code group (radio)
-			print "<div id='cg{$r['cgi']}' style='display:none;'>";
-			display_code_group($r['cgi'],$ac['row_id']);
-			print "</div>";
-
-*/
-	}
-	else 	//If this is just a column group - display leveled code set
-	{
-		display_code_group($ac['cgi'],$ac['row_id']);
-	}
-/*
-	if (!empty($ac['cmgi'])) //multi group
-	{
-		display_multi_root($ac['cmgi']);
 	}
 	else if (empty($ac) || $ac['auto_code'] == 0)
 	{
 		//get a code from this code group
 
-		$sql = "SELECT c.code_id
+		$sql = "SELECT c.code_id,w.column_group_id
 			FROM code as c
-			JOIN work as w ON (w.work_id = '$work_id')
+			JOIN work_unit AS wu ON (wu.work_unit_id = '$work_unit_id')
+			JOIN work as w ON (w.work_id = wu.work_id)
 			JOIN column_group as cg ON (cg.column_group_id = w.column_group_id)
 			JOIN code_level as cl ON (cl.code_group_id = cg.code_group_id AND c.code_level_id = cl.code_level_id)
 			LIMIT 1";
@@ -281,13 +259,14 @@ function display_codes($work_unit_id, $operator_id = false,$cdata = "")
 		$r = $db->GetRow($sql);
 	
 		if (!empty($r))
-			display_all_codes($r['code_id'],false);
+			display_all_codes($r['code_id'],false,$work_unit_id);
 	}
 	else
 	{
-		$sql = "SELECT c.code_id, (c.label LIKE '%$cdata%' OR c.keywords LIKE '%$cdata%') as test
+		$sql = "SELECT c.code_id, (c.label LIKE '%$cdata%' OR c.keywords LIKE '%$cdata%') as test,w.column_group_id
 			FROM code as c
-			JOIN work as w ON (w.work_id = '$work_id')
+			JOIN work_unit as wu ON (wu.work_unit_id = '$work_unit_id'
+			JOIN work as w ON (w.work_id = wu.work_id)
 			JOIN column_group as cg ON (cg.column_group_id = w.column_group_id)
 			JOIN code_level as cl ON (cl.code_group_id = cg.code_group_id AND c.code_level_id = cl.code_level_id)
 			ORDER BY (c.label LIKE '%$cdata%' OR c.keywords LIKE '%$cdata%') DESC, cl.level ASC
@@ -299,12 +278,11 @@ function display_codes($work_unit_id, $operator_id = false,$cdata = "")
 		{
 			$tmp = true;
 			if ($r['test'] == 0) $tmp = false;
-			display_all_codes($r['code_id'],$tmp);
+			display_all_codes($r['code_id'],$tmp,$work_unit_id);
 		}
 
 
 	}
-*/
 }
 
 /**
@@ -369,9 +347,10 @@ function display_multi_root($cmgi)
  * 
  * @param int $code_id The given code
  * @param bool $base Whether this is the base group or not
+ * @param int $work_unit_id The work_unit_id this belongs to
  * @see display_codes
  */
-function display_all_codes($code_id, $base = true)
+function display_all_codes($code_id, $base = true, $work_unit_id)
 {
 	global $db;
 
@@ -380,16 +359,21 @@ function display_all_codes($code_id, $base = true)
 	$allow = false; //Not allowed to automatically add codes
 
 	//First see if we are allowed to add codes to this code
-	$sql = "SELECT cg.allow_additions
-		FROM code_group as cg, code_level as cl, code as c
+	$sql = "SELECT cg.allow_additions,w.column_group_id
+		FROM code_group as cg, code_level as cl, code as c, work_unit as wu, work as w
 		WHERE c.code_id = $code_id
 		AND cl.code_level_id = c.code_level_id
-		AND cg.code_group_id = cl.code_group_id";
+		AND cg.code_group_id = cl.code_group_id
+		AND wu.work_unit_id = '$work_unit_id'
+		AND w.work_id = wu.work_id";
 	
 	$allowa = $db->GetRow($sql);
+
 	
 	if (!empty($allowa) && $allowa['allow_additions'] == 1)
 		$allow = true;
+
+	$column_group_id = $allowa['column_group_id'];
 
 	if ($base)
 	{
@@ -444,14 +428,14 @@ function display_all_codes($code_id, $base = true)
 		print "<div class='level'>";
 		foreach($rs2 as $r)
 		{
-			print "<div class='row'><input class='rb' type='radio' name='cli{$r['code_level_id']}' value='{$r['value']}' id='c{$r['code_id']}'";
+			print "<div class='row'><input class='rb' type='radio' name='cc{$r['code_level_id']}X$column_group_id' value='{$r['value']}' id='ccc{$r['code_id']}X{$r['code_level_id']}X$column_group_id'";
 			if ($base && $r['code_id'] == $c && !($last == 1 && ($count == $total)))
 			{
 				print " checked='checked'";
 				$lastcode = 1;
 				$parentcode = $r['code_id'];
 			}
-			print "/><label for='c{$r['code_id']}'>{$r['value']}:{$r['label']}</label></div>";
+			print "/><label for='ccc{$r['code_id']}X{$r['code_level_id']}X$column_group_id'>{$r['value']}:{$r['label']}</label></div>";
 		}
 		if ($allow && ($count == $total))
 			print "<div class='row'><div><input type='hidden' name='newcodesibling' value='{$r['code_id']}'/><input type='hidden' name='newcodelevel' value='{$r['code_level_id']}'/><input type='text' name='newcodevaluea' size='2'/><input type='text' name='newcodetexta'/><input type='submit' name='submit_add_sibling' value='" . T_("Add") . "'/></div></div>";

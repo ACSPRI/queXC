@@ -22,6 +22,9 @@
   width : 30%;
   height : 15%;
 }
+.message{
+  color:red;
+}
 .embeddedobject {
   width:100%;
   height:100%;

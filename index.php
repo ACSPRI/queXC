@@ -54,21 +54,45 @@ include("functions/functions.code.php");
  */
 include("functions/functions.process.php");
 
+$operator_id = get_operator_id();
+if ($operator_id != false)
+	$work_unit_id = get_work($operator_id);
+	
 if (isset($_GET['display_codes']))
 {
-	display_all_codes(intval($_GET['display_codes']));
-	print "<script type='text/javascript'>updateevents();</script>";
+	if ($work_unit_id != false)
+	{
+		$code_ids = explode('X',substr($_GET['display_codes'],3));
+		$code_id = intval($code_ids[0]);
+		display_all_codes($code_id,true,$work_unit_id);
+		print "<script type='text/javascript'>updateevents();</script>";
+	}
 	exit();
 }
 
-$operator_id = get_operator_id();
 $code_id = false;
+$message = false; //message to display
 
 if (isset($_POST['work_unit_id']))
 {
+	//If we are ending work, include endwork function and exit here
+	if (isset($_POST['submit_end_only']))
+	{
+		include("endwork.php");
+		exit();
+	}
+
 	//If we are adding a new code...
 	if (isset($_POST['submit_add_parent']) || isset($_POST['submit_add_sibling']) || isset($_POST['submit_add_multi']))
+	{
 		$code_id = add_code($_POST);
+	}
+	else if (isset($_POST['submit_refer']))
+	{
+		//refer this case to the supervisor (if one exists, otherwise just display the same case)
+		if (!refer_to_supervisor($_POST['work_unit_id']))
+			$message = T_("Could not refer to supervisor - no supervisor may be assigned");
+	}
 	else
 		save_work_process($_POST); //Posted - save the data 
 
@@ -80,7 +104,10 @@ if (isset($_POST['work_unit_id']))
 	}
 }
 
+
 xhtml_head(T_("queXC"), true, array("css/table.css","css/index.css","include/ajax-spell/styles.css","include/mif.menu-v1.2/Source/assets/styles/menu.css"),array('include/mif.menu-v1.2/assets/scripts/mootools.js','include/mootools/mootools-extension.js','js/index.js','include/mif.menu-v1.2/mif.menu-v1.2.js'));
+
+
 
 //See if there is work for us, if not, display "No more work" and allow for the page to be refreshed, or work to end
 
@@ -90,6 +117,9 @@ if ($operator_id != false)
 	$work_unit_id = get_work($operator_id);
 	
 	print "<div id='content'>";
+
+	if ($message !== false)
+		print "<div class='message'>$message</div>";
 
 	if ($work_unit_id == false)
 	{
@@ -116,7 +146,7 @@ if ($operator_id != false)
 		print "</div>";
 	
 		print "<form action='' method='post' id='cleancodeform'>";
-		print "<p><input type='submit' name='submit' value='" . T_("Submit and continue") . "'/>  <input type='submit' name='submit_end' value='" . T_("Submit and end work") . "'/></p>";
+		print "<p><input type='submit' name='submit' value='" . T_("Submit and continue") . "'/>  <input type='submit' name='submit_end' value='" . T_("Submit and end work") . "'/> <input type='submit' name='submit_refer' value='" . T_("Refer to supervisor") . "'/> <input type='submit' name='submit_end_only' value='" . T_("End work") . "'/></p>";
 		print "<div id='cleancode'>";
 		$r = get_work_process($work_unit_id);
 		$cell_id = $r['cell_id'];
@@ -133,7 +163,7 @@ if ($operator_id != false)
 			if ($code_id == false)
 				display_codes($work_unit_id,$operator_id,$cdata[0]);
 			else
-				display_all_codes($code_id);
+				display_all_codes($code_id,true,$work_unit_id);
 			print "</div>";
 		}
 		else
