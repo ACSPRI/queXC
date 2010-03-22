@@ -149,6 +149,7 @@ CREATE TABLE `column` (
   `column_id` bigint(20) NOT NULL auto_increment,
   `data_id` bigint(20) NOT NULL,
   `column_group_id` bigint(20) NOT NULL,
+  `column_multi_group_id` bigint(20) default NULL,
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `description` text collate utf8_unicode_ci NOT NULL,
   `startpos` int(11) default NULL COMMENT 'Location in fixed width file of start of cell',
@@ -157,15 +158,12 @@ CREATE TABLE `column` (
   `in_input` tinyint(1) NOT NULL default '0' COMMENT 'Set to 1 if this column exists in the input file',
   `sortorder` int(11) NOT NULL default '0' COMMENT 'Sort order in output',
   `code_level_id` bigint(20) default NULL,
+  `reference_column_group_id` bigint(20) default NULL COMMENT 'The column id that the text for this field should apply to',
   PRIMARY KEY  (`column_id`),
   KEY `name` (`name`),
-  KEY `column_group_id` (`column_group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `column`
---
-
+  KEY `column_group_id` (`column_group_id`),
+  KEY `column_multi_group_id` (`column_multi_group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -181,9 +179,15 @@ CREATE TABLE `column_group` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Description for a column group (equivalent of a var group in';
 
 --
--- Dumping data for table `column_group`
+-- Table structure for table `column_multi_group`
 --
 
+CREATE TABLE `column_multi_group` (
+  `column_multi_group_id` bigint(20) NOT NULL auto_increment,
+  `description` text NOT NULL,
+  `code_group_id` bigint(20) default NULL COMMENT 'The code group to generate columns from',
+  PRIMARY KEY  (`column_multi_group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -266,6 +270,7 @@ CREATE TABLE `operator_process` (
   `operator_id` bigint(20) NOT NULL,
   `process_id` bigint(20) NOT NULL,
   `auto_code` tinyint(1) NOT NULL default '0',
+  `is_supervisor` tinyint(1) NOT NULL default '0' COMMENT 'Is this operator a supervisor for this code?',
   PRIMARY KEY  (`operator_id`,`process_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -331,6 +336,7 @@ CREATE TABLE `work` (
   `work_id` bigint(20) NOT NULL auto_increment,
   `column_id` bigint(20) NOT NULL COMMENT 'Column from',
   `column_group_id` bigint(20) default NULL COMMENT 'The column group where we are sending the codes to',
+  `column_multi_group_id` bigint(20) default NULL COMMENT 'If we are sending to a multiple choice set of columns',
   `process_id` bigint(20) NOT NULL COMMENT 'The process to apply',
   `operator_id` bigint(20) default NULL COMMENT 'Assign this job to a specific operator',
   PRIMARY KEY  (`work_id`)
