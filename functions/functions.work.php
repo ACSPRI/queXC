@@ -114,17 +114,42 @@ function delete_work($work_id)
 /**
  * Remove all uncompleted work units from an operator
  *
+ * But don't remove where records are for a supervisor
+ *
  * @param int $operator_id The operator id
  */
 function remove_work_units($operator_id)
 {
 	global $db;
 
-	$sql = "DELETE FROM work_unit
-		WHERE operator_id = '$operator_id'
-		AND completed IS NULL";
+	$db->StartTrans();
+
+	//Remove all work units that could technically be assigned to someone else
+	$sql = "SELECT wu.work_unit_id
+		FROM work_unit AS wu
+		LEFT JOIN operator_process AS op ON (op.process_id = wu.process_id AND op.operator_id = wu.operator_id AND op.is_supervisor = 1)
+		WHERE wu.operator_id = '$operator_id'
+		AND wu.completed IS NULL
+		AND op.process_id IS NULL";
+
+	$rs = $db->GetAll($sql);
+
+	if (!empty($rs))
+	{
+		foreach($rs as $r)
+		{
+			$wuid = $r['work_unit_id'];
 	
-	$db->Execute($sql);
+			$sql = "DELETE FROM work_unit
+				WHERE operator_id = '$operator_id'
+				AND work_unit_id = '$wuid'
+				AND completed IS NULL";
+		
+			$db->Execute($sql);
+		}
+	}
+
+	$db->CompleteTrans();
 	
 }
 
@@ -515,16 +540,20 @@ function get_operator_id()
  * Copy a code group and return the code_group_id of the copy
  *
  * @param int code_group_id The code group to copy
+ * @param bool allow_additions True if additions are to be allowed, false if not
  * @return int The copy of the code group
  */
-function copy_code_group($code_group_id)
+function copy_code_group($code_group_id,$allow_additions = true)
 {
 	global $db;
+
+	$a = 1;
+	if (!$allow_additions) $a = 0;
 
 	$db->StartTrans();
 
 	$sql = "INSERT INTO code_group (code_group_id,description,blank_code_id,allow_additions,in_input)
-		SELECT NULL,CONCAT('" . T_("Copy of:") ." ',description),blank_code_id,1,0
+		SELECT NULL,CONCAT('" . T_("Copy of:") ." ',description),blank_code_id,$a,0
 		FROM code_group
 		WHERE code_group_id = '$code_group_id'";
 	
@@ -628,9 +657,10 @@ function copy_code_group($code_group_id)
  * @param int column_id The column id where the data originates
  * @param array operators An array of operators to assign the work to (if any)
  * @param int|bool $mcgi Multi code_group_id - to create multiple columns if exists
+ * @param array|bool $compare Whether we are creating a comparison work item or not (if true, should be an array of parent work_ids)
  * @return bool True on success, false on fail
  */
-function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),$mcgi = false)
+function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),$mcgi = false,$compare = false)
 {
 	global $db;
 
@@ -682,10 +712,50 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 				$cmgi = $m['cmgi'];
 	
 				if ($template == 1) //create a new code group based on this one
-					$code_group_id = copy_code_group($c['code_group_id']);
+					$code_group_id = copy_code_group($c['code_group_id'],!$compare); //if comparing don't allow manual additions
 				else
 					$code_group_id = $c['code_group_id'];
 	
+
+				if ($compare !== false)
+				{
+					//if comparing, create codes in this code group for each column in this work
+					$sql = "SELECT column_group_id,column_multi_group_id
+						FROM work
+						WHERE ( ";
+				
+					foreach($compare as $c)
+						$sql .= " work_id = $c OR";
+
+					$sql = substr($sql,0,-2) . ")";
+						
+					$ncodes = $db->GetAll($sql);
+				
+					$width = 0;
+	
+					foreach($ncodes as $n)
+					{
+						if (!empty($n['column_group_id'])) $c = "cgi" . $n['column_group_id'];
+						if (!empty($n['column_multi_group_id'])) $c = "cmgi" . $n['column_multi_group_id'];
+
+						if (strlen($c) > $width) $width = strlen($c);
+
+						$sql = "INSERT INTO `code` (code_id,value,label,code_level_id)
+							SELECT NULL,'$c','$c',code_level_id
+							FROM code_level
+							WHERE code_group_id = '$code_group_id'";
+
+						$db->Execute($sql);
+					}
+
+					$sql = "UPDATE code_level
+						SET width = '$width'
+						WHERE code_group_id = '$code_group_id'";
+
+					$db->Execute($sql);
+				}
+	
+
 				//First create a new column_group
 				$sql = "INSERT INTO column_group (column_group_id,description,code_group_id)
 					SELECT NULL, CONCAT(p.description, ' " . T_("code for variable:") . " ', c.name, CASE WHEN o.operator_id IS NULL THEN '' ELSE CONCAT(' " . T_("by operator:") . " ', o.description) END ), '$code_group_id'
@@ -799,6 +869,20 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 		}
 	} while (!empty($pprocess));
 
+
+	//Insert if comparing
+	if ($compare !== false)
+	{
+		foreach($compare as $c)
+		{
+			$sql = "INSERT INTO work_parent (work_id,parent_work_id)
+				VALUES ('$twid','$c')";
+		
+			$db->Execute($sql);	
+		}
+
+	}
+
 	run_auto_processes(array_reverse($nwork_id));
 
 	return $db->CompleteTrans();
@@ -892,7 +976,7 @@ function assign_work($operator_id, $by_row = false)
 	if ($by_row)
 		$order = "c.data_id ASC, ce.row_id ASC";
 
-	$sql = "SELECT w.work_id,c.data_id,ce.row_id,w.column_id,ce.cell_id,w.process_id,cg.blank_code_id,w.column_group_id,cg.code_group_id,p.auto_code_value,p.auto_code_label
+	$sql = "SELECT w.work_id,c.data_id,ce.row_id,w.column_id,ce.cell_id,w.process_id,cg.blank_code_id,w.column_group_id,cg.code_group_id,p.auto_code_value,p.auto_code_label,p.exclusive
 		FROM `work` AS w
 		LEFT JOIN work_parent AS wp ON ( wp.work_id = w.work_id )
 		JOIN `process` AS p ON ( p.process_id = w.process_id )
@@ -903,12 +987,14 @@ function assign_work($operator_id, $by_row = false)
 		LEFT JOIN work_unit AS wu2 ON ( wu2.cell_id = ce.cell_id AND wu2.work_id = wp.parent_work_id AND wu2.completed IS NOT NULL )
 		LEFT JOIN work_unit AS wu ON ( wu.cell_id = ce.cell_id AND wu.process_id = w.process_id AND w.work_id = wu.work_id)
 		LEFT JOIN work_unit AS wu3 ON (wu3.cell_id = ce.cell_id AND wu3.process_id = w.process_id AND wu3.operator_id = '$operator_id')
+                LEFT JOIN work_unit AS wu4 ON (wu4.operator_id = '$operator_id' AND wu4.cell_id = ce.cell_id AND wu4.work_id IN (SELECT parent_work_id FROM work_parent WHERE work_parent.work_id = w.work_id))		
 		LEFT JOIN column_group as colg ON (colg.column_group_id = w.column_group_id)
 		LEFT JOIN code_group as cg ON (cg.code_group_id = colg.code_group_id)
 		WHERE (w.operator_id IS NULL OR w.operator_id = '$operator_id')
 		AND wu.cell_id IS NULL
 		AND (wp.work_id IS NULL OR wu2.cell_id IS NOT NULL)
 		AND wu3.work_unit_id IS NULL
+		AND !(p.exclusive = 1 AND wu4.cell_id IS NOT NULL)
 		GROUP BY ce.cell_id, c.column_id, p.process_id
 		ORDER BY $order
 		LIMIT " . ASSIGN_MAX_LIMIT;
@@ -1027,6 +1113,8 @@ function assign_work($operator_id, $by_row = false)
 							$tcode_level_id = $tcp['code_level_id'];
 							$tcode_id = $tcp['code_id'];
 							$tvalue = $tcp['value'];
+									
+							$tcols[$tcode_level_id]['value'] = $tvalue;
 									
 							$tcols[$tcode_level_id]['value'] = $tvalue;
 							$tcols[$tcode_level_id]['code_id'] = $tcode_id;
@@ -1166,7 +1254,7 @@ function run_auto_processes($work_ids, $row_ids = false)
 						continue; //skip if not on the list of rows to process
 
 					list($data,$cell_revision_id) = get_cell_data($cell_id);
-					if (call_user_func($ap,$data,$cell_id,$work_id,$process_id) == 0) //return 0, create work unit
+					if (call_user_func($ap,$data,$cell_id,$work_id,$process_id,$row_id) == 0) //return 0, create work unit
 						create_work_unit($work_id,$cell_id,$process_id,0);
 				}
 			}
@@ -1175,6 +1263,210 @@ function run_auto_processes($work_ids, $row_ids = false)
 
 	return $db->CompleteTrans();
 }
+
+
+/**
+ * Display XHTML for comparing
+ *
+ * @param int $cell_id The cell to display data for
+ * @param string $cell_data The data in the cell
+ * @param int $work_unit_id
+ */
+function compare_display($cell_id,$cell_data,$work_unit_id)
+{
+	global $db;
+
+	//Select column_multi_group or column_group from work parents of this work_id
+	
+	$sql = "SELECT wp.parent_work_id, w.column_group_id, w.column_multi_group_id
+		FROM work_parent as wp, work_unit as wu, work as w
+		WHERE wp.work_id = wu.work_id
+		AND wu.work_unit_id = '$work_unit_id'
+		AND w.work_id = wp.parent_work_id";
+
+	//Loop over all columns for this column_group and display cell contents (break on any difference)
+
+	$rs = $db->GetAll($sql);
+
+	//create an XHTML table so we can display columnwise
+
+
+	$tablecontents = array();
+
+	print "<table class='tclass'><tr>";
+
+	$j = 0;
+	$maxi = 0;
+
+	foreach($rs as $r)
+	{
+		$wi = $r['parent_work_id'];
+		
+		$title = "";
+		if (!empty($r['column_group_id'])) $title = "cgi" . $r['column_group_id'];
+		if (!empty($r['column_multi_group_id'])) $title = "cmgi" . $r['column_multi_group_id'];
+
+		print "<th>$title</th>";
+
+		$sql = "SELECT c.column_id, ce.cell_id, c.description, c.name, c.code_level_id
+			FROM work AS w 
+			JOIN `column` AS c ON (w.column_multi_group_id = c.column_multi_group_id OR c.column_group_id = w.column_group_id)
+			JOIN `work_unit` as wu ON (wu.work_unit_id = '$work_unit_id')
+			JOIN `cell` AS ce2 ON (ce2.cell_id = wu.cell_id)
+			LEFT JOIN `cell` AS ce ON (ce.column_id = c.column_id AND ce.row_id = ce2.row_id)
+			WHERE w.work_id = '$wi'
+			ORDER BY c.column_id ASC";
+
+		$compare = $db->GetAll($sql);
+		
+		$i = 0;
+
+		foreach($compare as $c)
+		{
+			$ceid = $c['cell_id'];
+			$colid = $c['column_id'];
+			$desc = $c['description'];
+
+			list($data,$rev) = get_cell_data($ceid);
+			
+			if (!empty($data))
+			{
+				if (!empty($c['code_level_id']))
+				{
+					$cli = $c['code_level_id'];
+
+					//Replace with code label if a code supplied
+					$sql = "SELECT `label`
+						FROM `code`
+						WHERE `code_level_id` = '$cli'
+						AND `value` LIKE '$data'";
+		
+					$crs = $db->GetRow($sql);
+		
+					if (!empty($crs))
+						$data = $crs['label'];
+				}
+
+				$contents = $desc . " : " . $data;	
+
+				$tablecontents[$i][$j] = $contents;
+
+				$i++;
+				if ($i > $maxi) $maxi = $i;
+			}
+		}
+
+		$j++;
+	}
+	print "</tr>";
+
+	
+	for ($x = 0; $x < $maxi; $x++)
+	{
+		print "<tr>";
+		for ($y = 0; $y < $j; $y++)
+		{
+			print "<td>";
+			if (isset($tablecontents[$x][$y])) print $tablecontents[$x][$y];
+			print "</td>";
+		}
+		print "</tr>";
+	}
+	print "</table>";
+
+	//coding
+        print "<div class='header' id='header'>";
+        display_codes($work_unit_id);
+	print "</div>";
+}
+
+/**
+ * Compare columns, and create an auto work unit if they are identical
+ * Also create a cell containing a code identifying this as "identical"
+ *
+ * This function should only be run once for each work_id
+ *
+ * @param string $data The string in the original column
+ * @param int $cell_id The cell id
+ * @param int $work_id The work id
+ * @param int $process_id The process id
+ * @param int $row_id The row id
+ * @return int Return 1 if the columns to compare are different, otherwise return 0
+ */
+function compare($data,$cell_id,$work_id,$process_id,$row_id)
+{
+	global $db;
+
+	//Select column_multi_group or column_group from work parents of this work_id
+	
+	$sql = "SELECT parent_work_id
+		FROM work_parent
+		WHERE work_id = '$work_id'";
+
+	//Loop over all columns for this column_group and compare cell contents (break on any difference)
+	
+	$rs = $db->GetAll($sql);
+
+	$compare = "";
+
+	foreach($rs as $r)
+	{
+		$wi = $r['parent_work_id'];
+
+		$sql = "SELECT c.column_id, ce.cell_id
+			FROM work AS w 
+			JOIN `column` AS c ON (w.column_multi_group_id = c.column_multi_group_id OR c.column_group_id = w.column_group_id)
+			LEFT JOIN `cell` AS ce ON (ce.column_id = c.column_id AND ce.row_id = '$row_id')
+			WHERE w.work_id = '$wi'
+			ORDER BY c.column_id ASC";
+
+		if (empty($compare))
+			$compare = $db->GetAll($sql);
+		else
+		{
+			$test = $db->GetAll($sql);
+
+			//print_r($compare);
+			//print_r($test);
+
+			for ($i = 0; $i < count($compare); $i++)
+			{
+				$compareval = $compare[$i]['cell_id'];
+				$testval = $test[$i]['cell_id'];
+				list($comparedata,$rev) = get_cell_data($compareval);
+				list($thisdata,$rev) = get_cell_data($testval); //data from this SQL from the same column
+
+				if ($comparedata != $thisdata)
+				{
+					//different, return 1
+					return 1;
+				}
+			}
+		}
+	}
+
+	//If identical - create a code in the new column as "identical" and return 0 to create work unit
+	$work_unit_id = create_work_unit($work_id,$cell_id,$process_id,0);
+		
+	//Get the column_id of the new column to send to
+	$sql = "SELECT c.column_id
+		FROM `column` as c, work as w
+		WHERE w.work_id = '$work_id'
+		AND c.column_group_id = w.column_group_id";
+	
+	$c = $db->GetRow($sql);
+
+	$column_id = $c['column_id'];
+
+	$ncell_id = get_cell_id($row_id,$column_id);
+	if ($ncell_id == false)
+		$ncell_id = new_cell($row_id,$column_id);
+	new_cell_revision($ncell_id,'1',$work_unit_id); //code as '1' "Identical"
+
+	//return 1 as we have created the work_unit here
+	return 1;
+}
+
 
 /**
  * Normalise the space for all available records
@@ -1187,7 +1479,7 @@ function run_auto_processes($work_ids, $row_ids = false)
  * @param int $process_id The process id
  * @return int Return 1 as we are creating the work unit, so we don't want to do it automatically
  */
-function spacing($data,$cell_id,$work_id,$process_id)
+function spacing($data,$cell_id,$work_id,$process_id,$row_id)
 {
 	$ndata = trim(normalise_space($data));
 
@@ -1212,10 +1504,8 @@ function spacing($data,$cell_id,$work_id,$process_id)
  * @return int Return 1 if there is a spelling error, otherwise return 0
  *
  */
-function spelling($data,$cell_id,$work_id,$process_id)
+function spelling($data,$cell_id,$work_id,$process_id,$row_id)
 {
-	if (check_words($data) == 1) //If there is a spelling error, do not create a work_unit record
-		return 1;
 
 	return 0;
 }
@@ -1246,7 +1536,7 @@ function email_check($string)
  * @return int Return 1 if there is an error, otherwise return 0
  *
  */
-function email($data,$cell_id,$work_id,$process_id)
+function email($data,$cell_id,$work_id,$process_id,$row_id)
 {
 	if (email_check($data) != 1) //If there is a error, do not create a work_unit record
 		return 1;

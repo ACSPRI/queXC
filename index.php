@@ -169,7 +169,7 @@ if ($operator_id != false)
 		else
 		{
 			if (is_callable($process_function))
-				call_user_func($process_function,$cell_id,$cdata[0]);
+				call_user_func($process_function,$cell_id,$cdata[0],$work_unit_id);
 			else
 				print "<p>" . T_("Error: Cannot execute process function:") . " $process_function</p>";
 		}

@@ -44,8 +44,9 @@ include_once(dirname(__FILE__).'/functions.xhtml.php');
  *
  * @param int $cell_id The cell to display data for
  * @param string $cell_data The data in the cell
+ * @param int $work_unit_id
  */
-function spelling_display($cell_id,$cell_data)
+function spelling_display($cell_id,$cell_data,$work_unit_id)
 {
 	xhtml_script(array('include/ajax-spell/spell_checker.js'));
 	print "<p><textarea class='spell_check' rows='10' cols='50' name='ci$cell_id' id='ci$cell_id'>$cell_data</textarea></p>";
@@ -57,8 +58,9 @@ function spelling_display($cell_id,$cell_data)
  *
  * @param int $cell_id The cell to display data for
  * @param string $cell_data The data in the cell
+ * @param int $work_unit_id
  */
-function email_display($cell_id,$cell_data)
+function email_display($cell_id,$cell_data,$work_unit_id)
 {
 	print "<p><textarea rows='10' cols='50' name='ci$cell_id' id='ci$cell_id'>$cell_data</textarea></p>";
 }

@@ -45,7 +45,7 @@ include ("../functions/functions.xhtml.php");
 include("../db.inc.php");
 
 
-if (isset($_POST['submit']))
+if (isset($_POST['submit']) || isset($_POST['submit_compare']))
 {
 	//apply process
 	$data_id = intval($_POST['data_id']);
@@ -66,10 +66,24 @@ if (isset($_POST['submit']))
 			$operators[] = intval($_POST[$key]);
 	}
 
-	if (count($operators) > 0)
+	if (isset($_POST['submit']) && count($operators) > 0)
 	{
 		include ("../functions/functions.work.php");
 		create_work($data_id,$process_id,$column_id,$operators,$mcgi);
+	}
+
+	if (isset($_POST['submit_compare']))
+	{
+		$compare = array();
+		foreach($_POST as $key => $val)
+		{
+			if (substr($key,0,3) == 'cid')
+				$compare[] = intval($_POST[$key]);
+
+		}
+
+		include("../functions/functions.work.php");
+		create_work($data_id,11,$column_id,array('NULL'),false,$compare);
 	}
 }
 
@@ -155,24 +169,32 @@ if ($data_id != 0)
 				FROM code_group";
 			display_chooser($db->GetAll($sql),'multi_code_group_id','multi_code_group_id',true,false,false);
 
-			print "<div><input type='submit' name='submit' value='" . T_("Create work") . "'/></div></form>";
+			print "<div><input type='submit' name='submit' value='" . T_("Create work") . "'/></div>";
+
+
+			//List work already created for this data_id
+			$sql = "SELECT w.work_id,c.name,p.description, wp.parent_work_id, o.description as oname, CONCAT('<input type=\'checkbox\' name=\'cid', w.work_id, '\' value=\'', w.work_id, '\'/>') as cbox
+		
+				FROM work as w
+				JOIN process as p ON (p.process_id = w.process_id)
+				JOIN `column` as c ON (c.data_id = '$data_id' AND w.column_id = c.column_id)
+				LEFT JOIN work_parent as wp on (wp.work_id = w.work_id)
+				LEFT JOIN operator as o on (w.operator_id = o.operator_id)
+				WHERE w.column_id = '$column_id'
+				ORDER BY w.work_id ASC";
+		
+			$rs = $db->GetAll($sql);
+			translate_array($rs,array("description"));
+			p(T_("Current work for this data file and column"),"h2");
+			xhtml_table($rs,array('work_id','name','description','parent_work_id','oname','cbox'),array(T_("Work ID"),T_("Variable name"),T_("Process description"),T_("Parent job"),T_("Assigned operator"),T_("Create comparison work")));
+			
+			print "<div><input type='submit' name='submit_compare' value='" . T_("Create comparison work") . "'/></div>";
+			
+			print "</form>";
+
 		}
 
 	}
-
-	//List work already created for this data_id
-	$sql = "SELECT w.work_id,c.name,p.description, wp.parent_work_id, o.description as oname
-		FROM work as w
-		JOIN process as p ON (p.process_id = w.process_id)
-		JOIN `column` as c ON (c.data_id = '$data_id' AND w.column_id = c.column_id)
-		LEFT JOIN work_parent as wp on (wp.work_id = w.work_id)
-		LEFT JOIN operator as o on (w.operator_id = o.operator_id)
-		ORDER BY w.work_id ASC";
-
-	$rs = $db->GetAll($sql);
-	translate_array($rs,array("description"));
-	p(T_("Current work for this data file"),"h2");
-	xhtml_table($rs,array('work_id','name','description','parent_work_id','oname'),array(T_("Work ID"),T_("Variable name"),T_("Process description"),T_("Parent job"),T_("Assigned operator")));
 
 }
 

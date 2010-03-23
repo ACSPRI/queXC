@@ -77,6 +77,7 @@ CREATE TABLE `code` (
 
 INSERT INTO `code` VALUES(1, '1', 'Blank', '', 1);
 INSERT INTO `code` VALUES(2, '2', 'Not codeable', '', 1);
+INSERT INTO `code` VALUES(3, '1', 'Identical', '', 2);
 
 -- --------------------------------------------------------
 
@@ -99,6 +100,8 @@ CREATE TABLE `code_group` (
 --
 
 INSERT INTO `code_group` VALUES(1, 'Blank', 1, 0, 0);
+INSERT INTO `code_group` VALUES(2, 'Compare', NULL, 0, 0);
+
 
 -- --------------------------------------------------------
 
@@ -121,6 +124,7 @@ CREATE TABLE `code_level` (
 --
 
 INSERT INTO `code_level` VALUES(1, 1, 0, 1);
+INSERT INTO `code_level` VALUES(2, 2, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -294,6 +298,7 @@ CREATE TABLE `process` (
   `auto_code_value` tinyint(1) NOT NULL default '0',
   `auto_code_label` tinyint(1) NOT NULL default '0',
   `template` tinyint(1) NOT NULL default '0' COMMENT 'Use as a template',
+  `exclusive` tinyint(1) NOT NULL default '0' COMMENT 'Should this process be run only by an operator tha hasn''t done any work on the parent work?',
   PRIMARY KEY  (`process_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -301,10 +306,11 @@ CREATE TABLE `process` (
 -- Dumping data for table `process`
 --
 
-INSERT INTO `process` VALUES(1, 'Spacing', NULL, 'spacing', 'spacing_display', 0, 0, 0);
-INSERT INTO `process` VALUES(2, 'Spell check', NULL, 'spelling', 'spelling_display', 0, 0, 0);
-INSERT INTO `process` VALUES(3, 'Email validate', NULL, 'email', 'email_display', 0, 0, 0);
-INSERT INTO `process` VALUES(4, 'Create new code group', 1, NULL, NULL, 0, 1, 1);
+INSERT INTO `process` VALUES(1, 'Spacing', NULL, 'spacing', 'spacing_display', 0, 0, 0, 0);
+INSERT INTO `process` VALUES(2, 'Spell check', NULL, 'spelling', 'spelling_display', 0, 0, 0, 0);
+INSERT INTO `process` VALUES(3, 'Email validate', NULL, 'email', 'email_display', 0, 0, 0, 0);
+INSERT INTO `process` VALUES(4, 'Create new code group', 1, NULL, NULL, 0, 1, 1, 0);
+INSERT INTO `process` VALUES(5, 'Compare', 2, 'compare', 'compare_display', 0, 0, 1, 1);
 
 -- --------------------------------------------------------
 
