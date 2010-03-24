@@ -102,7 +102,7 @@ function import_fixed_width($filename,$data_id,$column_id = false)
 	//Insert line by line, cell by cell using string concatenation
 	//If column_id is set, check if this line should be inserted first
 
-	$lines = file($filename);
+	$lines = gzfile($filename);
 	
 	$row_id = -1;
 	
@@ -204,7 +204,7 @@ function import_csv_data($filename,$data_id,$column_id = false)
 	//Insert line by line, cell by cell using csv function
 	//If column_id is set, check if this line should be inserted first
 
-	$handle = fopen($filename, "r");
+	$handle = gzopen($filename, "r");
 	
 	$row_id = -1;
 	
@@ -309,7 +309,7 @@ function import_csv_columns($filename,$data_id)
 	$db->StartTrans();
 
 	$row = 1;
-	$handle = fopen($filename, "r");
+	$handle = gzopen($filename, "r");
 	
 	$cols = array();
 	$numberofcols = 0;
@@ -571,7 +571,7 @@ function import_code($filename,$description,$allow = 0)
 	//Insert rows into code table
 
 	$row = 1;
-	$handle = fopen($filename, "r");
+	$handle = gzopen($filename, "r");
 	while (($r = fgetcsv($handle)) !== FALSE) 
 	{
 		$sql = "INSERT INTO code (code_id,value,label,keywords,code_level_id)
@@ -585,7 +585,7 @@ function import_code($filename,$description,$allow = 0)
 		if (strlen(trim($r[3])) > 0)
 			$codeparentindex[] = array($r[3],$code_id);
 	}
-	fclose($handle);
+	gzclose($handle);
 
 	//Insert code_parent relationship
 
