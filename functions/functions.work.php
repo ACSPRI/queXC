@@ -537,6 +537,109 @@ function get_operator_id()
 }
 
 /**
+ * 
+ * Copy data from one column to another
+ * 
+ * @param int $column_id_from The column_id to copy data from
+ * @param int $column_id_to The column_id to copy data to
+ *
+ */
+function copy_data($column_id_from,$column_id_to)
+{
+	global $db;
+
+	$db->StartTrans();
+	
+	$sql = "SELECT cell_id, row_id
+		FROM `cell`
+		WHERE column_id = '$column_id_from'";
+
+	$rs = $db->GetAll($sql);
+
+	//Get each latest cell revision and create a new one in the new column
+	foreach($rs as $r)
+	{
+		$cell_id_from = $r['cell_id'];
+		$row_id = $r['row_id'];
+
+		list($data,$cell_revision_id) = get_cell_data($cell_id_from);
+
+		$cell_id_to = get_cell_id($row_id,$column_id_to);
+		if ($cell_id_to == false)
+			$cell_id_to = new_cell($row_id,$column_id_to);
+
+		new_cell_revision($cell_id_to,$data);
+	}
+
+	$db->CompleteTrans();
+}
+
+
+/** 
+ *
+ * Copy a column and return the new column_id of the copy
+ *
+ * @param int $column_id The column_id to copy
+ * @param bool $copy_data Whether to copy the data that exists in the column or not
+ * @param bool $copy_code_group Whether to copy the associated code group (if any) or not
+ * @param bool|int $column_group_id The column group to assign to
+ * @param bool|int $column_multi_group_id The column multi group to assign to
+ * @return int The new column_id
+ */
+function copy_column($column_id,$copy_data = false, $copy_code_group = false, $column_group_id = 'NULL', $column_multi_group_id = 'NULL')
+{
+	global $db;
+
+	$db->StartTrans();
+
+	$code_level_id = 'code_level_id';
+
+	if ($copy_code_group)
+	{
+		$sql = "SELECT c.code_level_id, cl.code_group_id, cl.level
+			FROM `column` as c, code_level as cl
+			WHERE c.column_id = '$column_id'
+			AND cl.code_level_id = c.code_level_id";
+
+		$rs = $db->GetRow($sql);
+
+		if (!empty($rs))
+		{
+			$cgi = $rs['code_group_id'];
+			$level = $rs['level'];
+
+			$ncgi = copy_code_group($cgi);
+
+			$sql = "SELECT code_level_id
+				FROM code_level
+				WHERE level = '$level'
+				AND code_group_id = '$ncgi'";
+
+			$cl = $db->GetRow($sql);
+
+			if (!empty($cl))
+				$code_level_id = $cl['code_level_id'];
+		}
+	}
+
+	$sql = "INSERT INTO `column` (`column_id`, `data_id`, `column_group_id`, `column_multi_group_id`, `name`, `description`, `startpos`, `width`, `type`, `in_input`, `sortorder`, `code_level_id`, `reference_column_group_id`)
+		SELECT column_id, data_id, $column_group_id, $column_multi_group_id, CONCAT('" . T_("COPY") . "', name), CONCAT('" . T_("Copy of: ") . "', description), 0, width, type, 0, 0, $code_level_id, reference_column_group_id
+		FROM `column`
+		WHERE column_id = '$column_id'";
+
+	$db->Execute($sql);
+
+	$ncolumn_id = $db->Insert_ID();
+	
+	if ($copy_data)
+		copy_data($column_id,$ncolumn_id);
+
+	$db->CompleteTrans();
+	
+	return $ncolumn_id;
+}
+
+/**
  * Copy a code group and return the code_group_id of the copy
  *
  * @param int code_group_id The code group to copy
@@ -1292,6 +1395,7 @@ function compare_display($cell_id,$cell_data,$work_unit_id)
 
 
 	$tablecontents = array();
+	$tablecontents_match = array();
 
 	print "<table class='tclass'><tr>";
 
@@ -1320,6 +1424,7 @@ function compare_display($cell_id,$cell_data,$work_unit_id)
 		$compare = $db->GetAll($sql);
 		
 		$i = 0;
+		$k = 0;
 
 		foreach($compare as $c)
 		{
@@ -1329,6 +1434,8 @@ function compare_display($cell_id,$cell_data,$work_unit_id)
 
 			list($data,$rev) = get_cell_data($ceid);
 			
+			$contents = "";
+
 			if (!empty($data))
 			{
 				if (!empty($c['code_level_id']))
@@ -1354,13 +1461,46 @@ function compare_display($cell_id,$cell_data,$work_unit_id)
 				$i++;
 				if ($i > $maxi) $maxi = $i;
 			}
+		
+			$tablecontents_match[$k][$j] = $contents;
+				
+			$k++;
 		}
 
 		$j++;
 	}
 	print "</tr>";
 
-	
+	//New table display which matches columns
+	for ($x = 0; $x < $k; $x++)
+	{
+		$blank = true;
+		foreach($tablecontents_match[$x] as $c)
+		{
+			if (!empty($c))
+			{
+				$blank = false;
+				break;
+			}
+		}
+		if (!$blank)
+		{
+			print "<tr>";
+			for ($y = 0; $y < $j; $y++)
+			{
+				print "<td>";
+				if (isset($tablecontents_match[$x][$y])) print $tablecontents_match[$x][$y];
+				print "</td>";
+			}
+			print "</tr>";
+		}
+	}
+	print "</table>";
+
+	/*
+	//Original table display
+		
+	print "<table>";
 	for ($x = 0; $x < $maxi; $x++)
 	{
 		print "<tr>";
@@ -1373,6 +1513,7 @@ function compare_display($cell_id,$cell_data,$work_unit_id)
 		print "</tr>";
 	}
 	print "</table>";
+	*/
 
 	//coding
         print "<div class='header' id='header'>";
