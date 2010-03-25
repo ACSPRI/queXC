@@ -55,15 +55,17 @@ if (isset($_POST['submit']))
 	$autolabel = 0;
 	$autovalue = 0;
 	$template = 0;
+	$exclusive = 0;
 	if (isset($_POST['autolabel'])) $autolabel = 1;
 	if (isset($_POST['autovalue'])) $autovalue = 1;
 	if (isset($_POST['template'])) $template = 1;
+	if (isset($_POST['exclusive'])) $exclusive = 1;
 
 
 	$db->StartTrans();
 
-	$sql = "INSERT INTO process (process_id,description,code_group_id,auto_code_value,auto_code_label,template)
-		VALUES (NULL,$description,'$code_group_id','$autovalue','$autolabel','$template')";
+	$sql = "INSERT INTO process (process_id,description,code_group_id,auto_code_value,auto_code_label,template,exclusive)
+		VALUES (NULL,$description,'$code_group_id','$autovalue','$autolabel','$template', '$exclusive')";
 		
 	$db->Execute($sql);
 
@@ -115,6 +117,7 @@ if ($code_group_id != 0)
 	print "<div><input type='checkbox' name='autolabel' id='autolabel'/><label for='autolabel'>" . T_("Automatically assign a code if the code label exactly matches the data?") . "</label></div>";
 	print "<div><input type='checkbox' name='autovalue' id='autovalue'/><label for='autovalue'>" . T_("Automatically assign a code if the code value exactly matches the data?") . "</label></div>";
 	print "<div><input type='checkbox' name='template' id='template'/><label for='template'>" . T_("Use the code group as a template? (Create a new, editable code group for each work unit that this is assigned to)") . "</label></div>";
+	print "<div><input type='checkbox' name='exclusive' id='exclusive'/><label for='exclusive'>" . T_("Should this process only be run by operator(s) that have not worked on the prior process (exclusive)?") . "</label></div>";
 
 	print "<div>" . T_("Name for process using this code: ");
 	print "<input type='text' name='description'/>";
