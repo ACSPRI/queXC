@@ -297,7 +297,7 @@ function save_work_process($post)
 				//get column and row id
 				$sql = "SELECT c.column_id, ce.row_id
 					FROM `column` as c, cell as ce, work_unit as wu
-					WHERE reference_column_group_id = '{$g['column_group_id']}'
+					WHERE reference_column_group_id = '{$m['column_group_id']}'
 					AND ce.cell_id = wu.cell_id
 					AND wu.work_unit_id = '$work_unit_id'";
 				
@@ -895,7 +895,7 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 
 				if ($mcgi) //if multi columns, insert a text column for each code column
 				{
-					$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,reference_column_group_id) VALUES (NULL,'$data_id','$column_group_id','TG$column_group_id','Text for $column_group_id','0','0','1','0','0','$column_group_id')";
+					$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,reference_column_group_id) VALUES (NULL,'$data_id','$column_group_id','TG$column_group_id','" . T_("Text for") . " $column_group_id','0','2048','1','0','0','$column_group_id')";
 					$db->Execute($sql);
 				}
 			}
