@@ -302,7 +302,12 @@ function save_work_process($post)
 					AND wu.work_unit_id = '$work_unit_id'";
 				
 				$tt = $db->GetRow($sql);
-	
+
+				if (empty($tt))
+				{
+					print "ERROR saving text data for work unit $work_unit_id for reference column " . $m['column_group_id'];
+					exit();
+				}	
 	
 				$cell_id = get_cell_id($tt['row_id'],$tt['column_id']);
 				if ($cell_id == false)
@@ -325,7 +330,8 @@ function save_work_process($post)
 			AND wu.process_id = p.process_id
 			AND p.code_group_id IS NOT NULL
 			AND wu.work_id = w.work_id
-			AND ce.cell_id = wu.cell_id ";
+			AND ce.cell_id = wu.cell_id
+			AND c.reference_column_group_id IS NULL "; //make sure to ignore reference columns so we don't override what we already did with blanks
 	
 		$sql .= $g;
 

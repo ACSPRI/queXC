@@ -52,10 +52,10 @@ if (isset($_GET['remove']))
 	$relevant_column_id = intval($_GET['relevant_column_id']);
 
 	$sql = "DELETE FROM column_process_column
-		AND process_id = '$process_id'
+		WHERE process_id = '$process_id'
 		AND column_id = '$column_id'
 		AND relevant_column_id = '$relevant_column_id'";
-	
+
 	$db->Execute($sql);
 
 }
@@ -128,7 +128,7 @@ if ($data_id != 0)
 		if ($process_id != 0)
 		{
 			//Display columns selected for this data file and process
-			$sql = "SELECT p.description as pdes, c.description as cdes, CONCAT('<a href=\'?remove=remove&amp;process_id=',cpc.process_id,'&amp;column_id=',cpc.column_id,'&amp;relevant_column_id=',cpc.relevant_column_id,'\'>" . T_("Remove") . "</a>') as link
+			$sql = "SELECT p.description as pdes, c.description as cdes, CONCAT('<a href=\'?data_id=$data_id&amp;remove=remove&amp;process_id=',cpc.process_id,'&amp;column_id=',cpc.column_id,'&amp;relevant_column_id=',cpc.relevant_column_id,'\'>" . T_("Remove") . "</a>') as link
 				FROM process as p, `column` as c, column_process_column as cpc
 				WHERE cpc.process_id = '$process_id'
 				AND cpc.column_id = '$column_id'

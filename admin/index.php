@@ -80,6 +80,7 @@ print "<ul><li><a href=\"javascript:link('mainobj','operatorperformance.php');\"
 
 print "<li><h3>" . T_("Export") . "</h3>";
 print "<ul><li><a href=\"javascript:link('mainobj','export.php');\">" . T_("Export data") . "</a></li>";
+print "<li><a href=\"javascript:link('mainobj','updateddi.php');\">" . T_("Update data description") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','listdata.php');\">" . T_("List data") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','exportcode.php');\">" . T_("Export code groups") . "</a></li></ul></li>";
 
