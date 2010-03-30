@@ -44,7 +44,7 @@ include ("../functions/functions.xhtml.php");
  */
 include("../db.inc.php");
 
-if (isset($_GET['submit']))
+if (isset($_GET['submit']) || isset($_GET['submitmove']))
 {
 	$data_id = intval($_GET['data_id']);
 	$column_id = intval($_GET['column_id']);
@@ -88,6 +88,22 @@ if (isset($_GET['submit']))
 	}
 
 	$db->CompleteTrans();
+
+	if (isset($_GET['submitmove']))
+	{
+		$sql = "SELECT column_id
+			FROM `column`
+			WHERE data_id = '$data_id'
+			AND column_id > '$column_id'
+			AND in_input = 1
+			ORDER BY column_id ASC
+			LIMIT 1";
+	
+		$next = $db->GetRow($sql);
+		
+		if (!empty($next))
+			$_GET['column_id'] = $next['column_id'];
+	}
 }
 	
 
@@ -113,7 +129,7 @@ if ($data_id != 0)
 	//Select variable (column)
 	$sql = "SELECT column_id as value, name as description, CASE WHEN column_id = '$column_id' THEN 'selected=\'selected\'' ELSE '' END AS selected
 		FROM `column`
-		WHERE type = 1
+		WHERE in_input = 1
 		AND data_id = '$data_id'";
 
 	print "<div>" . T_("Select variable: ");
@@ -176,7 +192,7 @@ if ($data_id != 0)
 			}
 		}
 
-		print "<div><input type='submit' name='submit' id='submit' value='". T_("Update") . "'/></div></form>";
+		print "<div><input type='submit' name='submit' id='submit' value='". T_("Update") . "'/><input type='submit' name='submitmove' id='submitmove' value='". T_("Update and move to next column") . "'/></div></form>";
 	}
 }
 
