@@ -44,6 +44,17 @@ include ("../functions/functions.xhtml.php");
  */
 include("../db.inc.php");
 
+/** 
+ * Remove all excessive white space
+ * 
+ * @param string $str a string
+ * @return string the string with missing white space
+ */
+function trimall($str)
+{
+	return preg_replace('/[\r\n\s\t]+/xms', ' ', trim($str));  
+}
+
 if (isset($_GET['submit']) || isset($_GET['submitmove']))
 {
 	$data_id = intval($_GET['data_id']);
@@ -55,8 +66,8 @@ if (isset($_GET['submit']) || isset($_GET['submitmove']))
 	
 	if (isset($_GET['n'.$column_id]) && isset($_GET['d'.$column_id]))
 	{
-		$name = $db->qstr($_GET['n'.$column_id]);
-		$desc = $db->qstr($_GET['d'.$column_id]);
+		$name = $db->qstr(trimall($_GET['n'.$column_id]));
+		$desc = $db->qstr(trimall($_GET['d'.$column_id]));
 		$sql = "UPDATE `column`
 			SET name = $name, description = $desc, code_level_id = $code_level_id
 			WHERE column_id = '$column_id'";
@@ -76,8 +87,8 @@ if (isset($_GET['submit']) || isset($_GET['submitmove']))
 			$code_id = $c['code_id'];
 			if (isset($_GET['c'.$code_id]) && isset($_GET['l'.$code_id]))
 			{
-				$value = $db->qstr($_GET['c'.$code_id]);
-				$label = $db->qstr($_GET['l'.$code_id]);
+				$value = $db->qstr(trimall($_GET['c'.$code_id]));
+				$label = $db->qstr(trimall($_GET['l'.$code_id]));
 				$sql = "UPDATE `code`
 					SET value = $value, label = $label
 					WHERE code_id = '$code_id'";

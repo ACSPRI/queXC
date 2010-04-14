@@ -72,6 +72,7 @@ print "<li><a href=\"javascript:link('mainobj','relevantcolumns.php');\">" . T_(
 print "<li><h3>" . T_("Progress") . "</h3>";
 print "<ul><li><a href=\"javascript:link('mainobj','progress.php');\">" . T_("Display progress") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','worklist.php');\">" . T_("List all work") . "</a></li>";
+print "<li><a href=\"javascript:link('mainobj','unassign.php');\">" . T_("List work assigned but not complete") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','modificationhistory.php');\">" . T_("Modification history") . "</a></li></ul></li>";
 
 
