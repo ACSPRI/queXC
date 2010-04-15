@@ -201,9 +201,17 @@ function redo($work_unit_id,$operator_id = false)
 {
 	global $db;
 
+	/*
+	//This SQL is a problem because when work units are cleared, this will be cleared and the 
+	//existing work unit will be deemed to complete the job
 	$sql = "INSERT INTO work_unit (work_unit_id,work_id,cell_id,process_id,operator_id,assigned,completed)
 		SELECT NULL,work_id,cell_id,process_id,operator_id,NULL,NULL
 		FROM work_unit
+		WHERE work_unit_id = '$work_unit_id'";
+	*/
+
+	$sql = "UPDATE work_unit 
+		SET assigned = NULL, completed = NULL
 		WHERE work_unit_id = '$work_unit_id'";
 
 	$db->Execute($sql);
@@ -1110,7 +1118,6 @@ function assign_work($operator_id, $by_row = false)
 
 	$rs = $db->GetAll($sql);
 
-
 	$work_unit_id = false;
 
 	if (!empty($rs))
@@ -1141,6 +1148,7 @@ function assign_work($operator_id, $by_row = false)
 
 					$brs = $db->GetRow($sql);
 
+
 					if (!empty($brs))
 					{
 						//code blank to this cell
@@ -1166,6 +1174,7 @@ function assign_work($operator_id, $by_row = false)
 			{
 				list($tdata,$tcell_revision_id) = get_cell_data($r['cell_id']);
 				$tdata = trim($tdata);
+				$tdata = $db->qstr($tdata);
 				$tcode_group_id = $r['code_group_id'];
 
 				//See if there is EXACTLY ONE label or value which matches this tdata
@@ -1176,13 +1185,14 @@ function assign_work($operator_id, $by_row = false)
 					AND cl.code_group_id = '$tcode_group_id'";
 
 				if ($r['auto_code_value'] == 1 && $r['auto_code_label'] == 1)
-					$sql .= " (AND c.value LIKE '$tdata' OR c.label LIKE '$tdata')";
+					$sql .= " (AND c.value LIKE $tdata OR c.label LIKE $tdata)";
 				else if ($r['auto_code_value'] == 1)
-					$sql .= " AND c.value LIKE '$tdata' ";
+					$sql .= " AND c.value LIKE $tdata ";
 				else if ($r['auto_code_label'] == 1)
-					$sql .= " AND c.label LIKE '$tdata' ";
+					$sql .= " AND c.label LIKE $tdata ";
 
 				$aall = $db->GetAll($sql);
+
 
 				if (count($aall) == 1) //one result - so auto code
 				{
@@ -1269,6 +1279,7 @@ function assign_work($operator_id, $by_row = false)
 				VALUES (NULL,{$r['work_id']},{$r['cell_id']},{$r['process_id']},$operator_id,NULL,NULL)";
 	
 			$db->Execute($sql);
+
 
 			if ($test == 0)
 			{

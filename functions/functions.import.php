@@ -444,7 +444,7 @@ function import_ddi($filename,$data_id)
 		}
 
 		$t = 0;
-		if ($type != "numeric") $t = 1;
+		if ($type != "numeric" && $type != "number") $t = 1;
 
 		$code_level_id = "NULL";
 
