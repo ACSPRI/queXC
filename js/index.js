@@ -1,3 +1,13 @@
+Element.Events.keyenter = {
+	base: 'keypress',
+	condition: function(e){
+		// We can basically put any logic here.
+		// In this example we return true, when the pressed key is the
+		// Enter-Button so the keyenter event gets fired.
+		return e.key=='enter';
+	}
+};
+
 function getSelectedText()
 {
     var txt = '';
@@ -48,6 +58,40 @@ function showhide(eid)
 	}
 }
 
+function addevents() {
+	$('searchclick').addEvent('click', function(event) {
+
+		//make the ajax call, replace text
+		var req = new Request.HTML({
+			method: 'get',
+			evalScripts: true,
+			url: 'index.php',
+			data: { 'search' : $('search').value },
+			update: $('header'),
+			}
+		).send();
+
+	});
+
+	$('search').addEvent('keyenter', function(event) {
+		//Stop page submit
+		event.stop();
+
+		//make the ajax call, replace text
+		var req = new Request.HTML({
+			method: 'get',
+			evalScripts: true,
+			url: 'index.php',
+			data: { 'search' : $('search').value },
+			update: $('header'),
+			}
+		).send();
+
+	});
+
+
+}
+
 function updateevents() {
 	$$('.rb').addEvent('click', function(event) {
 		//prevent the page from changing
@@ -64,7 +108,27 @@ function updateevents() {
 		).send();
 
 	});
+
+
+}
+
+function updateevents2() {
+	$$('.rb').addEvent('click', function(event) {
+		//prevent the page from changing
+		event.stop();
+
+		//make the ajax call, replace text
+		var req = new Request.HTML({
+			method: 'get',
+			evalScripts: true,
+			url: 'displayscheme.php',
+			data: { 'display_codes' : this.id },
+			update: $('header'),
+			}
+		).send();
+
+	});
 }
 
 //on dom ready...
-window.addEvent('domready', function() {updateevents();});
+window.addEvent('domready', function() {updateevents(); addevents();});

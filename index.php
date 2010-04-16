@@ -57,6 +57,31 @@ include("functions/functions.process.php");
 $operator_id = get_operator_id();
 if ($operator_id != false)
 	$work_unit_id = get_work($operator_id);
+
+if (isset($_GET['search']))
+{
+	if ($work_unit_id != false)
+	{
+		$code_id = search_codes($work_unit_id,$_GET['search']);
+		if ($code_id != false)
+		{
+			//print "$code_id";
+			display_all_codes($code_id,true,$work_unit_id);
+		}
+		else
+		{
+			//print "$code_id";
+			$r = get_work_process($work_unit_id);
+			$cell_id = $r['cell_id'];
+			$process_id = $r['process_id'];
+			$work_id = $r['work_id'];
+			$cdata = get_cell_data($cell_id);
+			display_codes($work_unit_id,$operator_id,$cdata[0]);
+		}
+		print "<script type='text/javascript'>updateevents();</script>";
+	}
+	exit();
+}
 	
 if (isset($_GET['display_codes']))
 {
@@ -158,6 +183,9 @@ if ($operator_id != false)
 
 		if ($process_function == false) //coding
 		{
+			//search area
+			print "<div id='searcharea'><label for='search'>" . T_("Search") . ":</label><input type='text' id='search' name='search'/> <span id='searchclick'>" . T_("Click here to search (or press enter) Use % character as a wildcard") . "</span></div>";
+
 			//coding
 			print "<div class='header' id='header'>";
 			if ($code_id == false)
