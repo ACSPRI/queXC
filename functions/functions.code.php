@@ -263,13 +263,15 @@ function display_codes($work_unit_id, $operator_id = false,$cdata = "")
 	}
 	else
 	{
-		$sql = "SELECT c.code_id, (c.label LIKE '%$cdata%' OR c.keywords LIKE '%$cdata%') as test,w.column_group_id
+		$cdata = $db->qstr("%" . $cdata. "%");
+
+		$sql = "SELECT c.code_id, (c.label LIKE $cdata OR c.keywords LIKE $cdata) as test,w.column_group_id
 			FROM code as c
 			JOIN work_unit as wu ON (wu.work_unit_id = '$work_unit_id')
 			JOIN work as w ON (w.work_id = wu.work_id)
 			JOIN column_group as cg ON (cg.column_group_id = w.column_group_id)
 			JOIN code_level as cl ON (cl.code_group_id = cg.code_group_id AND c.code_level_id = cl.code_level_id)
-			ORDER BY (c.label LIKE '%$cdata%' OR c.keywords LIKE '%$cdata%') DESC, cl.level ASC
+			ORDER BY (c.label LIKE $cdata OR c.keywords LIKE $cdata) DESC, cl.level ASC
 			LIMIT 1";
 
 		$r = $db->GetRow($sql);
