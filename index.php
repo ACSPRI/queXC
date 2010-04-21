@@ -62,23 +62,18 @@ if (isset($_GET['search']))
 {
 	if ($work_unit_id != false)
 	{
-		$code_id = search_codes($work_unit_id,$_GET['search']);
-		if ($code_id != false)
+		$codes = search_codes_all($work_unit_id,$_GET['search']);
+		if ($codes != false)
 		{
-			//print "$code_id";
-			display_all_codes($code_id,true,$work_unit_id);
+			print "<ul>";
+			foreach($codes as $code_id => $label)
+			{
+				print "<li><a href='?code_id=$code_id'>$label</a></li>";
+			}
+			print "</ul>";
 		}
 		else
-		{
-			//print "$code_id";
-			$r = get_work_process($work_unit_id);
-			$cell_id = $r['cell_id'];
-			$process_id = $r['process_id'];
-			$work_id = $r['work_id'];
-			$cdata = get_cell_data($cell_id);
-			display_codes($work_unit_id,$operator_id,$cdata[0]);
-		}
-		print "<script type='text/javascript'>updateevents();</script>";
+			print "<a href='?'>" . T_("No results") ."</a>";
 	}
 	exit();
 }
@@ -96,6 +91,8 @@ if (isset($_GET['display_codes']))
 }
 
 $code_id = false;
+if (isset($_GET['code_id'])) $code_id = intval($_GET['code_id']); //get from search request
+
 $message = false; //message to display
 
 if (isset($_POST['work_unit_id']))
@@ -170,7 +167,7 @@ if ($operator_id != false)
 		print "<p>{$thiscolumn['name']}: {$thiscolumn['description']}</p><h3 id='menu-target' onmouseup='getSelectedText();'>{$thiscolumn['data'][0]}</h3>";
 		print "</div>";
 	
-		print "<form action='' method='post' id='cleancodeform'>";
+		print "<form action='?' method='post' id='cleancodeform'>";
 		print "<p><input type='submit' name='submit' value='" . T_("Submit and continue") . "'/>  <input type='submit' name='submit_end' value='" . T_("Submit and end work") . "'/> <input type='submit' name='submit_refer' value='" . T_("Refer to supervisor") . "'/> <input type='submit' name='submit_end_only' value='" . T_("End work") . "'/></p>";
 		print "<div id='cleancode'>";
 		$r = get_work_process($work_unit_id);
@@ -184,7 +181,7 @@ if ($operator_id != false)
 		if ($process_function == false) //coding
 		{
 			//search area
-			print "<div id='searcharea'><label for='search'>" . T_("Search") . ":</label><input type='text' id='search' name='search'/> <span id='searchclick'>" . T_("Click here to search (or press enter) Use % character as a wildcard") . "</span></div>";
+			print "<div id='searcharea'><label for='search'>" . T_("Search") . ":</label><input type='text' id='search' name='search'/> <span id='searchclick'>" . T_("Click here to search (or press enter)") . "</span></div>";
 
 			//coding
 			print "<div class='header' id='header'>";

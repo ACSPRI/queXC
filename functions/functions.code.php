@@ -345,6 +345,38 @@ function display_multi_root($cmgi)
 }
 
 /**
+ * Search codes and return the code_id and label of all codes matching
+ *
+ * @param int $work_unit_id The work unit
+ * @param string $text The text to search on
+ * @return int|bool The code_id or false if none found
+ */
+function search_codes_all($work_unit_id,$text)
+{
+	global $db;
+
+	$s = $db->qstr("%$text%");
+
+	$sql = "SELECT c.code_id, c.label
+		FROM work_unit as wu, work as w, `column_group` as cg, code_level as cl, `code` as c
+		WHERE wu.work_unit_id = '$work_unit_id'
+		AND w.work_id = wu.work_id
+		AND cg.column_group_id = w.column_group_id
+		AND cl.code_group_id = cg.code_group_id
+		AND c.code_level_id = cl.code_level_id
+		AND c.label LIKE $s
+		ORDER BY cl.level DESC";
+
+	$rs = $db->GetAssoc($sql);
+
+	if (!empty($rs))
+		return $rs;
+	
+	return false;
+
+}
+
+/**
  * Search codes and return the code_id of the first code in this work_unit
  *
  * @param int $work_unit_id The work unit
