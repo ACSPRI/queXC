@@ -808,9 +808,10 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 			
 			$cmgi = $db->Insert_ID();
 
-			$sql = "SELECT $cmgi as cmgi,c.label as label
-				FROM code as c,code_level as cl
-				WHERE cl.code_group_id = '$mcgi'
+			$sql = "SELECT $cmgi as cmgi,c.label as label,cg.blank_code_id,c.code_id
+				FROM code as c,code_level as cl,code_group as cg
+				WHERE cg.code_group_id = '$mcgi'
+				AND cl.code_group_id = cg.code_group_id
 				AND c.code_level_id = cl.code_level_id
 				AND cl.level = 0"; //select the top level only
 
@@ -906,6 +907,17 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 					AND ocg.code_group_id = '$code_group_id'";
 	
 				$db->Execute($sql);
+				
+				if ($m['code_id'] == $m['blank_code_id']) //blank code so make this column the blank one
+				{
+					$temp_column_id = $db->Insert_ID();
+
+					$sql = "UPDATE column_multi_group
+						SET blank_column_id = '$temp_column_id'
+						WHERE column_multi_group_id = '$cmgi'";
+
+					$db->Execute($sql);
+				}
 
 				if ($mcgi) //if multi columns, insert a text column for each code column
 				{
@@ -1093,7 +1105,7 @@ function assign_work($operator_id, $by_row = false)
 	if ($by_row)
 		$order = "c.data_id ASC, ce.row_id ASC";
 
-	$sql = "SELECT w.work_id,c.data_id,ce.row_id,w.column_id,ce.cell_id,w.process_id,cg.blank_code_id,w.column_group_id,cg.code_group_id,p.auto_code_value,p.auto_code_label,p.exclusive
+	$sql = "SELECT w.work_id,c.data_id,ce.row_id,w.column_id,ce.cell_id,w.process_id,cg.blank_code_id,w.column_group_id,cg.code_group_id,p.auto_code_value,p.auto_code_label,p.exclusive, cmg.blank_column_id
 		FROM `work` AS w
 		LEFT JOIN work_parent AS wp ON ( wp.work_id = w.work_id )
 		JOIN `process` AS p ON ( p.process_id = w.process_id )
@@ -1107,6 +1119,7 @@ function assign_work($operator_id, $by_row = false)
                 LEFT JOIN work_unit AS wu4 ON (wu4.operator_id = '$operator_id' AND wu4.cell_id = ce.cell_id AND wu4.work_id IN (SELECT parent_work_id FROM work_parent WHERE work_parent.work_id = w.work_id))		
 		LEFT JOIN column_group as colg ON (colg.column_group_id = w.column_group_id)
 		LEFT JOIN code_group as cg ON (cg.code_group_id = colg.code_group_id)
+		LEFT JOIN column_multi_group as cmg ON (cmg.column_multi_group_id = w.column_multi_group_id)
 		WHERE (w.operator_id IS NULL OR w.operator_id = '$operator_id')
 		AND wu.cell_id IS NULL
 		AND (wp.work_id IS NULL OR wu2.cell_id IS NOT NULL)
@@ -1117,7 +1130,6 @@ function assign_work($operator_id, $by_row = false)
 		LIMIT " . ASSIGN_MAX_LIMIT;
 
 	$rs = $db->GetAll($sql);
-
 	$work_unit_id = false;
 
 	if (!empty($rs))
@@ -1131,20 +1143,33 @@ function assign_work($operator_id, $by_row = false)
 		foreach($rs as $r)
 		{
 			//If there is a blank_code_id set, check if the cell is blank, and if so, auto assign the blank code id
-			if (!empty($r['blank_code_id']))
+			if (!empty($r['blank_code_id']) || !empty($r['blank_column_id']))
 			{
 				list($tdata,$tcell_revision_id) = get_cell_data($r['cell_id']);
 				$tdata = trim($tdata);
 
 				if (strlen($tdata) == 0) //The cell is empty
 				{
-					$blank_code_id = $r['blank_code_id'];
-				
-					//Code to the blank_code_id in this cell
-					$sql = "SELECT co.column_id, c.value
-						FROM code AS c
-						JOIN `column` AS co ON ( co.code_level_id = c.code_level_id AND co.column_group_id = '{$r['column_group_id']}' )
-						WHERE c.code_id = '$blank_code_id'";
+					if (!empty($r['blank_code_id']))
+					{
+						$blank_code_id = $r['blank_code_id'];
+					
+						//Code to the blank_code_id in this cell
+						$sql = "SELECT co.column_id, c.value
+							FROM code AS c
+							JOIN `column` AS co ON ( co.code_level_id = c.code_level_id AND co.column_group_id = '{$r['column_group_id']}' )
+							WHERE c.code_id = '$blank_code_id'";
+					}
+					else if (!empty($r['blank_column_id'])) //handle blank column
+					{
+						$blank_column_id = $r['blank_column_id'];
+
+						//Code this column to the blank code id
+						$sql = "SELECT co.column_id, c.value
+							FROM `column` as co, code as c
+							WHERE co.column_id = '$blank_column_id'
+							AND c.code_level_id = co.code_level_id";
+					}
 
 					$brs = $db->GetRow($sql);
 

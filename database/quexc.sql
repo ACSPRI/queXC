@@ -190,6 +190,7 @@ CREATE TABLE `column_multi_group` (
   `column_multi_group_id` bigint(20) NOT NULL auto_increment,
   `description` text NOT NULL,
   `code_group_id` bigint(20) default NULL COMMENT 'The code group to generate columns from',
+  `blank_column_id` bigint(20) default NULL COMMENT 'The column to code as blank',
   PRIMARY KEY  (`column_multi_group_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
