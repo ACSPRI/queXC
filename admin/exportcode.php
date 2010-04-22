@@ -71,7 +71,7 @@ display_chooser($rs2,'code_group_id','code_group_id');
 print "</div>";
 
 if ($code_group_id != 0)
-	print "<p><a href='?codegroup=$code_group_id>" . T_("Export code group") . "</a></p>";
+	print "<p><a href='?codegroup=$code_group_id'>" . T_("Export code group") . "</a></p>";
 
 
 xhtml_foot();
