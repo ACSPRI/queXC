@@ -70,12 +70,12 @@ if (isset($_GET['work_id']) && isset($_GET['process_id']) && isset($_GET['operat
 xhtml_head(T_("Assigned work"),true,array("../css/table.css"),array("../js/display.js"));
 
 //List work to do for this data_id
-$sql = "SELECT count(*) as count, p.description as processd, o.description as odes, CONCAT('<a href=\'?work_id=',wu.work_id,'&amp;process_id=',wu.process_id,'&amp;operator_id=',wu.operator_id,'\'>" . T_("Delete") . "</a>') as dele
+$sql = "SELECT count(*) as count, wu.supervisor, p.description as processd, o.description as odes, CONCAT('<a href=\'?work_id=',wu.work_id,'&amp;process_id=',wu.process_id,'&amp;operator_id=',wu.operator_id,'\'>" . T_("Delete") . "</a>') as dele
 	FROM `work_unit` AS wu
 	JOIN `process` AS p ON ( p.process_id = wu.process_id )
-	JOIN operator AS o ON (wu.operator_id = o.operator_id)
+	LEFT JOIN operator AS o ON (wu.operator_id = o.operator_id)
 	WHERE wu.assigned IS NULL and wu.completed IS NULL 
-	GROUP BY wu.operator_id,wu.process_id,wu.work_id ";
+	GROUP BY wu.operator_id,wu.process_id,wu.work_id,wu.supervisor ";
 
 $rs = $db->GetAll($sql);
 
@@ -86,7 +86,7 @@ if (empty($rs))
 else
 {
 	translate_array($rs,array("processd"));
-	xhtml_table($rs,array('count','processd','odes','dele'),array(T_("Rows to do"),T_("Process to apply"),T_("Operator"),T_("Delete assigned work")));
+	xhtml_table($rs,array('count','processd','odes','supervisor','dele'),array(T_("Rows to do"),T_("Process to apply"),T_("Operator"),T_("Supervisor?"),T_("Delete assigned work")));
 }
 
 xhtml_foot();

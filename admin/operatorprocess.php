@@ -62,11 +62,9 @@ if (isset($_POST['submit']) && isset($_GET['operator_id']))
 		if (substr($g,0,3) == "pid")
 		{
 			$auto_code = 0;
-			$supervisor = 0;
 			if (isset($_POST["auto" . $v])) $auto_code = 1;
-			if (isset($_POST["super" . $v])) $supervisor = 1;
-			$sql = "INSERT INTO operator_process (operator_id,process_id,auto_code,is_supervisor)
-				VALUES ($operator_id,$v,$auto_code,$supervisor)";
+			$sql = "INSERT INTO operator_process (operator_id,process_id,auto_code)
+				VALUES ($operator_id,$v,$auto_code)";
 			$db->Execute($sql);
 		}
 	}
@@ -95,14 +93,14 @@ if ($operator_id != 0)
 			
 	//display a checkbox of all processes
 
-	$sql = "SELECT p.process_id,p.description, CONCAT('<input type=\'checkbox\' name=\'pid', p.process_id, '\' value=\'', p.process_id, '\' ', CASE WHEN op.process_id IS NOT NULL THEN 'checked=\'checked\'' ELSE '' END  , '/>') as cbox, CONCAT('<input type=\'checkbox\' name=\'auto', p.process_id, '\' value=\'', p.process_id, '\' ', CASE WHEN (op.process_id IS NOT NULL AND op.auto_code = 1) THEN 'checked=\'checked\'' ELSE '' END  , '/>') as abox,  CONCAT('<input type=\'checkbox\' name=\'super', p.process_id, '\' value=\'', p.process_id, '\' ', CASE WHEN (op.process_id IS NOT NULL AND op.is_supervisor = 1) THEN 'checked=\'checked\'' ELSE '' END  , '/>') as sbox
+	$sql = "SELECT p.process_id,p.description, CONCAT('<input type=\'checkbox\' name=\'pid', p.process_id, '\' value=\'', p.process_id, '\' ', CASE WHEN op.process_id IS NOT NULL THEN 'checked=\'checked\'' ELSE '' END  , '/>') as cbox, CONCAT('<input type=\'checkbox\' name=\'auto', p.process_id, '\' value=\'', p.process_id, '\' ', CASE WHEN (op.process_id IS NOT NULL AND op.auto_code = 1) THEN 'checked=\'checked\'' ELSE '' END  , '/>') as abox 
 
 		FROM process as p
 		LEFT JOIN operator_process AS op ON (op.operator_id = $operator_id AND op.process_id = p.process_id)";
 
 	$rs = $db->GetAll($sql);
 	translate_array($rs,array("description"));
-	xhtml_table($rs,array('description','cbox','abox','sbox'),array(T_("Process"),T_("Select"),T_("Allow queXC to auto guess code"),T_("Operator is supervisor for this process")));
+	xhtml_table($rs,array('description','cbox','abox'),array(T_("Process"),T_("Select"),T_("Allow queXC to auto guess code")));
 
 	print "<div><input type='submit' name='submit' value='" . T_("Assign processes") . "'/></div></form>";
 }

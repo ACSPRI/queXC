@@ -125,12 +125,10 @@ function remove_work_units($operator_id)
 	$db->StartTrans();
 
 	//Remove all work units that could technically be assigned to someone else
-	$sql = "SELECT wu.work_unit_id
+	$sql = "SELECT wu.work_unit_id, wu.supervisor
 		FROM work_unit AS wu
-		LEFT JOIN operator_process AS op ON (op.process_id = wu.process_id AND op.operator_id = wu.operator_id AND op.is_supervisor = 1)
 		WHERE wu.operator_id = '$operator_id'
-		AND wu.completed IS NULL
-		AND op.process_id IS NULL";
+		AND wu.completed IS NULL";
 
 	$rs = $db->GetAll($sql);
 
@@ -139,11 +137,23 @@ function remove_work_units($operator_id)
 		foreach($rs as $r)
 		{
 			$wuid = $r['work_unit_id'];
-	
-			$sql = "DELETE FROM work_unit
-				WHERE operator_id = '$operator_id'
-				AND work_unit_id = '$wuid'
-				AND completed IS NULL";
+			$s = $r['supervisor'];
+		
+			if ($s == 0)
+			{
+				$sql = "DELETE FROM work_unit
+					WHERE operator_id = '$operator_id'
+					AND work_unit_id = '$wuid'
+					AND completed IS NULL";
+			}
+			else
+			{
+				$sql = "UPDATE work_unit
+					SET assigned = NULL, operator_id = NULL
+					WHERE work_unit_id = '$wuid'
+					AND completed IS NULL
+					AND supervisor = 0";
+			}
 		
 			$db->Execute($sql);
 		}
@@ -165,21 +175,15 @@ function refer_to_supervisor($work_unit_id)
 	global $db;
 
 	$sql = "SELECT o.operator_id
-		FROM operator_process as o
-		JOIN work_unit AS wu ON (wu.work_unit_id = $work_unit_id AND wu.process_id = o.process_id)
-		JOIN work AS w ON (w.work_id = wu.work_id)
-		JOIN `column` AS c ON (c.column_id = w.column_id)
-		JOIN operator_data AS od ON (od.data_id = c.data_id AND od.operator_id = o.operator_id)
-		WHERE o.is_supervisor = 1";
+		FROM operator_process_supervisor as o
+		JOIN work_unit AS wu ON (wu.work_unit_id = $work_unit_id AND wu.process_id = o.process_id)";
 
-	$rs = $db->GetRow($sql); //will currently just get the first supervisor
+	$rs = $db->GetRow($sql); //is there at least one supervisor for this process?
 
 	if (!empty($rs))
 	{
-		$so = $rs['operator_id'];
-
 		$sql = "UPDATE work_unit
-			SET operator_id = '$so', assigned = NULL
+			SET operator_id = NULL, assigned = NULL, supervisor = 1
 			WHERE work_unit_id = $work_unit_id 
 			AND completed IS NULL";
 
@@ -1056,7 +1060,33 @@ function get_work($operator_id)
 		if (!empty($rs2))
 			$work_unit_id = $rs2['work_unit_id'];
 		else
-			$work_unit_id = assign_work($operator_id); //If nothing assigned or completed available, assign work to this operator
+		{
+			//if we are a supervisor for this process, assign the next one to me
+			$sql = "SELECT wu.work_unit_id
+				FROM work_unit as wu, operator_process_supervisor as ops
+				WHERE wu.operator_id IS NULL
+				AND wu.completed IS NULL
+				AND wu.assigned IS NULL
+				AND ops.process_id = wu.process_id
+				AND ops.operator_id = '$operator_id'
+				ORDER BY work_unit_id ASC
+				LIMIT 1";
+
+			$rs3 = $db->GetRow($sql);
+			
+			if (!empty($rs3))
+			{
+				$work_unit_id = $rs3['work_unit_id'];
+
+				$sql = "UPDATE work_unit
+					SET operator_id = '$operator_id'
+					WHERE work_unit_id = '$work_unit_id'";
+
+				$db->Execute($sql);
+			}
+			else
+				$work_unit_id = assign_work($operator_id); //If nothing assigned or completed available, assign work to this operator
+		}
 
 		
 		if ($work_unit_id != false)

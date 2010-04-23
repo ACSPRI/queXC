@@ -275,12 +275,29 @@ CREATE TABLE `operator_process` (
   `operator_id` bigint(20) NOT NULL,
   `process_id` bigint(20) NOT NULL,
   `auto_code` tinyint(1) NOT NULL default '0',
-  `is_supervisor` tinyint(1) NOT NULL default '0' COMMENT 'Is this operator a supervisor for this code?',
   PRIMARY KEY  (`operator_id`,`process_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `operator_process`
+--
+
+
+-- --------------------------------------------------------
+
+
+--
+-- Table structure for table `operator_process_supervisor`
+--
+
+CREATE TABLE `operator_process_supervisor` (
+  `operator_id` bigint(20) NOT NULL,
+  `process_id` bigint(20) NOT NULL,
+  PRIMARY KEY  (`operator_id`,`process_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `operator_process_supervisor`
 --
 
 
@@ -385,6 +402,7 @@ CREATE TABLE `work_unit` (
   `operator_id` bigint(20) default NULL,
   `assigned` datetime default NULL,
   `completed` datetime default NULL,
+  `supervisor` tinyint(1) NOT NULL default '0' COMMENT 'Assigned to supervisor? (expert)',
   PRIMARY KEY  (`work_unit_id`),
   KEY `process_id` (`process_id`),
   KEY `cell_id` (`cell_id`),

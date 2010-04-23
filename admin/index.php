@@ -63,7 +63,8 @@ print "<li><a href=\"javascript:link('mainobj','createprocess.php');\">" . T_("C
 print "<li><h3>" . T_("Operator management") . "</h3>";
 print "<ul><li><a href=\"javascript:link('mainobj','operatoradd.php');\">" . T_("Add operators") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','operatordata.php');\">" . T_("Assign operators to data") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','operatorprocess.php');\">" . T_("Assign operators to processes") . "</a></li></ul></li>";
+print "<li><a href=\"javascript:link('mainobj','operatorprocess.php');\">" . T_("Assign operators to processes") . "</a></li>";
+print "<li><a href=\"javascript:link('mainobj','operatorprocesssupervisor.php');\">" . T_("Assign operators to be supervisors of processes") . "</a></li></ul></li>";
 
 print "<li><h3>" . T_("Job management") . "</h3>";
 print "<ul><li><a href=\"javascript:link('mainobj','markcolumns.php');\">" . T_("Create work") . "</a></li>";
