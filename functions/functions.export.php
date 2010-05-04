@@ -217,9 +217,10 @@ function export_fixed_width($data_id, $header = true)
  * Export a DDI file
  *
  * @param int $data_id The data ID to export
+ * @param bool $freqs True if we want to export frequencies
  *
  */
-function export_ddi($data_id)
+function export_ddi($data_id,$freqs = true)
 {
 	global $db;
 
@@ -231,9 +232,70 @@ function export_ddi($data_id)
 	$c = $dom->create_element("codeBook");
 	$dom->append_child($c);
 
+	$rows = 1;
+	$vars = 1;
+
+	$sql = "SELECT row_id
+		FROM `cell` as c, `column` as co
+		WHERE co.data_id = '$data_id'
+		AND c.column_id = co.column_id
+		GROUP BY row_id";
+
+	$rs = $db->Execute($sql);
+	$rows = $rs->RecordCount();
+
+	$sql = "SELECT column_id
+		FROM `column` as co
+		WHERE co.data_id = '$data_id'";
+
+	$rs = $db->Execute($sql);
+	$vars = $rs->RecordCount();
+
+	$fileDscr = $dom->create_element("fileDscr");
+	$fileTxt = $dom->create_element("fileTxt");
+	
+	$fileName = $dom->create_element("fileName");
+	$fileName->set_content(T_("Fixed width Data File"));
+	$fileTxt->append_child($fileName);
+	
+	$dimensns = $dom->create_element("dimensns");
+	
+	$caseQnty = $dom->create_element("caseQnty");
+	$caseQnty->set_content($rows);
+	$dimensns->append_child($caseQnty);
+
+	$varQnty = $dom->create_element("varQnty");
+	$varQnty->set_content($vars);
+	$dimensns->append_child($varQnty);
+
+	$recPrCas = $dom->create_element("recPrCas");
+	$recPrCas->set_content("1");
+	$dimensns->append_child($recPrCas);
+
+	$recNumTot = $dom->create_element("recNumTot");
+	$recNumTot->set_content($rows);
+	$dimensns->append_child($recNumTot);
+
+	$fileTxt->append_child($dimensns);
+
+	$fileType = $dom->create_element("fileType");
+	$fileType->set_content(T_("Raw data (ACSII)"));
+	$fileTxt->append_child($fileType);
+	
+	$format = $dom->create_element("format");
+	$format->set_content(T_("Fixed width"));
+	$fileTxt->append_child($format);
+
+	$software = $dom->create_element("software");
+	$software->set_content(T_("queXC - http://quexc.sourceforge.net/"));
+	$software->set_attribute("version","0.9.2");
+	$fileTxt->append_child($software);
+	
+	$fileDscr->append_child($fileTxt);
+	$c->append_child($fileDscr);
+
 	$d = $dom->create_element("dataDscr");
 	$c->append_child($d);		//create dataDscr element
-
 
 	//Create the varGrp elements
 	$sql = "SELECT c.column_group_id, cg.description, GROUP_CONCAT( c.name SEPARATOR ' ' ) AS name
@@ -326,6 +388,34 @@ function export_ddi($data_id)
 				$cgrl->set_attribute("level","category");
 				$cgrl->set_content($code['label']);
 				$cgr->append_child($cgrl);
+
+				if ($freqs)
+				{
+					$sql = "SELECT cr1.data
+						FROM `column` as co
+						LEFT JOIN cell AS c on (c.column_id = co.column_id)
+						INNER JOIN cell_revision AS cr1 ON (cr1.cell_id = c.cell_id)
+						INNER JOIN cell_revision AS cr2 ON (cr2.cell_id = c.cell_id)
+						WHERE co.column_id = '{$col['column_id']}'
+						AND TRIM(cr1.data) LIKE '{$code['value']}'
+						GROUP BY c.cell_id,cr1.cell_revision_id
+						HAVING cr1.cell_revision_id = MAX(cr2.cell_revision_id)";
+
+					$rs = $db->Execute($sql);
+					
+					$fcount = $rs->RecordCount();
+	
+					$cstat = $dom->create_element("catStat");
+					$cstat->set_attribute("type","freq");
+					$cstat->set_content($fcount);
+					$cgr->append_child($cstat);
+	
+					$cstat = $dom->create_element("catStat");
+					$cstat->set_attribute("type","percent");
+					$cstat->set_content(round(($fcount / $rows) * 100,2));
+					$cgr->append_child($cstat);
+				}
+
 				$var->append_child($cgr);
 			}
 
