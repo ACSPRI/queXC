@@ -43,22 +43,32 @@ include_once(dirname(__FILE__).'/../db.inc.php');
 
 
 /**
- * Export headered CSV file
+ * Export CSV file 
  *
  * @param int $data_id The data id to export
  * @param bool $header Whether to echo the header or not
  * @param bool $replacecode Whether to replace the code value with the code text
+ * @param bool $headrow Whether to include the first row as the variable names
+ * @param bool|array $specificcolumns if an array of column_id's only export these
+ * @param bool $allowempty If we should export a record if it is empty 
  *
  */
-function export_csv($data_id, $header = true, $replacecode = false)
+function export_csv($data_id, $header = true, $replacecode = false, $headrow = true, $specificcolumns = false, $allowempty = true)
 {
 	global $db;
 
+	$cols = "";
+
+	if (is_array($specificcolumns))
+		$cols = " AND (co.column_id = " . implode($specificcolumns, " OR co.column_id = ") . ") ";
+
 	//Get all columns for this data file
 	$sql = "SELECT *
-		FROM `column`
-		WHERE data_id = '$data_id'
-		ORDER BY in_input DESC , startpos ASC , sortorder ASC, column_id ASC";
+		FROM `column` as co
+		WHERE co.data_id = '$data_id'
+		$cols
+		ORDER BY co.in_input DESC , co.startpos ASC , co.sortorder ASC, co.column_id ASC";
+
 
 	$columns = $db->GetAll($sql);
 
@@ -67,6 +77,7 @@ function export_csv($data_id, $header = true, $replacecode = false)
 		FROM `cell` as c, `column` as co
 		WHERE co.data_id = '$data_id'
 		AND c.column_id = co.column_id
+		$cols
 		GROUP BY row_id";
 
 	$rows = $db->GetAll($sql);
@@ -78,17 +89,20 @@ function export_csv($data_id, $header = true, $replacecode = false)
 		header ("Content-Disposition: attachment; filename=data_$data_id.csv");
 	}
 
-	$ccount = count($columns);
-	$t = 1;
-	foreach($columns as $c)
+	if ($headrow)
 	{
-		echo "\"" . str_replace("\"", "'", $c['description']) . "\"";
-		if ($t < $ccount) 
-			echo ",";
-		$t++;
+		$ccount = count($columns);
+		$t = 1;
+		foreach($columns as $c)
+		{
+			echo "\"" . str_replace("\"", "'", $c['description']) . "\"";
+			if ($t < $ccount) 
+				echo ",";
+			$t++;
+		}
+		
+		echo "\r\n";
 	}
-	
-	echo "\r\n";
 
 	foreach($rows as $row)
 	{
@@ -105,15 +119,27 @@ function export_csv($data_id, $header = true, $replacecode = false)
 			FROM `column` AS co
 			LEFT JOIN cell AS c ON ( c.column_id = co.column_id AND c.row_id = '{$row['row_id']}' )
 			WHERE co.data_id = '$data_id'
+			$cols
 			ORDER BY co.in_input DESC , co.startpos ASC , co.sortorder ASC, co.column_id ASC";
 
 		$cells = $db->GetAll($sql);
 		
 		$ccount = count($cells);
 		$t = 1;
+		$p = 1;
 		foreach($cells as $cell)
 		{
 			$v = $cell['data']; //default is the listed data
+	
+			if (!$allowempty)
+			{
+				$tmp = trim($v);
+				if (strlen($tmp) == 0)
+				{
+					$p = 0;
+					break; //don't export where a cell will be empty
+				}
+			}
 
 			if ($replacecode && !empty($cell['code_level_id']))
 			{
@@ -132,10 +158,11 @@ function export_csv($data_id, $header = true, $replacecode = false)
 				$rowtext .= ",";
 			$t++;
 		}
-		
-		$rowtext .= "\r\n";
-
-		echo $rowtext;
+		if ($p == 1)
+		{
+			$rowtext .= "\r\n";
+			echo $rowtext;
+		}
 	}
 
 }

@@ -56,6 +56,7 @@ print "<li><a href=\"javascript:link('mainobj','adddatacsv.php');\">" . T_("Add 
 
 print "<li><h3>" . T_("Codes") . "</h3>";
 print "<ul><li><a href=\"javascript:link('mainobj','importcode.php');\">" . T_("Import code group") . "</a></li>";
+print "<li><a href=\"javascript:link('mainobj','importkeywordcode.php');\">" . T_("Import code keyword correspondence") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','selectblankcode.php');\">" . T_("Select blank code for code group") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','createprocess.php');\">" . T_("Create process from code group") . "</a></li></ul></li>";
 
@@ -68,7 +69,9 @@ print "<li><a href=\"javascript:link('mainobj','operatorprocesssupervisor.php');
 
 print "<li><h3>" . T_("Job management") . "</h3>";
 print "<ul><li><a href=\"javascript:link('mainobj','markcolumns.php');\">" . T_("Create work") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','relevantcolumns.php');\">" . T_("Assign relevant columns to codes") . "</a></li></ul></li>";
+print "<li><a href=\"javascript:link('mainobj','relevantcolumns.php');\">" . T_("Assign relevant columns to codes") . "</a></li>";
+print "<li><a href=\"javascript:link('mainobj','relevantkeywords.php');\">" . T_("Assign keyword groups to columns (correspondence)") . "</a></li></ul></li>";
+
 
 print "<li><h3>" . T_("Progress") . "</h3>";
 print "<ul><li><a href=\"javascript:link('mainobj','progress.php');\">" . T_("Display progress") . "</a></li>";
@@ -84,6 +87,7 @@ print "<li><h3>" . T_("Export") . "</h3>";
 print "<ul><li><a href=\"javascript:link('mainobj','export.php');\">" . T_("Export data") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','updateddi.php');\">" . T_("Update data description") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','listdata.php');\">" . T_("List data") . "</a></li>";
+print "<li><a href=\"javascript:link('mainobj','exportkeywords.php');\">" . T_("Export code keyword correspondence") . "</a></li>";
 print "<li><a href=\"javascript:link('mainobj','exportcode.php');\">" . T_("Export code groups") . "</a></li></ul></li>";
 
 print "</ul></div>";

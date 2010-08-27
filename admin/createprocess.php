@@ -54,9 +54,11 @@ if (isset($_POST['submit']))
 	$description = $db->qstr($_POST['description']);
 	$autolabel = 0;
 	$autovalue = 0;
+	$autokeyword = 0;
 	$template = 0;
 	$exclusive = 0;
 	if (isset($_POST['autolabel'])) $autolabel = 1;
+	if (isset($_POST['autokeyword'])) $autokeyword = 1;
 	if (isset($_POST['autovalue'])) $autovalue = 1;
 	if (isset($_POST['template'])) $template = 1;
 	if (isset($_POST['exclusive'])) $exclusive = 1;
@@ -64,8 +66,8 @@ if (isset($_POST['submit']))
 
 	$db->StartTrans();
 
-	$sql = "INSERT INTO process (process_id,description,code_group_id,auto_code_value,auto_code_label,template,exclusive)
-		VALUES (NULL,$description,'$code_group_id','$autovalue','$autolabel','$template', '$exclusive')";
+	$sql = "INSERT INTO process (process_id,description,code_group_id,auto_code_value,auto_code_label,template,exclusive,auto_code_keyword)
+		VALUES (NULL,$description,'$code_group_id','$autovalue','$autolabel','$template', '$exclusive','$autokeyword')";
 		
 	$db->Execute($sql);
 
@@ -116,6 +118,7 @@ if ($code_group_id != 0)
 
 	print "<div><input type='checkbox' name='autolabel' id='autolabel'/><label for='autolabel'>" . T_("Automatically assign a code if the code label exactly matches the data?") . "</label></div>";
 	print "<div><input type='checkbox' name='autovalue' id='autovalue'/><label for='autovalue'>" . T_("Automatically assign a code if the code value exactly matches the data?") . "</label></div>";
+	print "<div><input type='checkbox' name='autokeyword' id='autokeyword'/><label for='autovalue'>" . T_("Automatically assign a code if there is a matching code keyword in the database?") . "</label></div>";
 	print "<div><input type='checkbox' name='template' id='template'/><label for='template'>" . T_("Use the code group as a template? (Create a new, editable code group for each work unit that this is assigned to)") . "</label></div>";
 	print "<div><input type='checkbox' name='exclusive' id='exclusive'/><label for='exclusive'>" . T_("Should this process only be run by operator(s) that have not worked on the prior process (exclusive)?") . "</label></div>";
 

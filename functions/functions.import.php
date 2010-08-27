@@ -534,6 +534,82 @@ function import_ddi($filename,$data_id)
 
 
 /**
+ * Import a CSV file containing a code and keyword
+ * 
+ * Format of the CSV file:
+ * code,keyword
+ *
+ * @param string $filename The filename of the CSV file to open
+ * @param string $description The description of the code keyword group
+ * @param int $code_group_id The code group these keywords belong to
+ *
+ */
+function import_keyword_code($filename,$description,$code_group_id)
+{
+	global $db;
+
+	$db->StartTrans();
+
+	//Create a new code_keyword_group with a description of this code
+	$sql = "INSERT INTO code_keyword_group (code_keyword_group_id,code_group_id,description)
+		VALUES (NULL,$code_group_id," . $db->qstr($description) . ")";
+
+	$db->Execute($sql);
+
+	$ckgi = $db->Insert_ID();
+
+	//Insert rows in to code_keyword table. 
+	$failed = array();
+	$succeed  = array();
+
+	$row = 1;
+	$handle = fopen($filename, "r");
+	while (($r = fgetcsv($handle)) !== FALSE) 
+	{
+		//find the code_id based on the code value in the CSV file
+		do {
+			$sql = "SELECT c.*
+				FROM `code` as c, code_level as cl
+				WHERE c.code_level_id = cl.code_level_id
+				AND cl.code_group_id = '$code_group_id'
+				AND (c.value LIKE " . $db->qstr($r[0]) . ")";
+
+			$code = $db->GetRow($sql);
+			
+			if (strlen($r[0]) > 0 && substr($r[0], -1) == "0")
+				$r[0] = substr($r[0], 0, -1);
+			else
+				break;
+			
+
+		} while (empty($code));
+
+		if (!empty($code))	
+		{
+			$code_id = $code['code_id'];
+			
+			$sql = "INSERT INTO code_keyword (code_keyword_id,code_keyword_group_id,code_id,keyword)
+				VALUES (NULL,'$ckgi','$code_id', " . $db->qstr($r[1]) . ")";
+
+			$db->Execute($sql);
+		}
+		else	
+		{
+			$db->FailTrans();
+			$error = array("Row:" => $row,$r);
+			break;
+		}
+		$row++;
+	}
+	fclose($handle);
+
+	if($db->CompleteTrans())
+		return true;
+	
+	return $error;
+}
+
+/**
  * Import a CSV file containing a coding scheme
  * The scheme may be hierarchical (parent codes)
  * 

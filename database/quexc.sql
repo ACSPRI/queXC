@@ -102,6 +102,35 @@ CREATE TABLE `code_group` (
 INSERT INTO `code_group` VALUES(1, 'Blank', 1, 0, 0);
 INSERT INTO `code_group` VALUES(2, 'Compare', NULL, 0, 0);
 
+--
+-- Table structure for table `code_keyword`
+--
+
+CREATE TABLE IF NOT EXISTS `code_keyword` (
+  `code_keyword_id` bigint(20) NOT NULL auto_increment,
+  `code_keyword_group_id` bigint(20) NOT NULL,
+  `code_id` bigint(20) NOT NULL,
+  `keyword` varchar(255) collate utf8_unicode_ci NOT NULL,
+  PRIMARY KEY  (`code_keyword_id`),
+  KEY `code_keyword_group_id` (`code_keyword_group_id`),
+  KEY `code_id` (`code_id`),
+  KEY `keyword` (`keyword`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `code_keyword_group`
+--
+
+CREATE TABLE IF NOT EXISTS `code_keyword_group` (
+  `code_keyword_group_id` bigint(20) NOT NULL auto_increment,
+  `description` text character set utf8 collate utf8_unicode_ci NOT NULL,
+  `code_group_id` bigint(20) NOT NULL COMMENT 'The code group this keyword group applies to',
+  PRIMARY KEY  (`code_keyword_group_id`),
+  KEY `code_group_id` (`code_group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 
@@ -168,6 +197,20 @@ CREATE TABLE `column` (
   KEY `column_group_id` (`column_group_id`),
   KEY `column_multi_group_id` (`column_multi_group_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `column_code_keyword`
+--
+
+CREATE TABLE IF NOT EXISTS `column_code_keyword` (
+  `column_code_keyword_id` bigint(20) NOT NULL auto_increment,
+  `column_id` bigint(20) NOT NULL COMMENT 'Column id from (text data)',
+  `column_group_id` bigint(20) NOT NULL COMMENT 'The column group to code to',
+  `code_keyword_group_id` bigint(20) NOT NULL,
+  PRIMARY KEY  (`column_code_keyword_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -315,6 +358,7 @@ CREATE TABLE `process` (
   `manual_process_function` varchar(255) collate utf8_unicode_ci default NULL,
   `auto_code_value` tinyint(1) NOT NULL default '0',
   `auto_code_label` tinyint(1) NOT NULL default '0',
+  `auto_code_keyword` tinyint(1) NOT NULL default '0',
   `template` tinyint(1) NOT NULL default '0' COMMENT 'Use as a template',
   `exclusive` tinyint(1) NOT NULL default '0' COMMENT 'Should this process be run only by an operator tha hasn''t done any work on the parent work?',
   PRIMARY KEY  (`process_id`)
@@ -324,12 +368,12 @@ CREATE TABLE `process` (
 -- Dumping data for table `process`
 --
 
-INSERT INTO `process` VALUES(1, 'Spacing', NULL, 'spacing', 'spacing_display', 0, 0, 0, 0);
-INSERT INTO `process` VALUES(2, 'Spell check', NULL, 'spelling', 'spelling_display', 0, 0, 0, 0);
-INSERT INTO `process` VALUES(3, 'Email validate', NULL, 'email', 'email_display', 0, 0, 0, 0);
-INSERT INTO `process` VALUES(4, 'Create new code group', 1, NULL, NULL, 0, 1, 1, 0);
-INSERT INTO `process` VALUES(5, 'Compare', 2, 'compare', 'compare_display', 0, 0, 1, 1);
-INSERT INTO `process` VALUES(6, 'Create new code group existing (code other)', 1, 'code_other', '', 0, 0, 1, 0);
+INSERT INTO `process` VALUES(1, 'Spacing', NULL, 'spacing', 'spacing_display', 0, 0, 0, 0, 0);
+INSERT INTO `process` VALUES(2, 'Spell check', NULL, 'spelling', 'spelling_display', 0, 0, 0, 0, 0);
+INSERT INTO `process` VALUES(3, 'Email validate', NULL, 'email', 'email_display', 0, 0, 0, 0, 0);
+INSERT INTO `process` VALUES(4, 'Create new code group', 1, NULL, NULL, 0, 1, 0, 1, 0);
+INSERT INTO `process` VALUES(5, 'Compare', 2, 'compare', 'compare_display', 0, 0, 0, 1, 1);
+INSERT INTO `process` VALUES(6, 'Create new code group existing (code other)', 1, 'code_other', '', 0, 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
