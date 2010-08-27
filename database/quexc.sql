@@ -329,6 +329,7 @@ INSERT INTO `process` VALUES(2, 'Spell check', NULL, 'spelling', 'spelling_displ
 INSERT INTO `process` VALUES(3, 'Email validate', NULL, 'email', 'email_display', 0, 0, 0, 0);
 INSERT INTO `process` VALUES(4, 'Create new code group', 1, NULL, NULL, 0, 1, 1, 0);
 INSERT INTO `process` VALUES(5, 'Compare', 2, 'compare', 'compare_display', 0, 0, 1, 1);
+INSERT INTO `process` VALUES(6, 'Create new code group existing (code other)', 1, 'code_other', '', 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -363,6 +364,7 @@ CREATE TABLE `work` (
   `column_multi_group_id` bigint(20) default NULL COMMENT 'If we are sending to a multiple choice set of columns',
   `process_id` bigint(20) NOT NULL COMMENT 'The process to apply',
   `operator_id` bigint(20) default NULL COMMENT 'Assign this job to a specific operator',
+  `reference_column_id` bigint(20) default NULL COMMENT 'A reference column id if required by the process',
   PRIMARY KEY  (`work_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

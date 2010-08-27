@@ -779,9 +779,10 @@ function copy_code_group($code_group_id,$allow_additions = true)
  * @param array operators An array of operators to assign the work to (if any)
  * @param int|bool $mcgi Multi code_group_id - to create multiple columns if exists
  * @param array|bool $compare Whether we are creating a comparison work item or not (if true, should be an array of parent work_ids)
+ * @param int|bool $reference Reference column id - to be handled by process
  * @return bool True on success, false on fail
  */
-function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),$mcgi = false,$compare = false)
+function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),$mcgi = false,$compare = false,$reference = false)
 {
 	global $db;
 
@@ -834,7 +835,22 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 				$cmgi = $m['cmgi'];
 	
 				if ($template == 1) //create a new code group based on this one
-					$code_group_id = copy_code_group($c['code_group_id'],!$compare); //if comparing don't allow manual additions
+				{
+					if ($reference == false)
+						$code_group_id = copy_code_group($c['code_group_id'],!$compare); //if comparing don't allow manual additions
+					else
+					{
+						//if a reference, get code group id from reference column
+						$sql = "SELECT cl.code_group_id 
+							FROM `column` as c, code_level as cl
+							WHERE c.column_id = '$reference'
+							AND cl.code_level_id = c.code_level_id";
+
+						$tmp = $db->GetRow($sql);
+
+						$code_group_id = copy_code_group($tmp['code_group_id'],!$compare);
+					}	
+				}
 				else
 					$code_group_id = $c['code_group_id'];
 	
@@ -933,9 +949,12 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 			if ($cmgi != "NULL")
 				$column_group_id = "NULL";
 
+			if ($reference == false)
+				$reference = "NULL";
+
 			//Create the initial work item
-			$sql = "INSERT INTO work (work_id,column_id,column_group_id,process_id,operator_id,column_multi_group_id)
-				VALUES (NULL,'$column_id',$column_group_id,'$process_id',$operator_id,$cmgi)";
+			$sql = "INSERT INTO work (work_id,column_id,column_group_id,process_id,operator_id,column_multi_group_id,reference_column_id)
+				VALUES (NULL,'$column_id',$column_group_id,'$process_id',$operator_id,$cmgi,$reference)";
 		
 			$db->Execute($sql);
 	
@@ -1114,6 +1133,61 @@ function get_work($operator_id)
 
 }
 
+
+function assign_code($column_group_id,$code_id,$value,$code_level_id,$work_unit_id,$row_id)
+{
+	global $db;
+
+	//Select all columns for this column group
+	$sql = "SELECT c.code_level_id,c.column_id, '' as value, '' as code_id
+		FROM `column` as c, code_level as cl
+		WHERE c.column_group_id = '$column_group_id'
+		AND cl.code_level_id = c.code_level_id
+		ORDER BY cl.level ASC";
+
+	$ttrs = $db->Execute($sql);
+	$tcols = $ttrs->GetAssoc();
+
+	$tcols[$code_level_id]['value'] = $value;
+	$tcols[$code_level_id]['code_id'] = $code_id;
+
+	//update tcols for all parents (if any)
+	do {
+		$sql = "SELECT c.code_id, c.code_level_id, c.value
+			FROM code_parent as cp, code as c
+			WHERE c.code_id = cp.parent_code_id
+			AND cp.code_id = '$code_id'
+			LIMIT 1";
+		
+		$tcp = $db->GetRow($sql);
+
+		if (empty($tcp))
+			$code_id = false;
+		else
+		{
+			$code_level_id = $tcp['code_level_id'];
+			$code_id = $tcp['code_id'];
+			$value = $tcp['value'];
+					
+			$tcols[$code_level_id]['value'] = $value;
+			$tcols[$code_level_id]['code_id'] = $code_id;
+		}
+
+
+	} while ($code_id != false);
+	
+
+	//Code to all cells using selected code
+	foreach ($tcols as $tkey => $tval)
+	{
+		$tcell_id = get_cell_id($row_id,$tval['column_id']);
+		if ($tcell_id == false)
+			$tcell_id = new_cell($row_id,$tval['column_id']);
+
+		new_cell_revision($tcell_id,$tval['value'],$work_unit_id);
+	}
+}
+
 /** 
  * Assign work to the operator
  *
@@ -1135,7 +1209,7 @@ function assign_work($operator_id, $by_row = false)
 	if ($by_row)
 		$order = "c.data_id ASC, ce.row_id ASC";
 
-	$sql = "SELECT w.work_id,c.data_id,ce.row_id,w.column_id,ce.cell_id,w.process_id,cg.blank_code_id,w.column_group_id,cg.code_group_id,p.auto_code_value,p.auto_code_label,p.exclusive, cmg.blank_column_id
+	$sql = "SELECT w.work_id,c.data_id,ce.row_id,w.column_id,ce.cell_id,w.process_id,cg.blank_code_id,w.column_group_id,cg.code_group_id,p.auto_code_value,p.auto_code_label,p.exclusive,p.auto_code_keyword, cmg.blank_column_id
 		FROM `work` AS w
 		LEFT JOIN work_parent AS wp ON ( wp.work_id = w.work_id )
 		JOIN `process` AS p ON ( p.process_id = w.process_id )
@@ -1251,69 +1325,61 @@ function assign_work($operator_id, $by_row = false)
 
 				if (count($aall) == 1) //one result - so auto code
 				{
+					//store as done (Create completed work_unit)
+					$twork_unit_id = create_work_unit($r['work_id'],$r['cell_id'],$r['process_id'],0);
 					$tcode_id = $aall[0]['code_id'];
 					$tvalue = $aall[0]['value'];
 					$tcode_level_id = $aall[0]['code_level_id'];
-
-					
-					//Select all columns for this column group
-					$sql = "SELECT c.code_level_id,c.column_id, '' as value, '' as code_id
-						FROM `column` as c, code_level as cl
-						WHERE c.column_group_id = '{$r['column_group_id']}'
-						AND cl.code_level_id = c.code_level_id
-						ORDER BY cl.level ASC";
-
-
-					$ttrs = $db->Execute($sql);
-					$tcols = $ttrs->GetAssoc();
-
-					$tcols[$tcode_level_id]['value'] = $tvalue;
-					$tcols[$tcode_level_id]['code_id'] = $tcode_id;
-
-					//update tcols for all parents (if any)
-					do {
-						$sql = "SELECT c.code_id, c.code_level_id, c.value
-							FROM code_parent as cp, code as c
-							WHERE c.code_id = cp.parent_code_id
-							AND cp.code_id = '$tcode_id'
-							LIMIT 1";
-						
-						$tcp = $db->GetRow($sql);
-
-						if (empty($tcp))
-							$tcode_id = false;
-						else
-						{
-							$tcode_level_id = $tcp['code_level_id'];
-							$tcode_id = $tcp['code_id'];
-							$tvalue = $tcp['value'];
-									
-							$tcols[$tcode_level_id]['value'] = $tvalue;
-									
-							$tcols[$tcode_level_id]['value'] = $tvalue;
-							$tcols[$tcode_level_id]['code_id'] = $tcode_id;
-						}
-
-
-					} while ($tcode_id != false);
-					
-
-					//store as done (Create completed work_unit)
-					$twork_unit_id = create_work_unit($r['work_id'],$r['cell_id'],$r['process_id'],0);
-	
-					//Code to all cells using selected code
-					foreach ($tcols as $tkey => $tval)
-					{
-						$tcell_id = get_cell_id($r['row_id'],$tval['column_id']);
-						if ($tcell_id == false)
-							$tcell_id = new_cell($r['row_id'],$tval['column_id']);
-
-						new_cell_revision($tcell_id,$tval['value'],$twork_unit_id);
-					}
+			
+					assign_code($r['column_group_id'],$tcode_id,$tvalue,$tcode_level_id,$twork_unit_id,$r['row_id']);
 
 					continue; //Don't insert a work record too
 				}
 			}
+			
+			//Assign code by keyword if available
+			if (!empty($r['code_group_id']) && ($r['auto_code_keyword'] == 1 ))
+			{
+				$sql = "SELECT column_id,column_group_id,code_keyword_group_id
+					FROM column_code_keyword
+					WHERE column_group_id = '{$r['column_group_id']}'";
+
+				$ct = $db->GetAll($sql);
+
+				foreach($ct as $cr)
+				{
+					list($tdata,$tcell_revision_id) = get_cell_data(get_cell_id($r['row_id'],$cr['column_id']));
+					$tdata = trim($tdata);
+					$tdata = $db->qstr($tdata);
+					$tcode_keyword_group_id = $cr['code_keyword_group_id'];
+
+					//See if there is a keyword that matches this tdata
+
+					$sql = "SELECT c.code_id,c.value,c.code_level_id
+						FROM code as c, code_keyword as ck
+						WHERE ck.code_keyword_group_id = '$tcode_keyword_group_id'
+						AND ck.code_id = c.code_id
+						AND ck.keyword LIKE $tdata";
+
+					$aall = $db->GetRow($sql);
+
+	
+					if (!empty($aall)) //a result
+					{
+						//store as done (Create completed work_unit)
+			
+						$twork_unit_id = create_work_unit($r['work_id'],$r['cell_id'],$r['process_id'],0);
+						$tcode_id = $aall['code_id'];
+						$tvalue = $aall['value'];
+						$tcode_level_id = $aall['code_level_id'];
+			
+						assign_code($cr['column_group_id'],$tcode_id,$tvalue,$tcode_level_id,$twork_unit_id,$r['row_id']);
+
+						continue 2; //Don't insert a work record too
+					}
+				}
+			}		
+
 
 			//Add until the row or column changes
 			if ($by_row)
@@ -1591,6 +1657,53 @@ function compare_display($cell_id,$cell_data,$work_unit_id)
         print "<div class='header' id='header'>";
         display_codes($work_unit_id);
 	print "</div>";
+}
+
+/**
+ * Copy value from reference table and mark as done unless
+ * there is data in this column (text column) so mark as needs to be coded
+ *
+ * This function should only be run once for each work_id
+ *
+ * @param string $data The string in the original column
+ * @param int $cell_id The cell id
+ * @param int $work_id The work id
+ * @param int $process_id The process id
+ * @param int $row_id The row id
+ * @return int Return 1 if the string in the original column is not empty, otherwise return 0
+ */
+function code_other($data,$cell_id,$work_id,$process_id,$row_id)
+{
+	$data = trim($data);
+	if (strlen($data) == 0) //copy the reference value to our column
+	{
+		global $db;
+
+		$work_unit_id = create_work_unit($work_id,$cell_id,$process_id,0);
+			
+		//Get the column_id of the new column to send to
+		$sql = "SELECT c.column_id, w.reference_column_id
+			FROM `column` as c, work as w
+			WHERE w.work_id = '$work_id'
+			AND c.column_group_id = w.column_group_id";
+		
+		$c = $db->GetRow($sql);
+	
+		$column_id = $c['column_id'];
+
+		list($tval,$tcell_revision_id) = get_cell_data(get_cell_id($row_id,$c['reference_column_id']));
+	
+		$ncell_id = get_cell_id($row_id,$column_id);
+		if ($ncell_id == false)
+			$ncell_id = new_cell($row_id,$column_id);
+		new_cell_revision($ncell_id,$tval,$work_unit_id); //code as value in original
+	
+		//return 1 as we have created the work_unit here
+		return 1;
+	}
+	
+	//There is data in this column so we need to manually code it
+	return 1;
 }
 
 /**

@@ -51,6 +51,7 @@ if (isset($_POST['submit']) || isset($_POST['submit_compare']))
 	$data_id = intval($_POST['data_id']);
 	$process_id = intval($_POST['process_id']);
 	$column_id = intval($_POST['column_id']);
+	$reference = intval($_POST['reference']);
 	$anyoperators = intval($_POST['any']);
 	$mcgi = false;
 	if (isset($_POST['multi_code_group_id']) && !empty($_POST['multi_code_group_id']))
@@ -69,7 +70,7 @@ if (isset($_POST['submit']) || isset($_POST['submit_compare']))
 	if (isset($_POST['submit']) && count($operators) > 0)
 	{
 		include ("../functions/functions.work.php");
-		create_work($data_id,$process_id,$column_id,$operators,$mcgi);
+		create_work($data_id,$process_id,$column_id,$operators,$mcgi,false,$reference);
 	}
 
 	if (isset($_POST['submit_compare']))
@@ -161,6 +162,14 @@ if ($data_id != 0)
 			$rs[] = array('description' => T_("Any operator: enter how many"), 'cbox' => "<input type='text' name='any' value='0'/>");
 
 			xhtml_table($rs,array('description','cbox'),array(T_("Operator"),T_("Select")));
+
+			//Add a reference column if applicable to this process
+			print "<div>" . T_("If a reference column is applicable, choose it below") . "</div>"; 
+
+			$sql = "SELECT column_id as value, name as description, '' AS selected
+				FROM `column`
+				WHERE data_id = '$data_id'";
+			display_chooser($db->GetAll($sql),'reference','reference',true,false,false);
 
 			//Add a code group to select to generate multiple columns
 			print "<div>" . T_("To create a multiple choice coding scheme, select a code group to generate multiple groups from") . "</div>"; 
