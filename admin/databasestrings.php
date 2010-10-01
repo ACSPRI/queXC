@@ -36,5 +36,7 @@ T_("Spacing");
 T_("Spell check");
 T_("Email validate");
 T_("Create new code group");
+T_("Compare");
+T_("Identical");
 
 ?>
