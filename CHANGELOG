@@ -1,0 +1,22 @@
+queXC 0.9.2 - Changes since 0.9.1
+
+There hasn't been a queXC release in a while, so this one incorporates a lot of new changes.
+
+In summary, major new features include the ability to code to multiple columns (multiple choice coding) and to assign portions of the text to a code by simply selecting it in the browser window. A search feature has been added for searching inside coding schemes. An administrator can update the data description (question labels, response labels). A keyword correspondence feature allows you to automatically code a field based on the details of another. Also, operators can see their performance in comparison with other operators while working.
+
+*Added keyword correspondence feature (code based on a keyword file from any other column)
+*Added ability to code via a reference column (coding other)
+*Added percentages,totals and file description to DDI description
+*Added refer to supervisor (expert) method
+*Added search code function - returns list of applicable codes, when clicked - will update list on page
+*Redo work unit occurs instantly (next work unit will be the one selected for redo)
+*Added unassign function (To remove assigned work from operators so someone else can do it later)
+*Added update DDI (update data description) function
+*CSS updated to work on most size screens now
+*Added list data function to display the current revision of the data file, column by column
+*Added a new "Compare" process which compares the coding of multiple operators, and sets them as "identical" if they are identical, otherwise gets a third operator to decide the change
+*Added "exclusive" element to process - this means that an operator can only work on this process if they haven't worked on the parent process(es)
+*Added multiple column coding (coding to a multiple choice response) including text selecting and assigning to the multiple code selected
+*Added performance screen for coders
+*Added PSPP export of syntax only
+*XML outputs as UTF-8
