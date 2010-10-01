@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: quexc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-03-18 12:41+1000\n"
-"PO-Revision-Date: 2009-03-21 22:25+0000\n"
-"Last-Translator: zimi <Unknown>\n"
+"POT-Creation-Date: 2009-04-23 14:32+1000\n"
+"PO-Revision-Date: 2009-06-29 10:38+0000\n"
+"Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-04-23 04:40+0000\n"
+"X-Launchpad-Export-Date: 2010-10-01 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: endwork.php:48
@@ -74,7 +74,7 @@ msgstr "Šiandien"
 
 #: workhistory.php:58
 msgid "Redo"
-msgstr ""
+msgstr "Grąžinti"
 
 #: workhistory.php:72
 msgid "No work history"
@@ -101,7 +101,7 @@ msgstr "Procesas"
 
 #: workhistory.php:76
 msgid "Redo?"
-msgstr ""
+msgstr "Grąžinti?"
 
 #: admin/markcolumns.php:74
 msgid "Mark columns to be coded"
@@ -200,12 +200,12 @@ msgstr "Pasirikite CSV failą su stulpelių atraštėmis"
 #: admin/importcsv.php:76
 #: admin/import.php:79
 msgid "Description for file:"
-msgstr ""
+msgstr "Failo aprašymas:"
 
 #: admin/importcsv.php:77
 #: admin/import.php:80
 msgid "Create new data file"
-msgstr ""
+msgstr "Sukurti naują duomenų failą"
 
 #: admin/databasestrings.php:33
 msgid "Blank"
@@ -221,7 +221,7 @@ msgstr ""
 
 #: admin/databasestrings.php:36
 msgid "Spell check"
-msgstr ""
+msgstr "Rašybos tikrinimas"
 
 #: admin/databasestrings.php:37
 msgid "Email validate"
@@ -378,32 +378,36 @@ msgstr ""
 msgid "Select blank code"
 msgstr ""
 
-#: admin/selectblankcode.php:88
+#: admin/selectblankcode.php:90
 msgid "Select code: "
 msgstr ""
 
-#: admin/selectblankcode.php:93
+#: admin/selectblankcode.php:95
 msgid "Assign as blank code"
 msgstr ""
 
-#: admin/export.php:76
+#: admin/export.php:82
 msgid "Export Data"
 msgstr ""
 
-#: admin/export.php:93
+#: admin/export.php:99
 msgid "Export fixed width data file"
 msgstr ""
 
-#: admin/export.php:94
+#: admin/export.php:100
 msgid "Export DDI file"
 msgstr ""
 
-#: admin/export.php:95
+#: admin/export.php:101
 msgid "Export PSPP file"
 msgstr ""
 
-#: admin/export.php:96
+#: admin/export.php:102
 msgid "Export CSV file"
+msgstr ""
+
+#: admin/export.php:103
+msgid "Export CSV file with labels for codes"
 msgstr ""
 
 #: admin/operatoradd.php:64
@@ -498,6 +502,7 @@ msgid "Delete?"
 msgstr ""
 
 #: admin/operatordata.php:146
+#: admin/operatordata.php:267
 msgid "Assign operators to datas"
 msgstr ""
 
