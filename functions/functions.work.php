@@ -803,32 +803,34 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 	{
 		$mc = array(array('cmgi' => "NULL", 'label' => ""));
 
-
-		if ($mcgi)
-		{
-			$sql = "INSERT INTO column_multi_group(description,code_group_id)
-				VALUES ('','$mcgi')";
-
-			$db->Execute($sql);
-			
-			$cmgi = $db->Insert_ID();
-
-			$sql = "SELECT $cmgi as cmgi,c.label as label,cg.blank_code_id,c.code_id
-				FROM code as c,code_level as cl,code_group as cg
-				WHERE cg.code_group_id = '$mcgi'
-				AND cl.code_group_id = cg.code_group_id
-				AND c.code_level_id = cl.code_level_id
-				AND cl.level = 0"; //select the top level only
-
-			$mc = $db->GetAll($sql);
-		}
-
-
 		//Columns need to be created as we are creating a new code
 	
 		//need to create a new column for each assigned operator (if there is one)
 		foreach($operators as $operator_id)
 		{
+
+			//Create a new cmg for each operator otherwise they are writing in to the same group
+			if ($mcgi)
+			{
+				$sql = "INSERT INTO column_multi_group(description,code_group_id)
+					VALUES ('','$mcgi')";
+	
+				$db->Execute($sql);
+				
+				$cmgi = $db->Insert_ID();
+	
+				$sql = "SELECT $cmgi as cmgi,c.label as label,cg.blank_code_id,c.code_id
+					FROM code as c,code_level as cl,code_group as cg
+					WHERE cg.code_group_id = '$mcgi'
+					AND cl.code_group_id = cg.code_group_id
+					AND c.code_level_id = cl.code_level_id
+					AND cl.level = 0"; //select the top level only
+	
+				$mc = $db->GetAll($sql);
+			}
+
+
+
 			foreach($mc as $m) //loop over all multi columns 
 			{
 				$template = $c['template'];
