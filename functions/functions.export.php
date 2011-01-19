@@ -228,7 +228,7 @@ function export_fixed_width($data_id, $header = true)
 					$startpos = $cell['startpos'];
 				}
 			}							
-			$rowtext .= str_pad(substr($cell['data'],0,$cell['width']), $cell['width'], " ", STR_PAD_RIGHT);
+			$rowtext .= str_pad(substr(str_replace(array("\r","\n"), " ",$cell['data']),0,$cell['width']), $cell['width'], " ", STR_PAD_RIGHT);
 			$startpos += $cell['width'];
 		}
 		
