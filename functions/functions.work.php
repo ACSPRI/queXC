@@ -872,20 +872,25 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 					$ncodes = $db->GetAll($sql);
 				
 					$width = 0;
+
+
+					$cval = 2; //start cmgi code value at 2 (first one is Identical - 1)
 	
 					foreach($ncodes as $n)
 					{
 						if (!empty($n['column_group_id'])) $c = "cgi" . $n['column_group_id'];
 						if (!empty($n['column_multi_group_id'])) $c = "cmgi" . $n['column_multi_group_id'];
 
-						if (strlen($c) > $width) $width = strlen($c);
+						if (strlen($cval) > $width) $width = strlen($cval);
 
 						$sql = "INSERT INTO `code` (code_id,value,label,code_level_id)
-							SELECT NULL,'$c','$c',code_level_id
+							SELECT NULL,'$cval','$c',code_level_id
 							FROM code_level
 							WHERE code_group_id = '$code_group_id'";
 
 						$db->Execute($sql);
+
+						$cval++;
 					}
 
 					$sql = "UPDATE code_level
