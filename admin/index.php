@@ -46,55 +46,59 @@ include ("../functions/functions.xhtml.php");
 
 xhtml_head(T_("Administrative Tools"),true,array("../css/table.css","../css/admin.css"),array("../js/link.js"));
 
+$page = "import.php";
+if (isset($_GET['page'])) $page = $_GET['page'];
+
 print "<div id='menu'><ul class='navmenu'>";
 
 print "<li><h3>" . T_("Import data") . "</h3>";
-print "<ul><li><a href=\"javascript:link('mainobj','import.php');\">" . T_("Import DDI/Fixed width data") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','importcsv.php');\">" . T_("Import CSV data") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','adddata.php');\">" . T_("Add data to existing (Fixed width)") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','adddatacsv.php');\">" . T_("Add data to existing (CSV)") . "</a></li></ul></li>";
+print "<ul><li><a href=\"index.php?page=import.php\">" . T_("Import DDI/Fixed width data") . "</a></li>";
+print "<li><a href=\"index.php?page=importcsv.php\">" . T_("Import CSV data") . "</a></li>";
+print "<li><a href=\"index.php?page=adddata.php\">" . T_("Add data to existing (Fixed width)") . "</a></li>";
+print "<li><a href=\"index.php?page=adddatacsv.php\">" . T_("Add data to existing (CSV)") . "</a></li></ul></li>";
 
 print "<li><h3>" . T_("Codes") . "</h3>";
-print "<ul><li><a href=\"javascript:link('mainobj','importcode.php');\">" . T_("Import code group") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','importkeywordcode.php');\">" . T_("Import code keyword correspondence") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','selectblankcode.php');\">" . T_("Select blank code for code group") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','createprocess.php');\">" . T_("Create process from code group") . "</a></li></ul></li>";
+print "<ul><li><a href=\"index.php?page=importcode.php\">" . T_("Import code group") . "</a></li>";
+print "<li><a href=\"index.php?page=importkeywordcode.php\">" . T_("Import code keyword correspondence") . "</a></li>";
+print "<li><a href=\"index.php?page=selectblankcode.php\">" . T_("Select blank code for code group") . "</a></li>";
+print "<li><a href=\"index.php?page=createprocess.php\">" . T_("Create process from code group") . "</a></li></ul></li>";
 
 
 print "<li><h3>" . T_("Operator management") . "</h3>";
-print "<ul><li><a href=\"javascript:link('mainobj','operatoradd.php');\">" . T_("Add operators") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','operatordata.php');\">" . T_("Assign operators to data") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','operatorprocess.php');\">" . T_("Assign operators to processes") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','operatorprocesssupervisor.php');\">" . T_("Assign operators to be supervisors of processes") . "</a></li></ul></li>";
+print "<ul><li><a href=\"index.php?page=operatoradd.php\">" . T_("Add operators") . "</a></li>";
+print "<li><a href=\"index.php?page=operatordata.php\">" . T_("Assign operators to data") . "</a></li>";
+print "<li><a href=\"index.php?page=operatorprocess.php\">" . T_("Assign operators to processes") . "</a></li>";
+print "<li><a href=\"index.php?page=operatorprocesssupervisor.php\">" . T_("Assign operators to be supervisors of processes") . "</a></li></ul></li>";
 
 print "<li><h3>" . T_("Job management") . "</h3>";
-print "<ul><li><a href=\"javascript:link('mainobj','markcolumns.php');\">" . T_("Create work") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','relevantcolumns.php');\">" . T_("Assign relevant columns to codes") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','relevantkeywords.php');\">" . T_("Assign keyword groups to columns (correspondence)") . "</a></li></ul></li>";
+print "<ul><li><a href=\"index.php?page=markcolumns.php\">" . T_("Create work") . "</a></li>";
+print "<li><a href=\"index.php?page=relevantcolumns.php\">" . T_("Assign relevant columns to codes") . "</a></li>";
+print "<li><a href=\"index.php?page=relevantkeywords.php\">" . T_("Assign keyword groups to columns (correspondence)") . "</a></li></ul></li>";
 
 
 print "<li><h3>" . T_("Progress") . "</h3>";
-print "<ul><li><a href=\"javascript:link('mainobj','progress.php');\">" . T_("Display progress") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','worklist.php');\">" . T_("List all work") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','unassign.php');\">" . T_("List work assigned but not complete") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','modificationhistory.php');\">" . T_("Modification history") . "</a></li></ul></li>";
+print "<ul><li><a href=\"index.php?page=progress.php\">" . T_("Display progress") . "</a></li>";
+print "<li><a href=\"index.php?page=worklist.php\">" . T_("List all work") . "</a></li>";
+print "<li><a href=\"index.php?page=unassign.php\">" . T_("List work assigned but not complete") . "</a></li>";
+print "<li><a href=\"index.php?page=modificationhistory.php\">" . T_("Modification history") . "</a></li></ul></li>";
 
 
 print "<li><h3>" . T_("Performance") . "</h3>";
-print "<ul><li><a href=\"javascript:link('mainobj','operatorperformance.php');\">" . T_("Operator performance") . "</a></li></ul></li>";
+print "<ul><li><a href=\"index.php?page=operatorperformance.php\">" . T_("Operator performance") . "</a></li></ul></li>";
 
 print "<li><h3>" . T_("Export") . "</h3>";
-print "<ul><li><a href=\"javascript:link('mainobj','export.php');\">" . T_("Export data") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','updateddi.php');\">" . T_("Update data description") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','listdata.php');\">" . T_("List data") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','exportkeywords.php');\">" . T_("Export code keyword correspondence") . "</a></li>";
-print "<li><a href=\"javascript:link('mainobj','exportcode.php');\">" . T_("Export code groups") . "</a></li></ul></li>";
+print "<ul><li><a href=\"index.php?page=export.php\">" . T_("Export data") . "</a></li>";
+print "<li><a href=\"index.php?page=updateddi.php\">" . T_("Update data description") . "</a></li>";
+print "<li><a href=\"index.php?page=listdata.php\">" . T_("List data") . "</a></li>";
+print "<li><a href=\"index.php?page=exportkeywords.php\">" . T_("Export code keyword correspondence") . "</a></li>";
+print "<li><a href=\"index.php?page=exportcode.php\">" . T_("Export code groups") . "</a></li></ul></li>";
 
 print "</ul></div>";
 
 
-print "<div id='main'><object class='embeddedobject' id='mainobj' data='' standby='" . T_("Choose a menu item from the left") . "' type='application/xhtml+xml'><p>" . T_("Choose a menu item from the left") . "</p></object></div>";
-
+print "<div id='main'>";
+xhtml_object($page,"mainobj");
+print "</div>";
 
 xhtml_foot();
 
