@@ -205,8 +205,11 @@ if ($operator_id != false)
 	
 	print "</div>";
 
-	print "<div id='workhistory'><object class='embeddedobject' id='work-history' data='workhistory.php' standby='" . T_("Loading panel...") . "' type='application/xhtml+xml'><p>" . T_("Error, try with Firefox") . "</p></object></div>";
-	print "<div id='performance'><object class='embeddedobject' id='performancetab' data='performance.php' standby='" . T_("Loading panel...") . "' type='application/xhtml+xml'><p>" . T_("Error, try with Firefox") . "</p></object></div>";
+	print "<div id='workhistory'>";
+	xhtml_object("workhistory.php","work-history");
+	print "<div id='performance'>";
+	xhtml_object("performance.php","performancetab");
+	print "</div>";
 }
 else
 	p(T_("No operator"),"p");
