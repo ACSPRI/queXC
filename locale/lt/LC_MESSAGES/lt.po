@@ -7,62 +7,81 @@ msgid ""
 msgstr ""
 "Project-Id-Version: quexc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-04-23 14:32+1000\n"
+"POT-Creation-Date: 2010-10-01 12:23+1000\n"
 "PO-Revision-Date: 2009-06-29 10:38+0000\n"
 "Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-01 02:20+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2013-04-12 02:32+0000\n"
+"X-Generator: Launchpad (build 16564)\n"
 
+#: index.php:76
+msgid "No results"
+msgstr ""
+
+#: index.php:116
+msgid "Could not refer to supervisor - no supervisor may be assigned"
+msgstr ""
+
+#: index.php:130
 #: endwork.php:48
-#: index.php:83
 msgid "queXC"
 msgstr "queXC"
 
-#: endwork.php:54
-msgid "Work is complete"
-msgstr "Darbas užbaigtas"
-
-#: endwork.php:57
-#: index.php:155
-#: workhistory.php:80
-msgid "No operator"
-msgstr "Nėra operatoriaus"
-
-#: index.php:96
+#: index.php:148
 msgid "No more work currently available"
 msgstr "Daugiau nėra jokio darbo"
 
-#: index.php:97
+#: index.php:149
 msgid "Try again for more work"
 msgstr ""
 
-#: index.php:98
+#: index.php:150
+#: index.php:171
 msgid "End work"
 msgstr "Užbaigti darbą"
 
-#: index.php:142
-msgid "Error: Cannot execute process function:"
-msgstr "Klaida: Negalima paleisti proceso"
-
-#: index.php:146
+#: index.php:171
 msgid "Submit and continue"
 msgstr "Patvirtinti ir tęsti"
 
-#: index.php:146
+#: index.php:171
 msgid "Submit and end work"
 msgstr "Patvirtinti ir užbaigti darbą"
 
-#: index.php:152
+#: index.php:171
+msgid "Refer to supervisor"
+msgstr ""
+
+#: index.php:184
+msgid "Search"
+msgstr ""
+
+#: index.php:184
+msgid "Click here to search (or press enter)"
+msgstr ""
+
+#: index.php:199
+msgid "Error: Cannot execute process function:"
+msgstr "Klaida: Negalima paleisti proceso"
+
+#: index.php:208
+#: index.php:209
 msgid "Loading panel..."
 msgstr "Valdymo pultas kraunamas..."
 
-#: index.php:152
+#: index.php:208
+#: index.php:209
 msgid "Error, try with Firefox"
 msgstr "Klaida, atsidarykite su Firefox naršykle"
+
+#: index.php:212
+#: workhistory.php:80
+#: endwork.php:57
+msgid "No operator"
+msgstr "Nėra operatoriaus"
 
 #: workhistory.php:54
 msgid "Work History"
@@ -85,7 +104,6 @@ msgid "Date"
 msgstr "Data"
 
 #: workhistory.php:76
-#: admin/progress.php:108
 msgid "Column"
 msgstr "Stulpelis"
 
@@ -94,8 +112,8 @@ msgid "Data"
 msgstr "Data"
 
 #: workhistory.php:76
-#: admin/operatorperformance.php:87
-#: admin/createprocess.php:135
+#: admin/createprocess.php:141
+#: admin/operatorprocess.php:103
 msgid "Process"
 msgstr "Procesas"
 
@@ -103,79 +121,161 @@ msgstr "Procesas"
 msgid "Redo?"
 msgstr "Grąžinti?"
 
-#: admin/markcolumns.php:74
-msgid "Mark columns to be coded"
+#: endwork.php:54
+msgid "Work is complete"
+msgstr "Darbas užbaigtas"
+
+#: performance.php:55
+msgid "Operator performance"
 msgstr ""
 
-#: admin/markcolumns.php:83
-#: admin/adddata.php:86
-#: admin/progress.php:75
-msgid "Select data file: "
-msgstr "Pasirinkite duomenų failą\" "
-
-#: admin/markcolumns.php:98
-msgid "Select variable: "
-msgstr "Pasirinkitę atributą: "
-
-#: admin/markcolumns.php:111
-msgid "Variable description:"
-msgstr "Atributo aprašymas"
-
-#: admin/markcolumns.php:121
-msgid "Select process to apply to this variable:"
-msgstr ""
-
-#: admin/markcolumns.php:128
-msgid "Select operator(s) to apply this process"
-msgstr ""
-
-#: admin/markcolumns.php:144
-msgid "Any operator: enter how many"
-msgstr "Operatoriuss: įrašykite skaičių"
-
-#: admin/markcolumns.php:146
-#: admin/operatorperformance.php:87
+#: performance.php:71
 msgid "Operator"
 msgstr "Operatorius"
 
-#: admin/markcolumns.php:146
-msgid "Select"
-msgstr "Pasirinkite"
-
-#: admin/markcolumns.php:148
-#: admin/progress.php:104
-msgid "Create work"
-msgstr "Sukurkite darbą"
-
-#: admin/markcolumns.php:164
-msgid "Current work for this data file"
+#: performance.php:71
+msgid "Average time"
 msgstr ""
 
-#: admin/markcolumns.php:165
-msgid "Work ID"
-msgstr "Darbo ID"
+#: performance.php:71
+msgid "Number done"
+msgstr ""
 
-#: admin/markcolumns.php:165
-msgid "Variable name"
-msgstr "Atributo pavadinimas"
+#: admin/createprocess.php:48
+msgid "Create process"
+msgstr ""
 
-#: admin/markcolumns.php:165
-msgid "Process description"
-msgstr "Proceso aprašymas"
+#: admin/createprocess.php:85
+msgid "Successfully created process"
+msgstr ""
 
-#: admin/markcolumns.php:165
-msgid "Parent job"
-msgstr "Tėvinis darbas"
+#: admin/createprocess.php:87
+msgid "Failed to create process"
+msgstr ""
 
-#: admin/markcolumns.php:165
-msgid "Assigned operator"
-msgstr "Priskirtas operatorius"
+#: admin/createprocess.php:99
+#: admin/exportcode.php:67
+msgid "Select code group: "
+msgstr ""
 
+#: admin/createprocess.php:113
+msgid "Select parent process (if any): "
+msgstr ""
+
+#: admin/createprocess.php:119
+msgid ""
+"Automatically assign a code if the code label exactly matches the data?"
+msgstr ""
+
+#: admin/createprocess.php:120
+msgid ""
+"Automatically assign a code if the code value exactly matches the data?"
+msgstr ""
+
+#: admin/createprocess.php:121
+msgid ""
+"Automatically assign a code if there is a matching code keyword in the "
+"database?"
+msgstr ""
+
+#: admin/createprocess.php:122
+msgid ""
+"Use the code group as a template? (Create a new, editable code group for "
+"each work unit that this is assigned to)"
+msgstr ""
+
+#: admin/createprocess.php:123
+msgid ""
+"Should this process only be run by operator(s) that have not worked on the "
+"prior process (exclusive)?"
+msgstr ""
+
+#: admin/createprocess.php:125
+msgid "Name for process using this code: "
+msgstr ""
+
+#: admin/createprocess.php:128
+msgid "Create new process"
+msgstr ""
+
+#: admin/createprocess.php:138
+msgid "Existing processes"
+msgstr ""
+
+#: admin/createprocess.php:141
+msgid "Process ID"
+msgstr ""
+
+#: admin/createprocess.php:141
+msgid "Code Group"
+msgstr ""
+
+#: admin/updateddi.php:122
+msgid "Update data description"
+msgstr ""
+
+#: admin/updateddi.php:131
+#: admin/adddatacsv.php:86
+#: admin/listdata.php:63
+msgid "Select data file: "
+msgstr "Pasirinkite duomenų failą\" "
+
+#: admin/updateddi.php:146
+#: admin/listdata.php:77
+msgid "Select variable: "
+msgstr "Pasirinkitę atributą: "
+
+#: admin/updateddi.php:188
+msgid "Choose an existing code level: "
+msgstr ""
+
+#: admin/updateddi.php:206
+msgid "Update"
+msgstr ""
+
+#: admin/updateddi.php:206
+msgid "Update and move to next column"
+msgstr ""
+
+#: admin/adddatacsv.php:47
 #: admin/importcsv.php:47
-#: admin/adddata.php:47
 #: admin/import.php:47
 msgid "Import data file"
 msgstr "Importuoti duomenų failą"
+
+#: admin/adddatacsv.php:62
+#: admin/importcsv.php:65
+#: admin/import.php:67
+msgid "Data imported successfully"
+msgstr "Duomenys importuoti sėkmingai"
+
+#: admin/adddatacsv.php:62
+msgid "Rows:"
+msgstr ""
+
+#: admin/adddatacsv.php:67
+msgid "Successfully ran automatic processes"
+msgstr ""
+
+#: admin/adddatacsv.php:69
+msgid "Failed to run automatic processes"
+msgstr ""
+
+#: admin/adddatacsv.php:73
+msgid "Failed to import data"
+msgstr ""
+
+#: admin/adddatacsv.php:101
+msgid "Select column with unique identifier: "
+msgstr ""
+
+#: admin/adddatacsv.php:113
+msgid "Choose the CSV data file to upload (Can be compressed with gz):"
+msgstr ""
+
+#: admin/adddatacsv.php:114
+msgid "Add records to data file"
+msgstr ""
 
 #: admin/importcsv.php:58
 #: admin/import.php:60
@@ -186,12 +286,6 @@ msgstr "Sukurti naują duomenų įrašą: "
 #: admin/import.php:64
 msgid "Created column strucure"
 msgstr "Sukurkite stulpelių strukturą"
-
-#: admin/importcsv.php:65
-#: admin/adddata.php:62
-#: admin/import.php:67
-msgid "Data imported successfully"
-msgstr "Duomenys importuoti sėkmingai"
 
 #: admin/importcsv.php:75
 msgid "Choose the headered CSV data file to upload:"
@@ -207,171 +301,48 @@ msgstr "Failo aprašymas:"
 msgid "Create new data file"
 msgstr "Sukurti naują duomenų failą"
 
-#: admin/databasestrings.php:33
-msgid "Blank"
-msgstr ""
-
-#: admin/databasestrings.php:34
-msgid "Not codeable"
-msgstr ""
-
-#: admin/databasestrings.php:35
-msgid "Spacing"
-msgstr ""
-
-#: admin/databasestrings.php:36
-msgid "Spell check"
-msgstr "Rašybos tikrinimas"
-
-#: admin/databasestrings.php:37
-msgid "Email validate"
-msgstr ""
-
-#: admin/databasestrings.php:38
-msgid "Create new code group"
-msgstr ""
-
-#: admin/adddata.php:62
-msgid "Rows:"
-msgstr ""
-
-#: admin/adddata.php:67
-msgid "Successfully ran automatic processes"
-msgstr ""
-
-#: admin/adddata.php:69
-msgid "Failed to run automatic processes"
-msgstr ""
-
-#: admin/adddata.php:73
-msgid "Failed to import data"
-msgstr ""
-
-#: admin/adddata.php:101
-msgid "Select column with unique identifier: "
-msgstr ""
-
-#: admin/adddata.php:113
-#: admin/import.php:78
-msgid "Choose the Fixed width data file to upload:"
-msgstr ""
-
-#: admin/adddata.php:114
-msgid "Add records to data file"
-msgstr ""
-
 #: admin/import.php:77
 msgid "Choose the DDI file file to upload:"
 msgstr ""
 
-#: admin/progress.php:66
-#: admin/progress.php:101
-msgid "Work remaining"
+#: admin/import.php:78
+msgid "Choose the Fixed width data file to upload:"
 msgstr ""
 
-#: admin/progress.php:80
-msgid "Delete"
+#: admin/operatorprocess.php:76
+msgid "Assign operators to processes"
 msgstr ""
 
-#: admin/progress.php:104
-msgid "No work remaining"
+#: admin/operatorprocess.php:85
+msgid "Select operator:"
 msgstr ""
 
-#: admin/progress.php:108
-msgid "Rows to do"
+#: admin/operatorprocess.php:90
+msgid "Select processes available to this operator"
 msgstr ""
 
-#: admin/progress.php:108
-msgid "Data file"
+#: admin/operatorprocess.php:103
+msgid "Select"
+msgstr "Pasirinkite"
+
+#: admin/operatorprocess.php:103
+msgid "Allow queXC to auto guess code"
 msgstr ""
 
-#: admin/progress.php:108
-msgid "Process to apply"
+#: admin/operatorprocess.php:105
+msgid "Assign processes"
 msgstr ""
 
-#: admin/progress.php:108
-msgid "For specific operator?"
+#: admin/listdata.php:54
+msgid "Display data"
 msgstr ""
 
-#: admin/progress.php:108
-msgid "Delete work"
+#: admin/exportcode.php:58
+msgid "Export code groups"
 msgstr ""
 
-#: admin/operatorperformance.php:46
-msgid "Operator performance"
-msgstr ""
-
-#: admin/operatorperformance.php:58
-msgid "Select operator: "
-msgstr ""
-
-#: admin/operatorperformance.php:66
-msgid "Select process: "
-msgstr ""
-
-#: admin/operatorperformance.php:87
-msgid "Average time"
-msgstr ""
-
-#: admin/operatorperformance.php:87
-msgid "Number of records"
-msgstr ""
-
-#: admin/createprocess.php:48
-msgid "Create process"
-msgstr ""
-
-#: admin/createprocess.php:81
-msgid "Successfully created process"
-msgstr ""
-
-#: admin/createprocess.php:83
-msgid "Failed to create process"
-msgstr ""
-
-#: admin/createprocess.php:95
-#: admin/selectblankcode.php:73
-msgid "Select code group: "
-msgstr ""
-
-#: admin/createprocess.php:109
-msgid "Select parent process (if any): "
-msgstr ""
-
-#: admin/createprocess.php:115
-msgid ""
-"Automatically assign a code if the code label exactly matches the data?"
-msgstr ""
-
-#: admin/createprocess.php:116
-msgid ""
-"Automatically assign a code if the code value exactly matches the data?"
-msgstr ""
-
-#: admin/createprocess.php:117
-msgid ""
-"Use the code group as a template? (Create a new, editable code group for "
-"each work unit that this is assigned to)"
-msgstr ""
-
-#: admin/createprocess.php:119
-msgid "Name for process using this code: "
-msgstr ""
-
-#: admin/createprocess.php:122
-msgid "Create new process"
-msgstr ""
-
-#: admin/createprocess.php:132
-msgid "Existing processes"
-msgstr ""
-
-#: admin/createprocess.php:135
-msgid "Process ID"
-msgstr ""
-
-#: admin/createprocess.php:135
-msgid "Code Group"
+#: admin/exportcode.php:74
+msgid "Export code group"
 msgstr ""
 
 #: admin/selectblankcode.php:64
@@ -386,28 +357,236 @@ msgstr ""
 msgid "Assign as blank code"
 msgstr ""
 
-#: admin/export.php:82
-msgid "Export Data"
+#: admin/operatorprocesssupervisor.php:146
+#: admin/index.php:68
+msgid "Assign operators to be supervisors of processes"
 msgstr ""
 
-#: admin/export.php:99
-msgid "Export fixed width data file"
+#: admin/operatorprocesssupervisor.php:267
+msgid "Assign operators to be supervisor for these processes"
 msgstr ""
 
-#: admin/export.php:100
-msgid "Export DDI file"
+#: admin/modificationhistory.php:47
+msgid "Display modification history"
 msgstr ""
 
-#: admin/export.php:101
-msgid "Export PSPP file"
+#: admin/modificationhistory.php:72
+msgid "Select column: "
 msgstr ""
 
-#: admin/export.php:102
-msgid "Export CSV file"
+#: admin/modificationhistory.php:82
+msgid "Select row: "
 msgstr ""
 
-#: admin/export.php:103
-msgid "Export CSV file with labels for codes"
+#: admin/modificationhistory.php:107
+msgid "Row"
+msgstr ""
+
+#: admin/modificationhistory.php:107
+msgid "Assigned"
+msgstr ""
+
+#: admin/modificationhistory.php:107
+msgid "Completed"
+msgstr ""
+
+#: admin/worklist.php:60
+msgid "Work List"
+msgstr ""
+
+#: admin/worklist.php:62
+#: admin/unassign.php:73
+msgid "Delete"
+msgstr ""
+
+#: admin/worklist.php:79
+msgid "Work Unit ID"
+msgstr ""
+
+#: admin/worklist.php:79
+msgid "Date Completed"
+msgstr ""
+
+#: admin/worklist.php:79
+msgid "Delete?"
+msgstr ""
+
+#: admin/operatorperformance.php:58
+msgid "Select operator: "
+msgstr ""
+
+#: admin/operatorperformance.php:66
+msgid "Select process: "
+msgstr ""
+
+#: admin/operatorperformance.php:88
+msgid "Number of records"
+msgstr ""
+
+#: admin/index.php:47
+msgid "Administrative Tools"
+msgstr ""
+
+#: admin/index.php:51
+msgid "Import data"
+msgstr ""
+
+#: admin/index.php:52
+msgid "Import DDI/Fixed width data"
+msgstr ""
+
+#: admin/index.php:53
+msgid "Import CSV data"
+msgstr ""
+
+#: admin/index.php:54
+msgid "Add data to existing (Fixed width)"
+msgstr ""
+
+#: admin/index.php:55
+msgid "Add data to existing (CSV)"
+msgstr ""
+
+#: admin/index.php:57
+msgid "Codes"
+msgstr ""
+
+#: admin/index.php:58
+#: admin/importcode.php:48
+msgid "Import code group"
+msgstr ""
+
+#: admin/index.php:59
+msgid "Import code keyword correspondence"
+msgstr ""
+
+#: admin/index.php:60
+msgid "Select blank code for code group"
+msgstr ""
+
+#: admin/index.php:61
+msgid "Create process from code group"
+msgstr ""
+
+#: admin/index.php:64
+msgid "Operator management"
+msgstr ""
+
+#: admin/index.php:65
+msgid "Add operators"
+msgstr ""
+
+#: admin/index.php:66
+#: admin/operatordata.php:267
+msgid "Assign operators to data"
+msgstr ""
+
+#: admin/index.php:70
+msgid "Job management"
+msgstr ""
+
+#: admin/index.php:71
+#: admin/markcolumns.php:181
+msgid "Create work"
+msgstr "Sukurkite darbą"
+
+#: admin/index.php:72
+msgid "Assign relevant columns to codes"
+msgstr ""
+
+#: admin/index.php:73
+msgid "Assign keyword groups to columns (correspondence)"
+msgstr ""
+
+#: admin/index.php:76
+msgid "Progress"
+msgstr ""
+
+#: admin/index.php:77
+msgid "Display progress"
+msgstr ""
+
+#: admin/index.php:78
+msgid "List all work"
+msgstr ""
+
+#: admin/index.php:79
+msgid "List work assigned but not complete"
+msgstr ""
+
+#: admin/index.php:80
+msgid "Modification history"
+msgstr ""
+
+#: admin/index.php:83
+msgid "Performance"
+msgstr ""
+
+#: admin/index.php:86
+msgid "Export"
+msgstr ""
+
+#: admin/index.php:87
+msgid "Export data"
+msgstr ""
+
+#: admin/index.php:89
+msgid "List data"
+msgstr ""
+
+#: admin/index.php:90
+#: admin/exportkeywords.php:58
+msgid "Export code keyword correspondence"
+msgstr ""
+
+#: admin/index.php:96
+msgid "Choose a menu item from the left"
+msgstr ""
+
+#: admin/exportkeywords.php:82
+msgid "Select column containing the code: "
+msgstr ""
+
+#: admin/exportkeywords.php:98
+msgid "Select column containing the keyword: "
+msgstr ""
+
+#: admin/exportkeywords.php:105
+msgid "Download correspondence CSV"
+msgstr ""
+
+#: admin/relevantkeywords.php:74
+msgid "Select relevant keywords for columns"
+msgstr ""
+
+#: admin/relevantkeywords.php:98
+msgid "Select column to auto code from:"
+msgstr ""
+
+#: admin/relevantkeywords.php:119
+msgid ""
+"Select column group to code to (work must already have been created): "
+msgstr ""
+
+#: admin/relevantkeywords.php:128
+#: admin/relevantkeywords.php:136
+msgid "Remove"
+msgstr ""
+
+#: admin/relevantkeywords.php:136
+msgid "Keyword group"
+msgstr ""
+
+#: admin/relevantkeywords.php:138
+msgid "Select keyword group to add"
+msgstr ""
+
+#: admin/relevantkeywords.php:154
+msgid "Add keyword group"
+msgstr ""
+
+#: admin/relevantkeywords.php:157
+msgid "No code keyword group available"
 msgstr ""
 
 #: admin/operatoradd.php:64
@@ -451,202 +630,196 @@ msgstr ""
 msgid "Add user"
 msgstr ""
 
-#: admin/modificationhistory.php:47
-msgid "Display modification history"
+#: admin/importkeywordcode.php:48
+msgid "Import code keywords"
 msgstr ""
 
-#: admin/modificationhistory.php:72
-#: admin/relevantcolumns.php:103
-msgid "Select column: "
+#: admin/importkeywordcode.php:63
+#: admin/importcode.php:65
+msgid "Successful import"
 msgstr ""
 
-#: admin/modificationhistory.php:82
-msgid "Select row: "
+#: admin/importkeywordcode.php:67
+msgid "Failed to import. Could not determine corresponding code for:"
 msgstr ""
 
-#: admin/modificationhistory.php:105
-msgid "Row"
+#: admin/importkeywordcode.php:74
+msgid "Failed to import codes"
 msgstr ""
 
-#: admin/modificationhistory.php:105
-msgid "Assigned"
+#: admin/importkeywordcode.php:74
+#: admin/importcode.php:72
+msgid "Error uploading file"
 msgstr ""
 
-#: admin/modificationhistory.php:105
-msgid "Completed"
+#: admin/importkeywordcode.php:78
+msgid "The CSV file must have 2 fields: code,keywords"
 msgstr ""
 
-#: admin/exportcode.php:58
-#: admin/index.php:83
-msgid "Export code groups"
+#: admin/importkeywordcode.php:79
+msgid "No fields may be blank"
 msgstr ""
 
-#: admin/exportcode.php:74
-msgid "Export code group"
+#: admin/importkeywordcode.php:80
+msgid ""
+"Do not include a header line as this will be imported as a code/keyword pair"
 msgstr ""
 
-#: admin/worklist.php:60
-msgid "Work List"
+#: admin/importkeywordcode.php:94
+msgid "Choose the CSV code keywords file to upload:"
 msgstr ""
 
-#: admin/worklist.php:79
-msgid "Work Unit ID"
+#: admin/importkeywordcode.php:95
+msgid "Description for this code keywords file:"
 msgstr ""
 
-#: admin/worklist.php:79
-msgid "Date Completed"
+#: admin/importkeywordcode.php:96
+msgid "What coding scheme does this list apply to?"
 msgstr ""
 
-#: admin/worklist.php:79
-msgid "Delete?"
+#: admin/importkeywordcode.php:97
+msgid "Create new keyword code"
+msgstr ""
+
+#: admin/export.php:88
+msgid "Export Data"
+msgstr ""
+
+#: admin/export.php:105
+msgid "Export fixed width data file"
+msgstr ""
+
+#: admin/export.php:106
+msgid "Export DDI file"
+msgstr ""
+
+#: admin/export.php:107
+msgid "Export PSPP file with data inline"
+msgstr ""
+
+#: admin/export.php:108
+msgid "Export PSPP file"
+msgstr ""
+
+#: admin/export.php:109
+msgid "Export CSV file"
+msgstr ""
+
+#: admin/export.php:110
+msgid "Export CSV file with labels for codes"
+msgstr ""
+
+#: admin/databasestrings.php:33
+msgid "Blank"
+msgstr ""
+
+#: admin/databasestrings.php:34
+msgid "Not codeable"
+msgstr ""
+
+#: admin/databasestrings.php:35
+msgid "Spacing"
+msgstr ""
+
+#: admin/databasestrings.php:36
+msgid "Spell check"
+msgstr "Rašybos tikrinimas"
+
+#: admin/databasestrings.php:37
+msgid "Email validate"
+msgstr ""
+
+#: admin/databasestrings.php:38
+#: admin/importcode.php:86
+msgid "Create new code group"
+msgstr ""
+
+#: admin/markcolumns.php:92
+msgid "Mark columns to be coded"
+msgstr ""
+
+#: admin/markcolumns.php:129
+msgid "Variable description:"
+msgstr "Atributo aprašymas"
+
+#: admin/markcolumns.php:139
+msgid "Select process to apply to this variable:"
+msgstr ""
+
+#: admin/markcolumns.php:146
+msgid "Select operator(s) to apply this process"
+msgstr ""
+
+#: admin/markcolumns.php:162
+msgid "Any operator: enter how many"
+msgstr "Operatoriuss: įrašykite skaičių"
+
+#: admin/markcolumns.php:167
+msgid "If a reference column is applicable, choose it below"
+msgstr ""
+
+#: admin/markcolumns.php:175
+msgid ""
+"To create a multiple choice coding scheme, select a code group to generate "
+"multiple groups from"
+msgstr ""
+
+#: admin/markcolumns.php:197
+msgid "Current work for this data file and column"
+msgstr ""
+
+#: admin/markcolumns.php:198
+msgid "Work ID"
+msgstr "Darbo ID"
+
+#: admin/markcolumns.php:198
+msgid "Variable name"
+msgstr "Atributo pavadinimas"
+
+#: admin/markcolumns.php:198
+msgid "Process description"
+msgstr "Proceso aprašymas"
+
+#: admin/markcolumns.php:198
+msgid "Parent job"
+msgstr "Tėvinis darbas"
+
+#: admin/markcolumns.php:198
+msgid "Assigned operator"
+msgstr "Priskirtas operatorius"
+
+#: admin/markcolumns.php:198
+#: admin/markcolumns.php:200
+msgid "Create comparison work"
 msgstr ""
 
 #: admin/operatordata.php:146
-#: admin/operatordata.php:267
 msgid "Assign operators to datas"
 msgstr ""
 
-#: admin/adddatacsv.php:113
-msgid "Choose the CSV data file to upload:"
+#: admin/unassign.php:70
+#: admin/unassign.php:82
+msgid "Assigned work"
 msgstr ""
 
-#: admin/index.php:47
-msgid "Administrative Tools"
+#: admin/unassign.php:85
+msgid "No assigned work"
 msgstr ""
 
-#: admin/index.php:51
-msgid "Import data"
+#: admin/unassign.php:89
+msgid "Rows to do"
 msgstr ""
 
-#: admin/index.php:52
-msgid "Import DDI/Fixed width data"
+#: admin/unassign.php:89
+msgid "Process to apply"
 msgstr ""
 
-#: admin/index.php:53
-msgid "Import CSV data"
+#: admin/unassign.php:89
+msgid "Supervisor?"
 msgstr ""
 
-#: admin/index.php:54
-msgid "Add data to existing (Fixed width)"
-msgstr ""
-
-#: admin/index.php:55
-msgid "Add data to existing (CSV)"
-msgstr ""
-
-#: admin/index.php:57
-msgid "Codes"
-msgstr ""
-
-#: admin/index.php:58
-#: admin/importcode.php:48
-msgid "Import code group"
-msgstr ""
-
-#: admin/index.php:59
-msgid "Select blank code for code group"
-msgstr ""
-
-#: admin/index.php:60
-msgid "Create process from code group"
-msgstr ""
-
-#: admin/index.php:63
-msgid "Operator management"
-msgstr ""
-
-#: admin/index.php:64
-msgid "Add operators"
-msgstr ""
-
-#: admin/index.php:65
-msgid "Assign operators to data"
-msgstr ""
-
-#: admin/index.php:66
-#: admin/operatorprocess.php:76
-msgid "Assign operators to processes"
-msgstr ""
-
-#: admin/index.php:68
-msgid "Job management"
-msgstr ""
-
-#: admin/index.php:70
-msgid "Assign relevant columns to codes"
-msgstr ""
-
-#: admin/index.php:72
-msgid "Progress"
-msgstr ""
-
-#: admin/index.php:73
-msgid "Display progress"
-msgstr ""
-
-#: admin/index.php:74
-msgid "List all work"
-msgstr ""
-
-#: admin/index.php:75
-msgid "Modification history"
-msgstr ""
-
-#: admin/index.php:78
-msgid "Performance"
-msgstr ""
-
-#: admin/index.php:81
-msgid "Export"
-msgstr ""
-
-#: admin/index.php:82
-msgid "Export data"
-msgstr ""
-
-#: admin/index.php:88
-msgid "Choose a menu item from the left"
-msgstr ""
-
-#: admin/operatorprocess.php:85
-msgid "Select operator:"
-msgstr ""
-
-#: admin/operatorprocess.php:90
-msgid "Select processes available to this operator"
-msgstr ""
-
-#: admin/operatorprocess.php:102
-msgid "Allow queXC to auto guess code"
-msgstr ""
-
-#: admin/operatorprocess.php:104
-msgid "Assign processes"
-msgstr ""
-
-#: admin/relevantcolumns.php:78
-msgid "Select relevant columns"
-msgstr ""
-
-#: admin/relevantcolumns.php:131
-#: admin/relevantcolumns.php:140
-msgid "Remove"
-msgstr ""
-
-#: admin/relevantcolumns.php:140
-msgid "Related column"
-msgstr ""
-
-#: admin/relevantcolumns.php:142
-msgid "Select column to add"
-msgstr ""
-
-#: admin/relevantcolumns.php:154
-msgid "Add column"
-msgstr ""
-
-#: admin/importcode.php:65
-msgid "Successful import"
+#: admin/unassign.php:89
+msgid "Delete assigned work"
 msgstr ""
 
 #: admin/importcode.php:66
@@ -662,10 +835,6 @@ msgstr ""
 
 #: admin/importcode.php:69
 msgid "Error importing codes"
-msgstr ""
-
-#: admin/importcode.php:72
-msgid "Error uploading file"
 msgstr ""
 
 #: admin/importcode.php:76
@@ -698,42 +867,113 @@ msgstr ""
 msgid "Allow additions to this code group?"
 msgstr ""
 
-#: functions/functions.code.php:193
-#: functions/functions.code.php:199
-msgid "Add"
+#: admin/adddata.php:113
+msgid ""
+"Choose the Fixed width data file to upload (Can be compressed with gz):"
 msgstr ""
 
-#: functions/functions.import.php:366
+#: admin/relevantcolumns.php:78
+msgid "Select relevant columns"
+msgstr ""
+
+#: admin/relevantcolumns.php:140
+msgid "Related column"
+msgstr ""
+
+#: admin/relevantcolumns.php:142
+msgid "Select column to add"
+msgstr ""
+
+#: admin/relevantcolumns.php:154
+msgid "Add column"
+msgstr ""
+
+#: admin/progress.php:66
+#: admin/progress.php:101
+msgid "Work remaining"
+msgstr ""
+
+#: admin/progress.php:104
+msgid "No work remaining"
+msgstr ""
+
+#: admin/progress.php:108
+msgid "Data file"
+msgstr ""
+
+#: admin/progress.php:108
+msgid "For specific operator?"
+msgstr ""
+
+#: admin/progress.php:108
+msgid "Delete work"
+msgstr ""
+
+#: functions/functions.export.php:285
+msgid "Fixed width Data File"
+msgstr ""
+
+#: functions/functions.export.php:309
+msgid "Raw data (ACSII)"
+msgstr ""
+
+#: functions/functions.export.php:313
+msgid "Fixed width"
+msgstr ""
+
+#: functions/functions.export.php:317
+msgid "queXC - http://quexc.sourceforge.net/"
+msgstr ""
+
+#: functions/functions.import.php:367
 msgid "Column group for data_id:"
 msgstr ""
 
-#: functions/functions.import.php:455
+#: functions/functions.import.php:456
 msgid "Code imported from (data_id:variable name)"
 msgstr ""
 
-#: functions/functions.work.php:239
-#: functions/functions.work.php:573
+#: functions/functions.code.php:341
+#: functions/functions.code.php:508
+#: functions/functions.code.php:514
+msgid "Add"
+msgstr ""
+
+#: functions/functions.work.php:375
+#: functions/functions.work.php:915
 msgid "Code for group:"
 msgstr ""
 
-#: functions/functions.work.php:239
-#: functions/functions.work.php:573
+#: functions/functions.work.php:375
+#: functions/functions.work.php:915
 msgid "Level:"
 msgstr ""
 
-#: functions/functions.work.php:422
+#: functions/functions.work.php:644
+msgid "COPY"
+msgstr ""
+
+#: functions/functions.work.php:644
+msgid "Copy of: "
+msgstr ""
+
+#: functions/functions.work.php:677
 msgid "Copy of:"
 msgstr ""
 
-#: functions/functions.work.php:560
+#: functions/functions.work.php:899
 msgid "code for variable:"
 msgstr ""
 
-#: functions/functions.work.php:560
+#: functions/functions.work.php:899
 msgid "by operator:"
 msgstr ""
 
-#: functions/functions.work.php:713
+#: functions/functions.work.php:944
+msgid "Text for"
+msgstr ""
+
+#: functions/functions.work.php:1123
 msgid ""
 "ERROR: There is more than one work_unit assigned to you that is not "
 "complete. This may be due to logging on with the same username on multiple "
@@ -742,8 +982,8 @@ msgid ""
 "operator id"
 msgstr ""
 
-#: include/php-gettext-1.0.7/examples/pigs_fallback.php:74
 #: include/php-gettext-1.0.7/examples/pigs_dropin.php:75
+#: include/php-gettext-1.0.7/examples/pigs_fallback.php:74
 msgid ""
 "This is how the story goes.\n"
 "\n"
