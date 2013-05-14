@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Select the code to automatically code when a record is blank 
  *

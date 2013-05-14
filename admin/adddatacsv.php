@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Add data to an existing data file from a CSV file
  *
@@ -110,10 +110,10 @@ else
 			?>
 			<form enctype="multipart/form-data" action="" method="post">
 			<p><input type="hidden" name="MAX_FILE_SIZE" value="1000000000" /></p>
-			<p><? echo T_("Choose the CSV data file to upload (Can be compressed with gz):"); ?><input name="datafile" type="file" /></p>
-			<p><input type="submit" name="import_file" value="<? echo T_("Add records to data file"); ?>"/></p>
+			<p><?php  echo T_("Choose the CSV data file to upload (Can be compressed with gz):"); ?><input name="datafile" type="file" /></p>
+			<p><input type="submit" name="import_file" value="<?php  echo T_("Add records to data file"); ?>"/></p>
 			</form>
-			<?
+			<?php 
 
 		}
 	}

@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Display performance of operators
  *

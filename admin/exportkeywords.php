@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Export correspondence file of keyword and code
  *

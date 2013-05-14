@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Display the main cleaning/coding page
  *

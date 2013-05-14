@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  *  Select relevant columns for each data file and process
  *

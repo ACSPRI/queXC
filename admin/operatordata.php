@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Assign operators to data files in a checkbox matrix
  *
@@ -149,7 +149,7 @@ xhtml_head(T_("Assign operators to datas"),false,array("../css/table.css"));
 
 <script type="text/javascript">
 
-<?
+<?php 
 print "data_id = new Array(";
 
 $s = "";
@@ -232,7 +232,7 @@ function checkVid(v)
 <body>
 
 
-<?
+<?php 
 
 
 

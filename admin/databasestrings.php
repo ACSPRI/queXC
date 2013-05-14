@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Translation template for strings in the database
  *

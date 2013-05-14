@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Display a history of work done, and allow for a new work unit to be specified 
  *

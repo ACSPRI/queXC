@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Import a data file from a CSV file
  *
@@ -72,12 +72,12 @@ else
 	?>
 	<form enctype="multipart/form-data" action="" method="post">
 	<p><input type="hidden" name="MAX_FILE_SIZE" value="1000000000" /></p>
-	<p><? echo T_("Choose the headered CSV data file to upload:"); ?><input name="datafile" type="file" /></p>
-	<p><? echo T_("Description for file:"); ?><input name="description" type="text" /></p>
-	<p><input type="submit" name="import_file" value="<? echo T_("Create new data file"); ?>"/></p>
+	<p><?php  echo T_("Choose the headered CSV data file to upload:"); ?><input name="datafile" type="file" /></p>
+	<p><?php  echo T_("Description for file:"); ?><input name="description" type="text" /></p>
+	<p><input type="submit" name="import_file" value="<?php  echo T_("Create new data file"); ?>"/></p>
 	</form>
 
-	<?
+	<?php 
 
 }
 

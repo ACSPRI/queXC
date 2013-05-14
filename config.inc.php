@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Configuration file
  *
@@ -41,12 +41,12 @@
 /**
  * Database configuration for queXC
  */
-define('DB_USER', 'quexc');
-define('DB_PASS', 'quexc');
-define('DB_HOST', 'databasedev.dcarf');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_HOST', 'localhost');
 define('DB_NAME', 'quexc');
 
-
+define('ADODB_PATH','/usr/share/php/adodb/');
 //Do not modify the following line:
 include(dirname(__FILE__).'/config.default.php');
 ?>

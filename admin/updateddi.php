@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Update the data description of a questionnaire
  *

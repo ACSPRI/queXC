@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Display work assigned to operators and delete if not complete
  *

@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Display the modifications done to a data file 
  *

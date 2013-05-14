@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  *  Functions relating to the assigning and creating of work
  *

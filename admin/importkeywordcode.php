@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Import a code file from an un-headered CSV file of this format:
  * code,keywords
@@ -91,12 +91,12 @@ print "</div>";
 ?>
 <form enctype="multipart/form-data" action="" method="post">
 <p><input type="hidden" name="MAX_FILE_SIZE" value="1000000000" /></p>
-<p><? echo T_("Choose the CSV code keywords file to upload:"); ?><input name="datafile" type="file" /></p>
-<p><? echo T_("Description for this code keywords file:"); ?><input name="description" type="text" /></p>
-<p><? echo T_("What coding scheme does this list apply to?"); display_chooser($rs2,'code_group_id','code_group_id',false,false,false,false); ?>
-<p><input type="submit" name="import_file" value="<? echo T_("Create new keyword code"); ?>"/></p>
+<p><?php  echo T_("Choose the CSV code keywords file to upload:"); ?><input name="datafile" type="file" /></p>
+<p><?php  echo T_("Description for this code keywords file:"); ?><input name="description" type="text" /></p>
+<p><?php  echo T_("What coding scheme does this list apply to?"); display_chooser($rs2,'code_group_id','code_group_id',false,false,false,false); ?>
+<p><input type="submit" name="import_file" value="<?php  echo T_("Create new keyword code"); ?>"/></p>
 </form>
-<?
+<?php 
 
 xhtml_foot();
 ?>

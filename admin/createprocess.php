@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Create a process from a code group 
  *

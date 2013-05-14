@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Create an operator and link to a webserver username for authentication
  *
@@ -78,20 +78,20 @@ xhtml_head(T_("Add an operator"));
 if ($a)
 {
 ?>
-	<h3><? echo $a; ?></h3>
-<?
+	<h3><?php  echo $a; ?></h3>
+<?php 
 }
 ?>
-<h1><? echo T_("Add an operator"); ?></h1>
-<p><? echo T_("Add an operator to allow them to use queXC"); ?>.</p>
-<p><? echo T_("Use this form to enter the username of a user based on your directory security system. For example, if you have secured the base directory of queXC using Apache file based security, enter the usernames of the users here."); ?></p>
+<h1><?php  echo T_("Add an operator"); ?></h1>
+<p><?php  echo T_("Add an operator to allow them to use queXC"); ?>.</p>
+<p><?php  echo T_("Use this form to enter the username of a user based on your directory security system. For example, if you have secured the base directory of queXC using Apache file based security, enter the usernames of the users here."); ?></p>
 <form enctype="multipart/form-data" action="" method="post">
-	<p><? echo T_("Enter the username of an operator to add:"); ?> <input name="operator" type="text"/></p>
-	<p><? echo T_("Enter a description of the operator to add:"); ?> <input name="description" type="text"/></p>
-	<p><input type="submit" value="<? echo T_("Add user"); ?>" /></p>
+	<p><?php  echo T_("Enter the username of an operator to add:"); ?> <input name="operator" type="text"/></p>
+	<p><?php  echo T_("Enter a description of the operator to add:"); ?> <input name="description" type="text"/></p>
+	<p><input type="submit" value="<?php  echo T_("Add user"); ?>" /></p>
 </form>
 
-<?
+<?php 
 
 xhtml_foot();
 

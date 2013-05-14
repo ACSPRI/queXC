@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Mark columns to be coded 
  *

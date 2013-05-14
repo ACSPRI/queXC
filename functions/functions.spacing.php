@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Spacing functions
  *

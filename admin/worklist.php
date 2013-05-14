@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Display a list of work for all operators including work not done
  * and allow for the deletion of not complete work_units

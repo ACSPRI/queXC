@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Import a data file from a DDI/Fixed width file
  *
@@ -74,13 +74,13 @@ else
 	?>
 	<form enctype="multipart/form-data" action="" method="post">
 	<p><input type="hidden" name="MAX_FILE_SIZE" value="1000000000" /></p>
-	<p><? echo T_("Choose the DDI file file to upload:"); ?><input name="ddifile" type="file" /></p>
-	<p><? echo T_("Choose the Fixed width data file to upload:"); ?><input name="datafile" type="file" /></p>
-	<p><? echo T_("Description for file:"); ?><input name="description" type="text" /></p>
-	<p><input type="submit" name="import_file" value="<? echo T_("Create new data file"); ?>"/></p>
+	<p><?php  echo T_("Choose the DDI file file to upload:"); ?><input name="ddifile" type="file" /></p>
+	<p><?php  echo T_("Choose the Fixed width data file to upload:"); ?><input name="datafile" type="file" /></p>
+	<p><?php  echo T_("Description for file:"); ?><input name="description" type="text" /></p>
+	<p><input type="submit" name="import_file" value="<?php  echo T_("Create new data file"); ?>"/></p>
 	</form>
 
-	<?
+	<?php 
 
 }
 

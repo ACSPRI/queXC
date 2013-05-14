@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Assign operators to processes in a checkbox matrix
  *

@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Assign operators to be supervisors for processes in a checkbox matrix
  *
@@ -149,7 +149,7 @@ xhtml_head(T_("Assign operators to be supervisors of processes"),false,array("..
 
 <script type="text/javascript">
 
-<?
+<?php 
 print "process_id = new Array(";
 
 $s = "";
@@ -232,7 +232,7 @@ function checkVid(v)
 <body>
 
 
-<?
+<?php 
 
 
 

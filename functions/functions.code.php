@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  *  Functions relating to the display and creation of codes
  *

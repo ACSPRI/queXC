@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Display how much work is left to do
  *

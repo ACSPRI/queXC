@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  *  Assign keywords to columns
  *

@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Functions relating to importing DDI and Fixed Width data files, and coding CSV
  *

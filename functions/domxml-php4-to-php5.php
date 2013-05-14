@@ -1,5 +1,4 @@
-<?php
-/*
+<?php /*
 	Requires PHP5, uses built-in DOM extension.
 	To be used in PHP4 scripts using DOMXML extension: allows PHP4/DOMXML scripts to run on PHP5/DOM.
 	(Optional: requires PHP5/XSL extension for domxml_xslt functions, PHP>=5.1 for XPath evaluation functions, and PHP>=5.1/libxml for DOMXML error reports)
