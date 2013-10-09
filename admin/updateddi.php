@@ -1,4 +1,4 @@
-<?php 
+<?
 /**
  * Update the data description of a questionnaire
  *
@@ -55,19 +55,21 @@ function trimall($str)
 	return preg_replace('/[\r\n\s\t]+/xms', ' ', trim($str));  
 }
 
-if (isset($_GET['submit']) || isset($_GET['submitmove']))
+if (isset($_POST['submit']) || isset($_POST['submitmove']))
 {
-	$data_id = intval($_GET['data_id']);
-	$column_id = intval($_GET['column_id']);
+	$data_id = intval($_POST['data_id']);
+	$column_id = intval($_POST['column_id']);
+	$_GET['data_id'] = $data_id;
+	$_GET['column_id'] = $column_id;
 	$code_level_id = "NULL";
-	if (isset($_GET['code_level_id'])) $code_level_id = intval($_GET['code_level_id']);
+	if (isset($_POST['code_level_id'])) $code_level_id = intval($_POST['code_level_id']);
 
 	$db->StartTrans();
 	
-	if (isset($_GET['n'.$column_id]) && isset($_GET['d'.$column_id]))
+	if (isset($_POST['n'.$column_id]) && isset($_POST['d'.$column_id]))
 	{
-		$name = $db->qstr(trimall($_GET['n'.$column_id]));
-		$desc = $db->qstr(trimall($_GET['d'.$column_id]));
+		$name = $db->qstr(trimall($_POST['n'.$column_id]));
+		$desc = $db->qstr(trimall($_POST['d'.$column_id]));
 		$sql = "UPDATE `column`
 			SET name = $name, description = $desc, code_level_id = $code_level_id
 			WHERE column_id = '$column_id'";
@@ -85,10 +87,10 @@ if (isset($_GET['submit']) || isset($_GET['submitmove']))
 		foreach($codes as $c)
 		{
 			$code_id = $c['code_id'];
-			if (isset($_GET['c'.$code_id]) && isset($_GET['l'.$code_id]))
+			if (isset($_POST['c'.$code_id]) && isset($_POST['l'.$code_id]))
 			{
-				$value = $db->qstr(trimall($_GET['c'.$code_id]));
-				$label = $db->qstr(trimall($_GET['l'.$code_id]));
+				$value = $db->qstr(trimall($_POST['c'.$code_id]));
+				$label = $db->qstr(trimall($_POST['l'.$code_id]));
 				$sql = "UPDATE `code`
 					SET value = $value, label = $label
 					WHERE code_id = '$code_id'";
@@ -100,13 +102,12 @@ if (isset($_GET['submit']) || isset($_GET['submitmove']))
 
 	$db->CompleteTrans();
 
-	if (isset($_GET['submitmove']))
+	if (isset($_POST['submitmove']))
 	{
 		$sql = "SELECT column_id
 			FROM `column`
 			WHERE data_id = '$data_id'
 			AND column_id > '$column_id'
-			AND in_input = 1
 			ORDER BY column_id ASC
 			LIMIT 1";
 	
@@ -140,8 +141,7 @@ if ($data_id != 0)
 	//Select variable (column)
 	$sql = "SELECT column_id as value, name as description, CASE WHEN column_id = '$column_id' THEN 'selected=\'selected\'' ELSE '' END AS selected
 		FROM `column`
-		WHERE in_input = 1
-		AND data_id = '$data_id'";
+		WHERE data_id = '$data_id'";
 
 	print "<div>" . T_("Select variable: ");
 	$c = $db->GetAll($sql);
@@ -158,7 +158,7 @@ if ($data_id != 0)
 	
 		$rs = $db->GetAll($sql);
 
-		print "<form action='?' method='get'>";
+		print "<form action='?' method='post'>";
 		print "<div><input type='hidden' name='column_id' value='$column_id'/><input type='hidden' name='data_id' value='$data_id'/></div>";
 		foreach($rs as $r)
 		{
