@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  *  Functions relating to the assigning and creating of work
  *
@@ -912,11 +912,18 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 				$db->Execute($sql);
 				
 				$column_group_id = $db->Insert_ID();
+
+				//Name a coded column by the code group description
+				$sql = "SELECT `description`
+					FROM `column`
+					WHERE column_id = $column_id";
+
+				$description = $db->GetOne($sql);
 	
 				//Now create all necessary columns
 	
 				$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,code_level_id,column_multi_group_id)
-					SELECT NULL,'$data_id','$column_group_id',CONCAT('L',ocl.code_level_id,'G$column_group_id'),";
+					SELECT NULL,'$data_id','$column_group_id',CONCAT('$description',ocg.description,(ocl.level + 1)),";
 
 				if ($cmgi == "NULL")
 					$sql .= "CONCAT('". T_("Code for group:") ." ',ocg.description, ' " . T_("Level:") . " ',ocl.level)";
@@ -1370,11 +1377,11 @@ function assign_work($operator_id, $by_row = false)
 
 					$aall = $db->GetRow($sql);
 
+
 	
 					if (!empty($aall)) //a result
 					{
 						//store as done (Create completed work_unit)
-			
 						$twork_unit_id = create_work_unit($r['work_id'],$r['cell_id'],$r['process_id'],0);
 						$tcode_id = $aall['code_id'];
 						$tvalue = $aall['value'];
@@ -1839,6 +1846,8 @@ function spacing($data,$cell_id,$work_id,$process_id,$row_id)
  */
 function spelling($data,$cell_id,$work_id,$process_id,$row_id)
 {
+	if (check_words($data) == 1) //If there is a spelling error, do not create a work_unit record
+		return 1;
 
 	return 0;
 }
