@@ -59,7 +59,7 @@ function showhide(eid)
 }
 
 function addevents() {
-	$('searchclick').addEvent('click', function(event) {
+	$$('#searchclick').addEvent('click', function(event) {
 
 		//make the ajax call, replace text
 		var req = new Request.HTML({
@@ -73,7 +73,7 @@ function addevents() {
 
 	});
 
-	$('search').addEvent('keyenter', function(event) {
+	$$('#search').addEvent('keyenter', function(event) {
 		//Stop page submit
 		event.stop();
 
