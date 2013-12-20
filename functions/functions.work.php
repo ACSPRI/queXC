@@ -919,7 +919,10 @@ function create_work($data_id,$process_id,$column_id,$operators = array('NULL'),
 					WHERE column_id = $column_id";
 
 				$description = $db->GetOne($sql);
-	
+        
+        //remove spaces
+        $description = str_replace(" ","",$description);
+
 				//Now create all necessary columns
 	
 				$sql = "INSERT INTO `column` (column_id,data_id,column_group_id,name,description,startpos,width,type,in_input,sortorder,code_level_id,column_multi_group_id)
