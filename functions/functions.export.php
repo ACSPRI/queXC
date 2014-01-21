@@ -557,7 +557,7 @@ function export_pspp($data_id, $include_data = true)
 	$startpos = 1;
 	$width = 0;
 
-	foreach ($cols as $col)
+	foreach ($cols as $key => $col)
 	{
 		$varname = $col['name'];
 	
@@ -575,7 +575,10 @@ function export_pspp($data_id, $include_data = true)
 		
 		$endpos = ($startpos + $width) - 1;
 
-		echo "$varname $startpos-$endpos $vartype";
+    if ($width != 0)
+  		echo "$varname $startpos-$endpos $vartype";
+    else
+      unset($cols[$key]);
 	}
 
 	echo " .\nVARIABLE LABELS ";
