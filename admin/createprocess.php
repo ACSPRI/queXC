@@ -118,7 +118,7 @@ if ($code_group_id != 0)
 
 	print "<div><input type='checkbox' name='autolabel' id='autolabel'/><label for='autolabel'>" . T_("Automatically assign a code if the code label exactly matches the data?") . "</label></div>";
 	print "<div><input type='checkbox' name='autovalue' id='autovalue'/><label for='autovalue'>" . T_("Automatically assign a code if the code value exactly matches the data?") . "</label></div>";
-	print "<div><input type='checkbox' name='autokeyword' id='autokeyword'/><label for='autovalue'>" . T_("Automatically assign a code if there is a matching code keyword in the database?") . "</label></div>";
+	print "<div><input type='checkbox' name='autokeyword' id='autokeyword'/><label for='autokeyword'>" . T_("Automatically assign a code if there is a matching code keyword in the database?") . "</label></div>";
 	print "<div><input type='checkbox' name='template' id='template'/><label for='template'>" . T_("Use the code group as a template? (Create a new, editable code group for each work unit that this is assigned to)") . "</label></div>";
 	print "<div><input type='checkbox' name='exclusive' id='exclusive'/><label for='exclusive'>" . T_("Should this process only be run by operator(s) that have not worked on the prior process (exclusive)?") . "</label></div>";
 
