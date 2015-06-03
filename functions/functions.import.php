@@ -237,8 +237,9 @@ function import_csv_data($filename,$data_id,$column_id = false)
 		{
 			if (isset($columns[$column_id]))
 			{
-				$compare = $columns[$column_id];
-				$elementnumber = intval(substr($compare['name'],1));
+        $compare = $columns[$column_id];
+        //check against CSV by sortorder
+				$elementnumber = intval($compare['sortorder']);
 
 				//Get the id data from the data file
 				$data = $db->qstr($r[$elementnumber]);
@@ -266,19 +267,21 @@ function import_csv_data($filename,$data_id,$column_id = false)
 		//if we are clear to go, insert the data for this row
 		foreach($columns as $column_id_loop => $column)
 		{	
-			$elementnumber = intval(substr($column['name'],1));
+			$elementnumber = intval($column['sortorder']);
 			$data = $db->qstr($r[$elementnumber]);
 
 			$sql = "INSERT INTO cell (cell_id,row_id,column_id)
 				VALUES (NULL,'$row_id','$column_id_loop')";
-			$db->Execute($sql);
-			
-			$cell_id = $db->Insert_ID();
+      	$db->Execute($sql);
+
+         //print "ROW: $row_id COLUMN:" . $column['name'] . " INSERT: " . $data . "<br/>\n";
+
+      	$cell_id = $db->Insert_ID();
 			
 			$sql = "INSERT INTO cell_revision (cell_revision_id,cell_id,data)
 				VALUES (NULL, '$cell_id', $data)";
 			
-			$db->Execute($sql);
+    	$db->Execute($sql);
 		}
 
 		$rowsimported[$row_id] = $row_id;
