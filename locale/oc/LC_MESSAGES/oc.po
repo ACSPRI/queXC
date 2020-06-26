@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: quexc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-01 12:23+1000\n"
-"PO-Revision-Date: 2010-05-22 08:35+0000\n"
+"PO-Revision-Date: 2016-10-17 06:32+0000\n"
 "Last-Translator: Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan (post 1500) <oc@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-12 02:32+0000\n"
-"X-Generator: Launchpad (build 16564)\n"
+"X-Launchpad-Export-Date: 2020-06-26 04:12+0000\n"
+"X-Generator: Launchpad (build 1cbd0aa39df153c901321817f9b57cf3f232b507)\n"
 
 #: index.php:76
 msgid "No results"
-msgstr ""
+msgstr "Pas cap de resultat"
 
 #: index.php:116
 msgid "Could not refer to supervisor - no supervisor may be assigned"
@@ -41,7 +41,7 @@ msgstr ""
 #: index.php:150
 #: index.php:171
 msgid "End work"
-msgstr ""
+msgstr "Arrestar de trabalhar"
 
 #: index.php:171
 msgid "Submit and continue"
@@ -57,7 +57,7 @@ msgstr ""
 
 #: index.php:184
 msgid "Search"
-msgstr ""
+msgstr "Recercar"
 
 #: index.php:184
 msgid "Click here to search (or press enter)"
@@ -81,7 +81,7 @@ msgstr ""
 #: workhistory.php:80
 #: endwork.php:57
 msgid "No operator"
-msgstr ""
+msgstr "Pas d'operator"
 
 #: workhistory.php:54
 msgid "Work History"
@@ -131,7 +131,7 @@ msgstr ""
 
 #: performance.php:71
 msgid "Operator"
-msgstr "Operador"
+msgstr "Operator"
 
 #: performance.php:71
 msgid "Average time"
@@ -231,7 +231,7 @@ msgstr ""
 
 #: admin/updateddi.php:206
 msgid "Update"
-msgstr ""
+msgstr "Metre a jorn"
 
 #: admin/updateddi.php:206
 msgid "Update and move to next column"
@@ -449,7 +449,7 @@ msgstr ""
 
 #: admin/index.php:57
 msgid "Codes"
-msgstr "Còdes"
+msgstr "Còdis"
 
 #: admin/index.php:58
 #: admin/importcode.php:48
@@ -683,7 +683,7 @@ msgstr ""
 
 #: admin/export.php:88
 msgid "Export Data"
-msgstr ""
+msgstr "Exportar las donadas"
 
 #: admin/export.php:105
 msgid "Export fixed width data file"
@@ -774,7 +774,7 @@ msgstr ""
 
 #: admin/markcolumns.php:198
 msgid "Variable name"
-msgstr ""
+msgstr "Nom de variabla"
 
 #: admin/markcolumns.php:198
 msgid "Process description"
@@ -919,7 +919,7 @@ msgstr ""
 
 #: functions/functions.export.php:313
 msgid "Fixed width"
-msgstr ""
+msgstr "Polica de largor fixa"
 
 #: functions/functions.export.php:317
 msgid "queXC - http://quexc.sourceforge.net/"

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: quexc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-01 12:23+1000\n"
-"PO-Revision-Date: 2012-04-10 12:40+0000\n"
-"Last-Translator: Robert Arkenin <Unknown>\n"
+"PO-Revision-Date: 2015-06-26 21:36+0000\n"
+"Last-Translator: Alex <ddrmoscow@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-12 02:32+0000\n"
-"X-Generator: Launchpad (build 16564)\n"
+"X-Launchpad-Export-Date: 2020-06-26 04:12+0000\n"
+"X-Generator: Launchpad (build 1cbd0aa39df153c901321817f9b57cf3f232b507)\n"
 
 #: index.php:76
 msgid "No results"
@@ -24,6 +24,7 @@ msgstr "Нет результатов"
 #: index.php:116
 msgid "Could not refer to supervisor - no supervisor may be assigned"
 msgstr ""
+"Невозможно обратиться к супервайзеру - супервайзер может быть не назначен"
 
 #: index.php:130
 #: endwork.php:48
@@ -32,28 +33,28 @@ msgstr "queXC"
 
 #: index.php:148
 msgid "No more work currently available"
-msgstr ""
+msgstr "В данный момент НЕТ доступных заданий"
 
 #: index.php:149
 msgid "Try again for more work"
-msgstr ""
+msgstr "Ещё раз попробовать получить задание"
 
 #: index.php:150
 #: index.php:171
 msgid "End work"
-msgstr ""
+msgstr "Закончить работу"
 
 #: index.php:171
 msgid "Submit and continue"
-msgstr ""
+msgstr "Отправить и продолжить"
 
 #: index.php:171
 msgid "Submit and end work"
-msgstr ""
+msgstr "Отправить и закончить работу"
 
 #: index.php:171
 msgid "Refer to supervisor"
-msgstr ""
+msgstr "Отправить супервайзеру"
 
 #: index.php:184
 msgid "Search"
@@ -65,17 +66,17 @@ msgstr "Нажмите для поиска (или нажмите enter)"
 
 #: index.php:199
 msgid "Error: Cannot execute process function:"
-msgstr ""
+msgstr "Ошибка: Невозможно выполнить функцию процесса:"
 
 #: index.php:208
 #: index.php:209
 msgid "Loading panel..."
-msgstr ""
+msgstr "Загрузка панели..."
 
 #: index.php:208
 #: index.php:209
 msgid "Error, try with Firefox"
-msgstr ""
+msgstr "Ошибка, попробуйте открыть в Firefox"
 
 #: index.php:212
 #: workhistory.php:80
@@ -85,7 +86,7 @@ msgstr "Отсутствует оператор"
 
 #: workhistory.php:54
 msgid "Work History"
-msgstr ""
+msgstr "История работ"
 
 #: workhistory.php:58
 msgid "Today"
@@ -97,7 +98,7 @@ msgstr "Повторить"
 
 #: workhistory.php:72
 msgid "No work history"
-msgstr ""
+msgstr "Нет истории работ"
 
 #: workhistory.php:76
 msgid "Date"
@@ -127,7 +128,7 @@ msgstr "Пабота закончена"
 
 #: performance.php:55
 msgid "Operator performance"
-msgstr ""
+msgstr "Производительность Оператора"
 
 #: performance.php:71
 msgid "Operator"
@@ -135,11 +136,11 @@ msgstr "Оператор"
 
 #: performance.php:71
 msgid "Average time"
-msgstr ""
+msgstr "Среднее время"
 
 #: performance.php:71
 msgid "Number done"
-msgstr ""
+msgstr "Номер закончен"
 
 #: admin/createprocess.php:48
 msgid "Create process"
@@ -147,78 +148,86 @@ msgstr "Сделать процесс"
 
 #: admin/createprocess.php:85
 msgid "Successfully created process"
-msgstr ""
+msgstr "Процесс успешно создан"
 
 #: admin/createprocess.php:87
 msgid "Failed to create process"
-msgstr ""
+msgstr "Не удалось создать процесс"
 
 #: admin/createprocess.php:99
 #: admin/exportcode.php:67
 msgid "Select code group: "
-msgstr ""
+msgstr "Выберите группу кода: "
 
 #: admin/createprocess.php:113
 msgid "Select parent process (if any): "
-msgstr ""
+msgstr "Выбор родительского процесса (если есть): "
 
 #: admin/createprocess.php:119
 msgid ""
 "Automatically assign a code if the code label exactly matches the data?"
 msgstr ""
+"Присваивать код Автоматически, если метка кода точно совпадает с данными?"
 
 #: admin/createprocess.php:120
 msgid ""
 "Automatically assign a code if the code value exactly matches the data?"
 msgstr ""
+"Присваивать код Автоматически, если значение кода точно совпадает с данными?"
 
 #: admin/createprocess.php:121
 msgid ""
 "Automatically assign a code if there is a matching code keyword in the "
 "database?"
 msgstr ""
+"Присваивать код Автоматически, если в базе данных есть совпадающее кодовое "
+"ключевое слово?"
 
 #: admin/createprocess.php:122
 msgid ""
 "Use the code group as a template? (Create a new, editable code group for "
 "each work unit that this is assigned to)"
 msgstr ""
+"Использовать код группы в качестве шаблона? (Создайте новую редактируемую "
+"группу кода для каждого назначенного блока работы)"
 
 #: admin/createprocess.php:123
 msgid ""
 "Should this process only be run by operator(s) that have not worked on the "
 "prior process (exclusive)?"
 msgstr ""
+"Этот процесс должен быть запущен только оператором(ами ), которые не "
+"работали на предыдущем процессе (эксклюзив)?"
 
 #: admin/createprocess.php:125
 msgid "Name for process using this code: "
-msgstr ""
+msgstr "Название процессов использующих этот код: "
 
 #: admin/createprocess.php:128
 msgid "Create new process"
-msgstr ""
+msgstr "Создать новый процесс"
 
 #: admin/createprocess.php:138
 msgid "Existing processes"
-msgstr ""
+msgstr "Существующие процессы"
 
 #: admin/createprocess.php:141
 msgid "Process ID"
-msgstr ""
+msgstr "ID процесса"
 
 #: admin/createprocess.php:141
 msgid "Code Group"
-msgstr ""
+msgstr "Группа кода"
 
 #: admin/updateddi.php:122
 msgid "Update data description"
-msgstr ""
+msgstr "Обновить описание данных"
 
 #: admin/updateddi.php:131
 #: admin/adddatacsv.php:86
 #: admin/listdata.php:63
 msgid "Select data file: "
-msgstr ""
+msgstr "Выберите файл с данными: "
 
 #: admin/updateddi.php:146
 #: admin/listdata.php:77
@@ -227,99 +236,99 @@ msgstr "Выбрать переменную: "
 
 #: admin/updateddi.php:188
 msgid "Choose an existing code level: "
-msgstr ""
+msgstr "Выберите существующий уровень кода: "
 
 #: admin/updateddi.php:206
 msgid "Update"
-msgstr ""
+msgstr "Обновить"
 
 #: admin/updateddi.php:206
 msgid "Update and move to next column"
-msgstr ""
+msgstr "Обновить и перейти к следующему столбцу"
 
 #: admin/adddatacsv.php:47
 #: admin/importcsv.php:47
 #: admin/import.php:47
 msgid "Import data file"
-msgstr ""
+msgstr "Импорт файла данных"
 
 #: admin/adddatacsv.php:62
 #: admin/importcsv.php:65
 #: admin/import.php:67
 msgid "Data imported successfully"
-msgstr ""
+msgstr "Данные успешно импортированы"
 
 #: admin/adddatacsv.php:62
 msgid "Rows:"
-msgstr ""
+msgstr "Строки:"
 
 #: admin/adddatacsv.php:67
 msgid "Successfully ran automatic processes"
-msgstr ""
+msgstr "Автоматические процессы успешно запущены"
 
 #: admin/adddatacsv.php:69
 msgid "Failed to run automatic processes"
-msgstr ""
+msgstr "Не удалось запустить автоматические процессы"
 
 #: admin/adddatacsv.php:73
 msgid "Failed to import data"
-msgstr ""
+msgstr "Не удалось импортировать данные"
 
 #: admin/adddatacsv.php:101
 msgid "Select column with unique identifier: "
-msgstr ""
+msgstr "Выберите столбец с уникальным идентификатором: "
 
 #: admin/adddatacsv.php:113
 msgid "Choose the CSV data file to upload (Can be compressed with gz):"
-msgstr ""
+msgstr "Выберите CSV-файл с данными для загрузки (может быть сжат с GZ):"
 
 #: admin/adddatacsv.php:114
 msgid "Add records to data file"
-msgstr ""
+msgstr "Добавление записей в файл данных"
 
 #: admin/importcsv.php:58
 #: admin/import.php:60
 msgid "Created new data entry: "
-msgstr ""
+msgstr "Создана новая запись: "
 
 #: admin/importcsv.php:62
 #: admin/import.php:64
 msgid "Created column strucure"
-msgstr ""
+msgstr "Создана структура столбцов"
 
 #: admin/importcsv.php:75
 msgid "Choose the headered CSV data file to upload:"
-msgstr ""
+msgstr "Выберите для загрузки файл CSV с заглавной строкой"
 
 #: admin/importcsv.php:76
 #: admin/import.php:79
 msgid "Description for file:"
-msgstr ""
+msgstr "Описание файла:"
 
 #: admin/importcsv.php:77
 #: admin/import.php:80
 msgid "Create new data file"
-msgstr ""
+msgstr "Создать новый файл данных"
 
 #: admin/import.php:77
 msgid "Choose the DDI file file to upload:"
-msgstr ""
+msgstr "Выбрать DDI файл для загрузки:"
 
 #: admin/import.php:78
 msgid "Choose the Fixed width data file to upload:"
-msgstr ""
+msgstr "Выбрать файл данных Фиксированной ширины  для загрузки:"
 
 #: admin/operatorprocess.php:76
 msgid "Assign operators to processes"
-msgstr ""
+msgstr "Назначить операторов для процессов"
 
 #: admin/operatorprocess.php:85
 msgid "Select operator:"
-msgstr ""
+msgstr "Выберите оператора:"
 
 #: admin/operatorprocess.php:90
 msgid "Select processes available to this operator"
-msgstr ""
+msgstr "Выберите процессы  доступные для данного оператора"
 
 #: admin/operatorprocess.php:103
 msgid "Select"
@@ -327,288 +336,289 @@ msgstr "Выбрать"
 
 #: admin/operatorprocess.php:103
 msgid "Allow queXC to auto guess code"
-msgstr ""
+msgstr "Разрешить queXC автоматически  угадывать код"
 
 #: admin/operatorprocess.php:105
 msgid "Assign processes"
-msgstr ""
+msgstr "Назначить процессы"
 
 #: admin/listdata.php:54
 msgid "Display data"
-msgstr ""
+msgstr "Показать данные"
 
 #: admin/exportcode.php:58
 msgid "Export code groups"
-msgstr ""
+msgstr "Экспортировать группы кода"
 
 #: admin/exportcode.php:74
 msgid "Export code group"
-msgstr ""
+msgstr "Экспортировать группу кода"
 
 #: admin/selectblankcode.php:64
 msgid "Select blank code"
-msgstr ""
+msgstr "Выбрать пустой код"
 
 #: admin/selectblankcode.php:90
 msgid "Select code: "
-msgstr ""
+msgstr "Выбрать код: "
 
 #: admin/selectblankcode.php:95
 msgid "Assign as blank code"
-msgstr ""
+msgstr "Присвоить пустой код"
 
 #: admin/operatorprocesssupervisor.php:146
 #: admin/index.php:68
 msgid "Assign operators to be supervisors of processes"
-msgstr ""
+msgstr "Назначить операторов быть супервайзерами процессов"
 
 #: admin/operatorprocesssupervisor.php:267
 msgid "Assign operators to be supervisor for these processes"
-msgstr ""
+msgstr "Назначить операторов быть супервайзером для этих процессов"
 
 #: admin/modificationhistory.php:47
 msgid "Display modification history"
-msgstr ""
+msgstr "Показать историю изменений"
 
 #: admin/modificationhistory.php:72
 msgid "Select column: "
-msgstr ""
+msgstr "Выбрать столбец: "
 
 #: admin/modificationhistory.php:82
 msgid "Select row: "
-msgstr ""
+msgstr "Выбрать строку: "
 
 #: admin/modificationhistory.php:107
 msgid "Row"
-msgstr ""
+msgstr "Строка"
 
 #: admin/modificationhistory.php:107
 msgid "Assigned"
-msgstr ""
+msgstr "Назначено"
 
 #: admin/modificationhistory.php:107
 msgid "Completed"
-msgstr ""
+msgstr "Завершено"
 
 #: admin/worklist.php:60
 msgid "Work List"
-msgstr ""
+msgstr "Список работы"
 
 #: admin/worklist.php:62
 #: admin/unassign.php:73
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
 
 #: admin/worklist.php:79
 msgid "Work Unit ID"
-msgstr ""
+msgstr "ID Блока Работы"
 
 #: admin/worklist.php:79
 msgid "Date Completed"
-msgstr ""
+msgstr "Дата завершения"
 
 #: admin/worklist.php:79
 msgid "Delete?"
-msgstr ""
+msgstr "Удалить?"
 
 #: admin/operatorperformance.php:58
 msgid "Select operator: "
-msgstr ""
+msgstr "Выбрать оператора: "
 
 #: admin/operatorperformance.php:66
 msgid "Select process: "
-msgstr ""
+msgstr "Выберите процесс: "
 
 #: admin/operatorperformance.php:88
 msgid "Number of records"
-msgstr ""
+msgstr "Количество записей"
 
 #: admin/index.php:47
 msgid "Administrative Tools"
-msgstr ""
+msgstr "Административные инструменты"
 
 #: admin/index.php:51
 msgid "Import data"
-msgstr ""
+msgstr "Импорт данных"
 
 #: admin/index.php:52
 msgid "Import DDI/Fixed width data"
-msgstr ""
+msgstr "Импортировать файл  данных  DDI /Фиксированной ширины"
 
 #: admin/index.php:53
 msgid "Import CSV data"
-msgstr ""
+msgstr "Импорт данных в формате CSV"
 
 #: admin/index.php:54
 msgid "Add data to existing (Fixed width)"
-msgstr ""
+msgstr "Добавить данные к существующим (Фиксированной ширины)"
 
 #: admin/index.php:55
 msgid "Add data to existing (CSV)"
-msgstr ""
+msgstr "Добавить данные к существующим (CSV)"
 
 #: admin/index.php:57
 msgid "Codes"
-msgstr ""
+msgstr "Коды"
 
 #: admin/index.php:58
 #: admin/importcode.php:48
 msgid "Import code group"
-msgstr ""
+msgstr "Импорт группы кода"
 
 #: admin/index.php:59
 msgid "Import code keyword correspondence"
-msgstr ""
+msgstr "Импортировать соответствие код ключевое слово"
 
 #: admin/index.php:60
 msgid "Select blank code for code group"
-msgstr ""
+msgstr "Выберите пустой код для группы кода"
 
 #: admin/index.php:61
 msgid "Create process from code group"
-msgstr ""
+msgstr "Создать процесс из группы кода"
 
 #: admin/index.php:64
 msgid "Operator management"
-msgstr ""
+msgstr "Управление записями операторов"
 
 #: admin/index.php:65
 msgid "Add operators"
-msgstr ""
+msgstr "Добавить операторов"
 
 #: admin/index.php:66
 #: admin/operatordata.php:267
 msgid "Assign operators to data"
-msgstr ""
+msgstr "Привязать операторов к данным"
 
 #: admin/index.php:70
 msgid "Job management"
-msgstr ""
+msgstr "Управление заданиями"
 
 #: admin/index.php:71
 #: admin/markcolumns.php:181
 msgid "Create work"
-msgstr ""
+msgstr "Создать работу"
 
 #: admin/index.php:72
 msgid "Assign relevant columns to codes"
-msgstr ""
+msgstr "Привязать соответствующие столбцы к кодам"
 
 #: admin/index.php:73
 msgid "Assign keyword groups to columns (correspondence)"
-msgstr ""
+msgstr "Привязать группы  ключевых слов к столбцам (соответствие)"
 
 #: admin/index.php:76
 msgid "Progress"
-msgstr ""
+msgstr "Состояние"
 
 #: admin/index.php:77
 msgid "Display progress"
-msgstr ""
+msgstr "Показать прогресс"
 
 #: admin/index.php:78
 msgid "List all work"
-msgstr ""
+msgstr "Список всех работ"
 
 #: admin/index.php:79
 msgid "List work assigned but not complete"
-msgstr ""
+msgstr "Список назначенных но незаконченных работ"
 
 #: admin/index.php:80
 msgid "Modification history"
-msgstr ""
+msgstr "История изменений"
 
 #: admin/index.php:83
 msgid "Performance"
-msgstr ""
+msgstr "Производительность"
 
 #: admin/index.php:86
 msgid "Export"
-msgstr ""
+msgstr "Экспорт"
 
 #: admin/index.php:87
 msgid "Export data"
-msgstr ""
+msgstr "Экспорт данных"
 
 #: admin/index.php:89
 msgid "List data"
-msgstr ""
+msgstr "Список данных"
 
 #: admin/index.php:90
 #: admin/exportkeywords.php:58
 msgid "Export code keyword correspondence"
-msgstr ""
+msgstr "Экспортировать соответствие код ключевое слово"
 
 #: admin/index.php:96
 msgid "Choose a menu item from the left"
-msgstr ""
+msgstr "Выберите пункт меню слева"
 
 #: admin/exportkeywords.php:82
 msgid "Select column containing the code: "
-msgstr ""
+msgstr "Выберите столбец, содержащий код: "
 
 #: admin/exportkeywords.php:98
 msgid "Select column containing the keyword: "
-msgstr ""
+msgstr "Выберите столбец, содержащий ключевое слово: "
 
 #: admin/exportkeywords.php:105
 msgid "Download correspondence CSV"
-msgstr ""
+msgstr "Скачать соответствие в формате CSV"
 
 #: admin/relevantkeywords.php:74
 msgid "Select relevant keywords for columns"
-msgstr ""
+msgstr "Выберите соответствующие ключевые слова для столбцов"
 
 #: admin/relevantkeywords.php:98
 msgid "Select column to auto code from:"
-msgstr ""
+msgstr "Выбрать столбец - источник для автоматического кодирования:"
 
 #: admin/relevantkeywords.php:119
 msgid ""
 "Select column group to code to (work must already have been created): "
 msgstr ""
+"Выбрать группу столбцов для введения кода (работа должна уже быть создана): "
 
 #: admin/relevantkeywords.php:128
 #: admin/relevantkeywords.php:136
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 #: admin/relevantkeywords.php:136
 msgid "Keyword group"
-msgstr ""
+msgstr "Группа ключевого слова"
 
 #: admin/relevantkeywords.php:138
 msgid "Select keyword group to add"
-msgstr ""
+msgstr "Выберите группу ключевого слова для добавления"
 
 #: admin/relevantkeywords.php:154
 msgid "Add keyword group"
-msgstr ""
+msgstr "Добавить группу ключевого слова"
 
 #: admin/relevantkeywords.php:157
 msgid "No code keyword group available"
-msgstr ""
+msgstr "Нет доступной группы кода ключевого слова"
 
 #: admin/operatoradd.php:64
 msgid "Added: "
-msgstr ""
+msgstr "Добавлено: "
 
 #: admin/operatoradd.php:68
 msgid "Could not add"
-msgstr ""
+msgstr "Невозможно добавить"
 
 #: admin/operatoradd.php:68
 msgid "There may already be an operator of this name"
-msgstr ""
+msgstr "Оператор с таким именем уже может быть"
 
 #: admin/operatoradd.php:76
 #: admin/operatoradd.php:85
 msgid "Add an operator"
-msgstr ""
+msgstr "Добавить оператора"
 
 #: admin/operatoradd.php:86
 msgid "Add an operator to allow them to use queXC"
-msgstr ""
+msgstr "Добавьте оператора, чтобы позволить им использовать queXC"
 
 #: admin/operatoradd.php:87
 msgid ""
@@ -617,126 +627,133 @@ msgid ""
 "queXC using Apache file based security, enter the usernames of the users "
 "here."
 msgstr ""
+"Используйте эту форму для ввода логина пользователя на основе вашей  системы "
+"безопасности каталогов . Например, если Вы защитили основную директорию "
+"queXC с помощью базовой системы безопасности Apache на основе файла, Введите "
+"логины пользователей здесь."
 
 #: admin/operatoradd.php:89
 msgid "Enter the username of an operator to add:"
-msgstr ""
+msgstr "Задайте имя пользователя для добавляемого оператора:"
 
 #: admin/operatoradd.php:90
 msgid "Enter a description of the operator to add:"
-msgstr ""
+msgstr "Введите описание для добавляемого оператора:"
 
 #: admin/operatoradd.php:91
 msgid "Add user"
-msgstr ""
+msgstr "Добавить пользователя"
 
 #: admin/importkeywordcode.php:48
 msgid "Import code keywords"
-msgstr ""
+msgstr "Импортировать ключевые слова кода"
 
 #: admin/importkeywordcode.php:63
 #: admin/importcode.php:65
 msgid "Successful import"
-msgstr ""
+msgstr "Успешный импорт"
 
 #: admin/importkeywordcode.php:67
 msgid "Failed to import. Could not determine corresponding code for:"
 msgstr ""
+"Не удалось импортировать. Невозможно определить соответствующий код для:"
 
 #: admin/importkeywordcode.php:74
 msgid "Failed to import codes"
-msgstr ""
+msgstr "Не удалось импортировать коды"
 
 #: admin/importkeywordcode.php:74
 #: admin/importcode.php:72
 msgid "Error uploading file"
-msgstr ""
+msgstr "Ошибка при загрузки файла"
 
 #: admin/importkeywordcode.php:78
 msgid "The CSV file must have 2 fields: code,keywords"
-msgstr ""
+msgstr "CSV-файл должен иметь 2 поля: код,ключевые слова"
 
 #: admin/importkeywordcode.php:79
 msgid "No fields may be blank"
-msgstr ""
+msgstr "Пустые поля недопустимы"
 
 #: admin/importkeywordcode.php:80
 msgid ""
 "Do not include a header line as this will be imported as a code/keyword pair"
 msgstr ""
+"Не включайте строку заголовка, т.к. это будет импортировано как пара  "
+"код/ключевое слово"
 
 #: admin/importkeywordcode.php:94
 msgid "Choose the CSV code keywords file to upload:"
-msgstr ""
+msgstr "Выбрать файл CSV с кодовыми ключевыми словами для загрузки:"
 
 #: admin/importkeywordcode.php:95
 msgid "Description for this code keywords file:"
-msgstr ""
+msgstr "Описание для этого файла с кодовыми ключевыми словами:"
 
 #: admin/importkeywordcode.php:96
 msgid "What coding scheme does this list apply to?"
-msgstr ""
+msgstr "К какой схеме кодирования применим этот список?"
 
 #: admin/importkeywordcode.php:97
 msgid "Create new keyword code"
-msgstr ""
+msgstr "Создать новое кодовок ключевое слово"
 
 #: admin/export.php:88
 msgid "Export Data"
-msgstr ""
+msgstr "Экспорт данных"
 
 #: admin/export.php:105
 msgid "Export fixed width data file"
-msgstr ""
+msgstr "Экспортировать файл данных Фиксированный ширины"
 
 #: admin/export.php:106
 msgid "Export DDI file"
-msgstr ""
+msgstr "Экспортировать файл DDI"
 
 #: admin/export.php:107
 msgid "Export PSPP file with data inline"
-msgstr ""
+msgstr "Экспортировать файл PSPP с линейными данными"
 
 #: admin/export.php:108
 msgid "Export PSPP file"
-msgstr ""
+msgstr "Экспортировать файл PSPP"
 
 #: admin/export.php:109
 msgid "Export CSV file"
-msgstr ""
+msgstr "Экспортировать файл CSV"
 
 #: admin/export.php:110
 msgid "Export CSV file with labels for codes"
-msgstr ""
+msgstr "Экспортировать  CSV-файл с метками для кодов"
 
 #: admin/databasestrings.php:33
 msgid "Blank"
-msgstr ""
+msgstr "Пустой"
 
 #: admin/databasestrings.php:34
 msgid "Not codeable"
-msgstr ""
+msgstr "Не кодируемое"
 
 #: admin/databasestrings.php:35
 msgid "Spacing"
-msgstr ""
+msgstr "Пространство"
 
 #: admin/databasestrings.php:36
 msgid "Spell check"
-msgstr ""
+msgstr "Проверка орфографии"
 
 #: admin/databasestrings.php:37
 msgid "Email validate"
-msgstr ""
+msgstr "Проверка правильности адреса эл. почты"
 
 #: admin/databasestrings.php:38
 #: admin/importcode.php:86
 msgid "Create new code group"
-msgstr ""
+msgstr "Создать новую группу кода"
 
 #: admin/markcolumns.php:92
 msgid "Mark columns to be coded"
-msgstr ""
+msgstr "Отметьте столбцы для кодирования"
 
 #: admin/markcolumns.php:129
 msgid "Variable description:"
@@ -744,234 +761,244 @@ msgstr "Описание переменной"
 
 #: admin/markcolumns.php:139
 msgid "Select process to apply to this variable:"
-msgstr ""
+msgstr "Выберите процесс применяемый к этой переменной:"
 
 #: admin/markcolumns.php:146
 msgid "Select operator(s) to apply this process"
-msgstr ""
+msgstr "Выберите оператора(ов), к которым применить этот процесс"
 
 #: admin/markcolumns.php:162
 msgid "Any operator: enter how many"
-msgstr ""
+msgstr "Любой оператор: введите сколько"
 
 #: admin/markcolumns.php:167
 msgid "If a reference column is applicable, choose it below"
-msgstr ""
+msgstr "Если применяется ссылка на столбец, выберите его"
 
 #: admin/markcolumns.php:175
 msgid ""
 "To create a multiple choice coding scheme, select a code group to generate "
 "multiple groups from"
 msgstr ""
+"Для создания схемы кодирования множественного выбора, выберите группу кода "
+"из которой будут созданы несколько групп"
 
 #: admin/markcolumns.php:197
 msgid "Current work for this data file and column"
-msgstr ""
+msgstr "Текущая работа для этого файла данных и столбца"
 
 #: admin/markcolumns.php:198
 msgid "Work ID"
-msgstr ""
+msgstr "ID Работы"
 
 #: admin/markcolumns.php:198
 msgid "Variable name"
-msgstr ""
+msgstr "Имя переменной"
 
 #: admin/markcolumns.php:198
 msgid "Process description"
-msgstr ""
+msgstr "Описание процесса"
 
 #: admin/markcolumns.php:198
 msgid "Parent job"
-msgstr ""
+msgstr "Родительское задание"
 
 #: admin/markcolumns.php:198
 msgid "Assigned operator"
-msgstr ""
+msgstr "Назначенный оператор"
 
 #: admin/markcolumns.php:198
 #: admin/markcolumns.php:200
 msgid "Create comparison work"
-msgstr ""
+msgstr "Создать работу по сравнению"
 
 #: admin/operatordata.php:146
 msgid "Assign operators to datas"
-msgstr ""
+msgstr "Привязать операторов к данным"
 
 #: admin/unassign.php:70
 #: admin/unassign.php:82
 msgid "Assigned work"
-msgstr ""
+msgstr "Назначенная работа"
 
 #: admin/unassign.php:85
 msgid "No assigned work"
-msgstr ""
+msgstr "Нет назначенной работы"
 
 #: admin/unassign.php:89
 msgid "Rows to do"
-msgstr ""
+msgstr "Осталось сделать строк"
 
 #: admin/unassign.php:89
 msgid "Process to apply"
-msgstr ""
+msgstr "Применяемый процесс"
 
 #: admin/unassign.php:89
 msgid "Supervisor?"
-msgstr ""
+msgstr "Супервайзер?"
 
 #: admin/unassign.php:89
 msgid "Delete assigned work"
-msgstr ""
+msgstr "Удалить назначенную работу"
 
 #: admin/importcode.php:66
 msgid ""
 "Select a code to automatically assign when an entry is blank for this code "
 "group"
 msgstr ""
+"Выберите код автоматически присваиваемый если запись  для этой группы кода "
+"пустая"
 
 #: admin/importcode.php:69
 #: admin/importcode.php:72
 msgid "Failed to import code group"
-msgstr ""
+msgstr "Не удалось импортировать группу кода"
 
 #: admin/importcode.php:69
 msgid "Error importing codes"
-msgstr ""
+msgstr "Ошибка импортирования кодов"
 
 #: admin/importcode.php:76
 msgid "The CSV file must have 4 fields: code,label,keywords,parent_code"
 msgstr ""
+"CSV-файл должен иметь 4 поля: код,метка,ключевые слова,parent_code "
+"(родительский код)"
 
 #: admin/importcode.php:77
 msgid "Only keywords and parent_code may be left blank"
-msgstr ""
+msgstr "Только ключевые слова и parent_code могут быть оставлены пустыми"
 
 #: admin/importcode.php:78
 msgid "Do not include a header line as this will be imported as a code"
-msgstr ""
+msgstr "Не включайте строку заголовка, т.к. это будет импортировано как код"
 
 #: admin/importcode.php:79
 msgid ""
 "Remember to include codes at the top level (without parents) such as: 'Not "
 "codable' and 'Left blank' - these will not be added automatically"
 msgstr ""
+"Не забудьте включить коды верхнего уровня (без родителей), такие как: 'Не "
+"кодируемый' и 'Оставить пустым' - они не будут добавлены автоматически"
 
 #: admin/importcode.php:83
 msgid "Choose the CSV code file to upload:"
-msgstr ""
+msgstr "Выберите CSV-файл  кодов  для загрузки:"
 
 #: admin/importcode.php:84
 msgid "Description for this code group:"
-msgstr ""
+msgstr "Описание для этой группы кода:"
 
 #: admin/importcode.php:85
 msgid "Allow additions to this code group?"
-msgstr ""
+msgstr "Разрешить дополнения к этой  группе кода?"
 
 #: admin/adddata.php:113
 msgid ""
 "Choose the Fixed width data file to upload (Can be compressed with gz):"
 msgstr ""
+"Выбрать  файл данных  Фиксированной ширины для загрузки (может быть сжат с "
+"GZ):"
 
 #: admin/relevantcolumns.php:78
 msgid "Select relevant columns"
-msgstr ""
+msgstr "Выберите соответствующие столбцы"
 
 #: admin/relevantcolumns.php:140
 msgid "Related column"
-msgstr ""
+msgstr "Связанный столбец"
 
 #: admin/relevantcolumns.php:142
 msgid "Select column to add"
-msgstr ""
+msgstr "Выберите столбец для добавления"
 
 #: admin/relevantcolumns.php:154
 msgid "Add column"
-msgstr ""
+msgstr "Добавить столбец"
 
 #: admin/progress.php:66
 #: admin/progress.php:101
 msgid "Work remaining"
-msgstr ""
+msgstr "Оставшаяся работа"
 
 #: admin/progress.php:104
 msgid "No work remaining"
-msgstr ""
+msgstr "Нет оставшейся работы"
 
 #: admin/progress.php:108
 msgid "Data file"
-msgstr ""
+msgstr "Файл данных"
 
 #: admin/progress.php:108
 msgid "For specific operator?"
-msgstr ""
+msgstr "Для конкретного оператора?"
 
 #: admin/progress.php:108
 msgid "Delete work"
-msgstr ""
+msgstr "Удалить работу"
 
 #: functions/functions.export.php:285
 msgid "Fixed width Data File"
-msgstr ""
+msgstr "Файл данных фиксированной ширины"
 
 #: functions/functions.export.php:309
 msgid "Raw data (ACSII)"
-msgstr ""
+msgstr "Исходные данные (в формате ACSII)"
 
 #: functions/functions.export.php:313
 msgid "Fixed width"
-msgstr ""
+msgstr "Фиксированная ширина"
 
 #: functions/functions.export.php:317
 msgid "queXC - http://quexc.sourceforge.net/"
-msgstr ""
+msgstr "queXC - http://quexc.sourceforge.net/"
 
 #: functions/functions.import.php:367
 msgid "Column group for data_id:"
-msgstr ""
+msgstr "Группа столбцов для data_id:"
 
 #: functions/functions.import.php:456
 msgid "Code imported from (data_id:variable name)"
-msgstr ""
+msgstr "Код импортирован из (data_id:имя переменной)"
 
 #: functions/functions.code.php:341
 #: functions/functions.code.php:508
 #: functions/functions.code.php:514
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
 #: functions/functions.work.php:375
 #: functions/functions.work.php:915
 msgid "Code for group:"
-msgstr ""
+msgstr "Код для группы:"
 
 #: functions/functions.work.php:375
 #: functions/functions.work.php:915
 msgid "Level:"
-msgstr ""
+msgstr "Уровень:"
 
 #: functions/functions.work.php:644
 msgid "COPY"
-msgstr ""
+msgstr "КОПИЯ"
 
 #: functions/functions.work.php:644
 msgid "Copy of: "
-msgstr ""
+msgstr "Копия для: "
 
 #: functions/functions.work.php:677
 msgid "Copy of:"
-msgstr ""
+msgstr "Копия для:"
 
 #: functions/functions.work.php:899
 msgid "code for variable:"
-msgstr ""
+msgstr "код для переменной:"
 
 #: functions/functions.work.php:899
 msgid "by operator:"
-msgstr ""
+msgstr "оператором:"
 
 #: functions/functions.work.php:944
 msgid "Text for"
-msgstr ""
+msgstr "Текст для"
 
 #: functions/functions.work.php:1123
 msgid ""
@@ -981,6 +1008,12 @@ msgid ""
 "to delete from the work_unit table the rows that are assigned to your "
 "operator id"
 msgstr ""
+"ОШИБКА: существует более чем один Незавершенный рабочий блок  назначенный "
+"вам. \r\n"
+"Это могло произойти из-за входа с одним и тем же именем пользователя на "
+"нескольких компьютерах одновременно. \r\n"
+"Пожалуйста, не поступайте так - и попросите вашего IT-специалиста удалить из "
+"таблицы work_unit  строки назначенные для вашего ID оператора"
 
 #: include/php-gettext-1.0.7/examples/pigs_dropin.php:75
 #: include/php-gettext-1.0.7/examples/pigs_fallback.php:74
@@ -988,11 +1021,13 @@ msgid ""
 "This is how the story goes.\n"
 "\n"
 msgstr ""
+"Вот такие пироги...\n"
+"\n"
 
 #: include/ajax-spell/spell_checker.php:70
 msgid "Add To Dictionary"
-msgstr ""
+msgstr "Добавить в Словарь"
 
 #: include/ajax-spell/spell_checker.php:73
 msgid "No Suggestions"
-msgstr ""
+msgstr "Нет рекомендаций"

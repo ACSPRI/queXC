@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: quexc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-01 12:23+1000\n"
-"PO-Revision-Date: 2012-03-06 04:39+0000\n"
-"Last-Translator: Javier Blanco <j2bv16@sdf.org>\n"
+"PO-Revision-Date: 2020-06-23 18:36+0000\n"
+"Last-Translator: Nicolas Reali <nreali@aresco.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-12 02:32+0000\n"
-"X-Generator: Launchpad (build 16564)\n"
+"X-Launchpad-Export-Date: 2020-06-26 04:12+0000\n"
+"X-Generator: Launchpad (build 1cbd0aa39df153c901321817f9b57cf3f232b507)\n"
 
 #: index.php:76
 msgid "No results"
@@ -53,7 +53,7 @@ msgstr "Enviar y finalizar trabajo"
 
 #: index.php:171
 msgid "Refer to supervisor"
-msgstr ""
+msgstr "Referir a un supervisor"
 
 #: index.php:184
 msgid "Search"
@@ -61,7 +61,7 @@ msgstr "Buscar"
 
 #: index.php:184
 msgid "Click here to search (or press enter)"
-msgstr ""
+msgstr "Click aqui para buscar (o presionar enter)"
 
 #: index.php:199
 msgid "Error: Cannot execute process function:"
@@ -197,6 +197,8 @@ msgid ""
 "Should this process only be run by operator(s) that have not worked on the "
 "prior process (exclusive)?"
 msgstr ""
+"Deberia este proceso solo ser ejecutado por operador(es) que no han "
+"trabajado en el proceso anterior (exclusivo)?"
 
 #: admin/createprocess.php:125
 msgid "Name for process using this code: "
@@ -255,7 +257,7 @@ msgstr "Importar archivo de datos"
 #: admin/importcsv.php:65
 #: admin/import.php:67
 msgid "Data imported successfully"
-msgstr "Datos imporatados satisfactoriamente"
+msgstr "Datos importados satisfactoriamente"
 
 #: admin/adddatacsv.php:62
 msgid "Rows:"
@@ -279,7 +281,7 @@ msgstr "Seleccionar columna con identificador único: "
 
 #: admin/adddatacsv.php:113
 msgid "Choose the CSV data file to upload (Can be compressed with gz):"
-msgstr ""
+msgstr "Elegir el archivo CVS a subir (Puede estar comprimido con gz):"
 
 #: admin/adddatacsv.php:114
 msgid "Add records to data file"
@@ -656,6 +658,7 @@ msgstr "Importación satisfactoria"
 #: admin/importkeywordcode.php:67
 msgid "Failed to import. Could not determine corresponding code for:"
 msgstr ""
+"No se pudo importar. No se puede deterninar el codigo correspondiente para:"
 
 #: admin/importkeywordcode.php:74
 msgid "Failed to import codes"
@@ -771,6 +774,7 @@ msgstr "Cualquier operador: ingresa cuantos"
 #: admin/markcolumns.php:167
 msgid "If a reference column is applicable, choose it below"
 msgstr ""
+"Si una columna de referencia es aplicable, seleccionela a continuación"
 
 #: admin/markcolumns.php:175
 msgid ""
@@ -814,11 +818,11 @@ msgstr "Asignar operadores a los datos"
 #: admin/unassign.php:70
 #: admin/unassign.php:82
 msgid "Assigned work"
-msgstr ""
+msgstr "Trabajo asignado"
 
 #: admin/unassign.php:85
 msgid "No assigned work"
-msgstr ""
+msgstr "Sin trabajo asignado"
 
 #: admin/unassign.php:89
 msgid "Rows to do"
@@ -834,7 +838,7 @@ msgstr "¿Supervisor?"
 
 #: admin/unassign.php:89
 msgid "Delete assigned work"
-msgstr ""
+msgstr "Borrar trabajo asignado"
 
 #: admin/importcode.php:66
 msgid ""

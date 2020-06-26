@@ -1,3 +1,13 @@
+queXC 0.9.5 - Changes since 0.9.4
+
+*Fixed Bug: ereg_replace deprecated in PHP 7
+*Fixed Bug: Use mysqli as connection type for ADODB
+*Fixed Bug: Remove session function requirements
+*Fixed Bug: Updating data from CSV file failed when column names changed in queXC
+*Fixed Bug: fix label reference
+*Fixed Bug: Don't try and export empty data items
+*Updated translations - Thank you for contributing!
+
 queXC 0.9.4 - Changes since 0.9.3
 
 *Fixed Bug: Reinstated spell checking
