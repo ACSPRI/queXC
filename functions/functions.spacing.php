@@ -54,7 +54,7 @@ function normalise_space($str)
  */
 function replace_symbols($str)
 {
-	return ereg_replace("[&]"," and ",$str);
+	return preg_replace("/&/"," and ",$str);
 }
 
 /**
@@ -65,7 +65,7 @@ function replace_symbols($str)
  */
 function remove_nonalpha($str)
 {
-	return ereg_replace("[^A-Za-z ]", "", $str);
+	return preg_replace("/[^A-Za-z ]/", "", $str);
 }
 
 /**
@@ -76,7 +76,7 @@ function remove_nonalpha($str)
  */
 function remove_nonalphanumeric($str)
 {
-	return ereg_replace("[^A-Za-z0-9 ]", "", $str);
+	return preg_replace("/[^A-Za-z0-9 ]/", "", $str);
 }
 
 ?>
