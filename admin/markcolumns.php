@@ -84,7 +84,7 @@ if (isset($_POST['submit']) || isset($_POST['submit_compare']))
 		}
 
 		include("../functions/functions.work.php");
-		create_work($data_id,11,$column_id,array('NULL'),false,$compare);
+		create_work($data_id,5,$column_id,array('NULL'),false,$compare);
 	}
 }
 
