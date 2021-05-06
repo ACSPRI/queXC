@@ -1331,7 +1331,7 @@ function assign_work($operator_id, $by_row = false)
 					AND cl.code_group_id = '$tcode_group_id'";
 
 				if ($r['auto_code_value'] == 1 && $r['auto_code_label'] == 1)
-					$sql .= " (AND c.value LIKE $tdata OR c.label LIKE $tdata)";
+					$sql .= " AND (c.value LIKE $tdata OR c.label LIKE $tdata)";
 				else if ($r['auto_code_value'] == 1)
 					$sql .= " AND c.value LIKE $tdata ";
 				else if ($r['auto_code_label'] == 1)
