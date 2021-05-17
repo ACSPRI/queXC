@@ -242,7 +242,7 @@ function import_csv_data($filename,$data_id,$column_id = false)
 				$elementnumber = intval($compare['sortorder']);
 
 				//Get the id data from the data file
-				$data = $db->qstr($r[$elementnumber]);
+				$data = $db->qstr(mb_convert_encoding($r[$elementnumber],'UTF-8'));
 
 				$sql = "SELECT cr.data
 					FROM cell_revision as cr, cell as c
@@ -268,11 +268,12 @@ function import_csv_data($filename,$data_id,$column_id = false)
 		foreach($columns as $column_id_loop => $column)
 		{	
 			$elementnumber = intval($column['sortorder']);
-			$data = $db->qstr($r[$elementnumber]);
+			$data = $db->qstr(mb_convert_encoding($r[$elementnumber],'UTF-8'));
 
 			$sql = "INSERT INTO cell (cell_id,row_id,column_id)
 				VALUES (NULL,'$row_id','$column_id_loop')";
       	$db->Execute($sql);
+
 
          //print "ROW: $row_id COLUMN:" . $column['name'] . " INSERT: " . $data . "<br/>\n";
 
@@ -280,8 +281,13 @@ function import_csv_data($filename,$data_id,$column_id = false)
 			
 			$sql = "INSERT INTO cell_revision (cell_revision_id,cell_id,data)
 				VALUES (NULL, '$cell_id', $data)";
-			
-    	$db->Execute($sql);
+		
+
+
+
+	
+            $db->Execute($sql);
+
 		}
 
 		$rowsimported[$row_id] = $row_id;
@@ -290,7 +296,7 @@ function import_csv_data($filename,$data_id,$column_id = false)
 
 	if ($db->CompleteTrans())
 		return $rowsimported;
-	
+
 	return false;
 }
 
@@ -331,7 +337,7 @@ function import_csv_columns($filename,$data_id)
 			{
 				//create varname by column?
 				$varname = "C$c";
-				$description = $db->qstr($h);
+				$description = $db->qstr(mb_convert_encoding($h,'UTF-8'));
 
 				$cols[$c] = array('varname' => $varname, 'description' => $description, 'width' => 0, 'type' => 0);
 	
@@ -575,7 +581,7 @@ function import_keyword_code($filename,$description,$code_group_id)
 				FROM `code` as c, code_level as cl
 				WHERE c.code_level_id = cl.code_level_id
 				AND cl.code_group_id = '$code_group_id'
-				AND (c.value LIKE " . $db->qstr($r[0]) . ")";
+				AND (c.value LIKE " . $db->qstr(mb_convert_encoding($r[0],'UTF-8')) . ")";
 
 			$code = $db->GetRow($sql);
 			
@@ -592,7 +598,7 @@ function import_keyword_code($filename,$description,$code_group_id)
 			$code_id = $code['code_id'];
 			
 			$sql = "INSERT INTO code_keyword (code_keyword_id,code_keyword_group_id,code_id,keyword)
-				VALUES (NULL,'$ckgi','$code_id', " . $db->qstr($r[1]) . ")";
+				VALUES (NULL,'$ckgi','$code_id', " . $db->qstr(mb_convert_encoding($r[1],'UTF-8')) . ")";
 
 			$db->Execute($sql);
 		}
@@ -655,7 +661,7 @@ function import_code($filename,$description,$allow = 0)
 	while (($r = fgetcsv($handle)) !== FALSE) 
 	{
 		$sql = "INSERT INTO code (code_id,value,label,keywords,code_level_id)
-			VALUES (NULL,'{$r[0]}', " . $db->qstr($r[1]) . "," . $db->qstr($r[2]) . ",'$code_level_id')";
+			VALUES (NULL,'{$r[0]}', " . $db->qstr(mb_convert_encoding($r[1],'UTF-8')) . "," . $db->qstr(mb_convert_encoding($r[2],'UTF-8')) . ",'$code_level_id')";
 
 		$db->Execute($sql);
 
